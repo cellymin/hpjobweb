@@ -3001,7 +3001,7 @@ class authModel extends Model {
             } 
         }else{
             if($data['rid'] == 7){
-                include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
+                //include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
                 $object = new QRcode();  
                 $data['created'] = time();
                 $data['last_ip']=ip_get_client();
