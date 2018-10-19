@@ -146,6 +146,7 @@ class authControl extends Control {
                 'code'     => $_POST['code'],
                 'type'     => empty($_POST['type'])?'app':$_POST['type'],
                 'is_bind' => 1,
+                'is_yewu' => 1,
                 'nickname' => '开心工作'.rand(10000,99999),
             );
 

@@ -61,7 +61,6 @@ class userControl extends myControl {
         if(!empty($users['num'])){
             $count = $users['num'];
         }
-        echo $count;
         
 
         foreach($users['user'] as $key=>$val){
@@ -704,7 +703,7 @@ class userControl extends myControl {
 
     //生成二维码
     public function getRecruitQR(){
-        include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
+        //include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
         $object = new QRcode(); 
         $uid = $_GET['id'];
         $url='http://www.hap-job.com/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&salesmanid='.$uid;

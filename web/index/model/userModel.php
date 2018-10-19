@@ -104,14 +104,16 @@ class userModel extends Model {
             $nums=$db->where($cond['user'],$cond['group'])->count();
             $page=new page($nums,20);
             $users=array();
-            $users['user']=$db->where($cond['user'],$cond['group'])->findall();
+            $users['user']=$db->where($cond['user'],$cond['group'])->findall($page->limit());
             $users['page']=$page->show();
+            $users['num']=$nums;
         }else{
             $nums=$this->user_r_model->where($cond['user'])->count();
             $page=new page($nums,20);
             $users=array();
             $users['user']=$this->user_r_model->where($cond['user'])->order('created desc')->findall($page->limit());
             $users['page']=$page->show();
+            $users['page']=$nums;
         }
         return $users;
     }
