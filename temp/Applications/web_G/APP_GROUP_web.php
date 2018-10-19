@@ -3030,6 +3030,7 @@ class authModel extends Model {
                 $data['created'] = time();
                 $data['last_ip']=ip_get_client();
                 $id = M('user')->add($data);
+                $huanxin = $this->openRegister($data['username'],$data['hx_password'],$data['username']);
                  M('user_info')->insert(array('uid' => $id, 'name' =>$data['username']));
                 if ($id) {
                     $this->user_role->insert(array('uid' => $id, 'rid' =>$data['rid']));

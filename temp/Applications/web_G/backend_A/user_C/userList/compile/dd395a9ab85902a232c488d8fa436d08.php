@@ -1,6 +1,23 @@
-{include file="__TPL__/header.html" /} 
+<?php if(!defined("PATH_LC"))exit;?>
+<?php if(!defined("PATH_LC"))exit;?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>后台管理</title>
+<link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+<link type="text/css" rel="stylesheet" href="http://localhost/hpjobweb/web/backend/templates/css/public.css"/>
+<script type="text/javascript" src="http://localhost//hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://localhost/hpjobweb/web/backend/templates/js/public.js"></script>
+<script type="text/javascript" src="http://localhost//hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script type="text/javascript" src="http://localhost//hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://localhost//hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
+<script type="text/javascript" src="http://localhost//hpjobweb/public/js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body> 
 <div id="userList">
-    <form action="__CONTROL__/export_users" method="post" enctype="multipart/form-data" id="export_users" class="well form-horizontal">
+    <form action="http://localhost/hpjobweb/index.php/backend/user/export_users" method="post" enctype="multipart/form-data" id="export_users" class="well form-horizontal">
         <table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
             <tr>
                 <td><input id="s_time" name="start_time" value="" type="text" style="display: none"></td>
@@ -11,21 +28,21 @@
             </tr>
         </table>
     </form>
-    <form action="__METH__" method="get" id="search-form">
+    <form action="http://localhost/hpjobweb/index.php/backend/user/userList" method="get" id="search-form">
         <table class="table well" style="margin-bottom:-18px;">
             <tr>
-                <th>手机号<input type="text" name="username" class="input-medium" value="{if value="$base.get.username|isset"}{$base.get.username}{/if}"></th>
-                <!--<th><input type="text" name="email" class="input-medium" value="{if value="$base.get.email|isset"}{$base.get.email}{/if}"></th>-->
+                <th>手机号<input type="text" name="username" class="input-medium" value="<?php if(isset($_GET['username'])){?><?php echo $_GET['username'];?><?php }?>"></th>
+                <!--<th><input type="text" name="email" class="input-medium" value="<?php if(isset($_GET['email'])){?><?php echo $_GET['email'];?><?php }?>"></th>-->
                 <th>角色
-                    <select name="rid" id="" class="input-medium" {if value="$base.get.rid|isset"}select="{$base.get.rid}"{/if}>
+                    <select name="rid" id="" class="input-medium" <?php if(isset($_GET['rid'])){?>select="<?php echo $_GET['rid'];?>"<?php }?>>
                     <option value="">请选择</option>
-                    {foreach from="$role_list" value="$role"}
-                    <option value="{$role.rid}">{$role.title}</option>
-                    {/foreach}
+                    <?php if(is_array($role_list)):?><?php  foreach($role_list as $role){ ?>
+                    <option value="<?php echo $role['rid'];?>"><?php echo $role['title'];?></option>
+                    <?php }?><?php endif;?>
                     </select>
                 </th>
                 <th>注册途径
-                    <select name="type" class="input-medium" {if value="$base.get.type|isset"}select="{$base.get.type}"{/if}>
+                    <select name="type" class="input-medium" <?php if(isset($_GET['type'])){?>select="<?php echo $_GET['type'];?>"<?php }?>>
                     <option value="">请选择</option>
                     <option value="weixin">微信</option>
                     <option value="app">app</option>
@@ -34,16 +51,16 @@
                     <option value="普通用户">普通用户</option>
                     </select>
                 </th>
-                <th>开始时间<input type="text" id="start_time" name="start_time" class="input-medium" {if value="$base.get.start_time|isset"}value="{$base.get.start_time}"{/if} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></th>
-                <th>结束时间<input type="text" id="end_time" name="end_time" class="input-medium" {if value="$base.get.end_time|isset"}value="{$base.get.end_time}"{/if} onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></th>
+                <th>开始时间<input type="text" id="start_time" name="start_time" class="input-medium" <?php if(isset($_GET['start_time'])){?>value="<?php echo $_GET['start_time'];?>"<?php }?> onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></th>
+                <th>结束时间<input type="text" id="end_time" name="end_time" class="input-medium" <?php if(isset($_GET['end_time'])){?>value="<?php echo $_GET['end_time'];?>"<?php }?> onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></th>
                 <th>状态
-                    <select name="banned" class="input-medium" {if value="$base.get.banned|isset"}select="{$base.get.banned}"{/if}>
+                    <select name="banned" class="input-medium" <?php if(isset($_GET['banned'])){?>select="<?php echo $_GET['banned'];?>"<?php }?>>
                     <option value="">请选择</option>
                     <option value="0">未禁止</option>
                     <option value="1">已禁止</option>
                     </select>
                 </th>
-                <th>搜索结果：<font color="red">{$counts}</font>条</th>
+                <th>搜索结果：<font color="red"><?php echo $counts;?></font>条</th>
                 <th colspan="2">
                     <button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>
                     <a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a>
@@ -74,57 +91,57 @@
             <th>审核</th>
 
         </tr>
-        {foreach from="$users" value="$user"} 
+        <?php if(is_array($users)):?><?php  foreach($users as $user){ ?> 
         <tr>
-            <td><input type="checkbox" class="input-checkbox" name="uid" value="{$user.uid}"> </td>
-            <td>{$user.username}<span class="tips">[ID:{$user.uid}]</span></td>
-            <td>{$user.created|date:'Y-m-d H:i:s',@@}</td>
-            <td>{if value="$user.title!=''"}{$user.title}{elseif value="$user.hp_role.0.title!=''"}{$user.hp_role.0.title}{/if}</td>
+            <td><input type="checkbox" class="input-checkbox" name="uid" value="<?php echo $user['uid'];?>"> </td>
+            <td><?php echo $user['username'];?><span class="tips">[ID:<?php echo $user['uid'];?>]</span></td>
+            <td><?php echo date('Y-m-d H:i:s',$user['created']);?></td>
+            <td><?php if($user['title']!=''){?><?php echo $user['title'];?><?php  }elseif($user['hp_role'][0]['title']!=''){ ?><?php echo $user['hp_role'][0]['title'];?><?php }?></td>
             <td class="status">
-                {if value="$user.verify==0"}
+                <?php if($user['verify']==0){?>
                 <span class="warning">未认证</span>
-                {elseif value="$user.verify==1"}
+                <?php  }elseif($user['verify']==1){ ?>
                 <span class="warning">待审核</span>
-                {elseif value="$user.verify==3"}
+                <?php  }elseif($user['verify']==3){ ?>
                 <span class="success">已通过审核</span>
-                {elseif value="$user.verify==2"}
+                <?php  }elseif($user['verify']==2){ ?>
                 <span class="warning">未通过审核</span>
-                {/if}
+                <?php }?>
             </td>
-            <td>{$user.type}</td> 
+            <td><?php echo $user['type'];?></td> 
 
             <td>
-                {if value="$user.hp_role.0.rid = 8"}
-                    {if value="$user.type"}
-                        {if value="$user.branchname"}
-                            {$user.branchname}&nbsp;
-                        {/if}
-                        {if value="$user.salesmanname"}
-                            {$user.salesmanname}[ID:{$user.salesmanid}]&nbsp;
-                        {/if}
-                        {if value="$user.salesmanphoneno"}
-                            {$user.salesmanphoneno}
-                        {/if}   
+                <?php if($user['hp_role'][0]['rid']==8){?>
+                    <?php if($user['type']){?>
+                        <?php if($user['branchname']){?>
+                            <?php echo $user['branchname'];?>&nbsp;
+                        <?php }?>
+                        <?php if($user['salesmanname']){?>
+                            <?php echo $user['salesmanname'];?>[ID:<?php echo $user['salesmanid'];?>]&nbsp;
+                        <?php }?>
+                        <?php if($user['salesmanphoneno']){?>
+                            <?php echo $user['salesmanphoneno'];?>
+                        <?php }?>   
 
-                        {if value="$user.normalmanid"}
+                        <?php if($user['normalmanid']){?>
                         <?php
                             $normalman = M('user')->where(array('uid'=>$user['normalmanid']))->find();
 
 
                         ?>
-                            {$normalman.username}[ID:{$user.normalmanid}]
-                        {/if}  
-                    {/if}
-                {/if}
+                            <?php echo $normalman['username'];?>[ID:<?php echo $user['normalmanid'];?>]
+                        <?php }?>  
+                    <?php }?>
+                <?php }?>
             </td>
             <td>
-                {if value="$user.gender == 0 "}
+                <?php if($user['gender'] == 0){?>
                 <span><font color="blue">男</font></span>
-                {elseif value="$user.gender == 1 "}
+                <?php  }elseif($user['gender'] == 1){ ?>
                 <span><font color="#c71585">女</font></span>
-                {elseif value="$user.gender == 3 "}
+                <?php  }elseif($user['gender'] == 3){ ?>
                 <span><font color="#006400">暂无</font></span>
-                {/if}
+                <?php }?>
             <td>
                 <?php
                         $groups=array_pop($user);
@@ -141,28 +158,28 @@
                         }
                     ?>
             <td>
-                <a {if value="in_array('3',$rid)"}href="__CONTROL__/viewUserInfo/id/{$user.uid}/type/cu"{else}href="__CONTROL__/viewUserInfo/id/{$user.uid}/type/pu"{/if}/if} c-name="{$user.username}" action="view" class="opt-item"><i class="icon-user"></i>查看</a>&nbsp;&nbsp;
-                <a href="__CONTROL__/editUserInfoForm/id/{$user.uid}" c-name="{$user.username}" action="edit" class="opt-item"><i class="icon-asterisk"></i>修改</a>&nbsp;&nbsp;
-                <a href="###" rid="{$rid|implode:'#',@@}" uid="{$user.uid}" username="{$user.username}" class="config-role" title="配置用户组"><i class="icon-th"></i>用户组</a>
-                <a href="__CONTROL__/getUserCommission/id/{$user.uid}" class="commission" action="edit"><i class="icon-asterisk"></i>佣金转移</a>
+                <a <?php if(in_array('3',$rid)){?>href="http://localhost/hpjobweb/index.php/backend/user/viewUserInfo/id/<?php echo $user['uid'];?>/type/cu"<?php  }else{ ?>href="http://localhost/hpjobweb/index.php/backend/user/viewUserInfo/id/<?php echo $user['uid'];?>/type/pu"<?php }?>/if} c-name="<?php echo $user['username'];?>" action="view" class="opt-item"><i class="icon-user"></i>查看</a>&nbsp;&nbsp;
+                <a href="http://localhost/hpjobweb/index.php/backend/user/editUserInfoForm/id/<?php echo $user['uid'];?>" c-name="<?php echo $user['username'];?>" action="edit" class="opt-item"><i class="icon-asterisk"></i>修改</a>&nbsp;&nbsp;
+                <a href="###" rid="<?php echo implode('#',$rid);?>" uid="<?php echo $user['uid'];?>" username="<?php echo $user['username'];?>" class="config-role" title="配置用户组"><i class="icon-th"></i>用户组</a>
+                <a href="http://localhost/hpjobweb/index.php/backend/user/getUserCommission/id/<?php echo $user['uid'];?>" class="commission" action="edit"><i class="icon-asterisk"></i>佣金转移</a>
                 
-                {if value="$user.hp_role.0.rid = 7"}
-                    {if value="!$user.qrcode"}
-                        &nbsp;&nbsp;<a href="__CONTROL__/getRecruitQR/id/{$user.uid}" ><i class="icon-pi  cture"></i>生成二维码</a> 
-                    {/if}
-                    {if value="$user.qrcode"}
-                        &nbsp;&nbsp;<a href="http://www.hap-job.com/{$user.qrcode}"  target="_blank" ><i class="icon-picture"></i>查看二维码</a>
-                    {/if}
-                {/if}
+                <?php if($user['hp_role'][0]['rid']==7){?>
+                    <?php if(!$user['qrcode']){?>
+                        &nbsp;&nbsp;<a href="http://localhost/hpjobweb/index.php/backend/user/getRecruitQR/id/<?php echo $user['uid'];?>" ><i class="icon-pi  cture"></i>生成二维码</a> 
+                    <?php }?>
+                    <?php if($user['qrcode']){?>
+                        &nbsp;&nbsp;<a href="http://www.hap-job.com/<?php echo $user['qrcode'];?>"  target="_blank" ><i class="icon-picture"></i>查看二维码</a>
+                    <?php }?>
+                <?php }?>
             </td>
             <td>
-                <a href="__CONTROL__/verifyRole?name=3&uid={$user.uid}">审核通过</a>
-                <a href="__CONTROL__/verifyRole?name=2&uid={$user.uid}">审核未通过</a>
+                <a href="http://localhost/hpjobweb/index.php/backend/user/verifyRole?name=3&uid=<?php echo $user['uid'];?>">审核通过</a>
+                <a href="http://localhost/hpjobweb/index.php/backend/user/verifyRole?name=2&uid=<?php echo $user['uid'];?>">审核未通过</a>
             </td>
 
 
         </tr>
-        {/foreach}
+        <?php }?><?php endif;?>
         <tr class="well">
             <td><input type="checkbox" class="select-all input-checkbox"></td>
             <td class="opt" colspan="2">
@@ -171,13 +188,13 @@
             </td>
 
             <td colspan="4">
-                {$page}
+                <?php echo $page;?>
             </td>
         </tr>
     </table>
 </div>
 <div id="config-role" title="配置用户角色" class="hide">
-    <form action="__CONTROL__/configUserRole" method="post">
+    <form action="http://localhost/hpjobweb/index.php/backend/user/configUserRole" method="post">
         <table class="table">
             <tr>
                 <th>用户：</th>
@@ -220,7 +237,7 @@
 <div id="sendMsg" title="发送消息" class="hide">
     <div id="tabs">
 
-        <form class="well" style="margin-top:10px;" id="message_form" action="__CONTROL__/send_message" method="post" validate="true">
+        <form class="well" style="margin-top:10px;" id="message_form" action="http://localhost/hpjobweb/index.php/backend/user/send_message" method="post" validate="true">
 
             <style>
                 .th_width{width: 66px;display: block;}
