@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html lang="en-US" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta charset="UTF-8">
+<title></title>
+{css file="bootstrap" /}
+{css file="__TPL__/css/public.css" /}
+{css file="jqueryUI.bootstrap" /}
+{jquery /}
+{js file="jqueryUI"}
+</head>
+<body>
+<form id="company-data-form" validate="true" method="post" action="__METH__">
+<table>
+    <tr>
+        <th>消息内容&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <td><textarea name="content" id="content" rows="6" cols="60"></textarea></td>
+    </tr>
+    <tr>
+        <th>消息分类</th>
+        <td>
+            <select name="massage_type" class="input">
+                <option value="101">抽奖活动</option>
+                <option value="102">签到</option>
+                <option value="103">限时抢兑</option>
+                <option value="104">职位订阅</option>
+                <option value="105">发现帖子</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>配图</th>
+        <td>{upload size="2" type="jpg,jpeg,png,gif" limit="1" text="选择配图" name="path" dir="uploads/message" /}</td>
+    </tr>
+    <tr>
+        <th>选择对象&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <td>
+            <select name="type" class="input-small">
+            <option value="1">求职者</option>
+            <option value="2">业务员</option>
+            <option value="3">全部用户</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+        <td><button id="confirm" class="btn" type="submit">发送</button></td>
+        <td></td>
+    </tr>
+</table>
+</form>
+<div id="dialog" class="hide" title="">
+	<img src="" alt="">
+</div>
+<script type="text/javascript">
+    $("#confirm").click(function(){
+        if(confirm('确认发送消息？')){
+            return true;
+        }else{
+            return false;
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_a07aa5e73ceb8c090fd6dcfda25ef677 = Array
+	(
+	0=>Array
+		(
+		'laid'=>470,
+		'title'=>'其他'
+		),
+	1=>Array
+		(
+		'laid'=>469,
+		'title'=>'临时'
+		),
+	2=>Array
+		(
+		'laid'=>468,
+		'title'=>'兼职'
+		)
+	);
+?>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        {css file="jqueryUI.bootstrap" /}
+        {css file="bootstrap"}
+        {css file="__TPL__/css/public.css" /}
+        {js file="jquery" /}
+        {js file="jquery.validate" /}
+        {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+        {js file="jqueryUI" /}
+        {js file="datepicker" /}
+        {js file="__ROOT__/caches/js/linkage_data.js" /}
+        {js file="__ROOT__/public/js/linkage/linkage_style_1.js" /}
+    </head>
+    <body>
+    <div id="tabs-2">
+        <style>
+            .table{ margin-top: 20px;}
+        </style>
+
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>昵称</th>
+                <th>评论内容</th>
+                <th>评论时间</th>
+                <th>操作</th>
+            </tr>
+            {foreach from="$comment" value="$comment"}
+            <tr>
+                <td>{$comment.cid}</td>
+                <td>{if value="$comment.pid!=0"}{$comment.username} 回复 {$comment.busername}({$comment.bnickname}){else /}{$comment.username}{/if}</td>
+                <td>{if value="$comment.nickname!=null"}{$comment.nickname}{else /}<font color="a9a9a9">暂无</font>{/if}</td>
+                <td>{$comment.content}</td>
+                <td>{$comment.created|date:'Y-m-d H:i:s',@@}</td>
+                <td><a href="__CONTROL__/delComment/cid/{$comment.cid}" title="删除" class="del_comment">删除</a></td>
+            </tr>
+            {/foreach}
+            <tr class="well">
+                <td colspan="6"></td>
+                <td>{$pages}</td>
+            </tr>
+        </table>
+        <script type="text/javascript">
+
+            $(".del_comment").click(function(){
+                if(confirm('确认删除此条评论？一旦删除不可恢复')){
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+        </script>
+
+    </div>
+
+    </body>
+</html>

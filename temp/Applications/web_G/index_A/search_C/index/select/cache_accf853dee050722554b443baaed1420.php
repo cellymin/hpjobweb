@@ -1,0 +1,36 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_accf853dee050722554b443baaed1420 = Array
+	(
+	0=>Array
+		(
+		'laid'=>698,
+		'title'=>'公关总监/经理'
+		),
+	1=>Array
+		(
+		'laid'=>699,
+		'title'=>'公关主管'
+		),
+	2=>Array
+		(
+		'laid'=>700,
+		'title'=>'公关专员/助理'
+		),
+	3=>Array
+		(
+		'laid'=>701,
+		'title'=>'媒介经理/主管'
+		),
+	4=>Array
+		(
+		'laid'=>702,
+		'title'=>'媒介专员/媒介购买'
+		),
+	5=>Array
+		(
+		'laid'=>703,
+		'title'=>'其他'
+		)
+	);
+?>

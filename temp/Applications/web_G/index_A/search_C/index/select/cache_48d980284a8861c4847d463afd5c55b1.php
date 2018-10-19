@@ -1,0 +1,36 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_48d980284a8861c4847d463afd5c55b1 = Array
+	(
+	0=>Array
+		(
+		'laid'=>766,
+		'title'=>'污水处理工程师'
+		),
+	1=>Array
+		(
+		'laid'=>767,
+		'title'=>'环境工程技术/园林景区'
+		),
+	2=>Array
+		(
+		'laid'=>768,
+		'title'=>'环境管理/保护'
+		),
+	3=>Array
+		(
+		'laid'=>769,
+		'title'=>'环保技术'
+		),
+	4=>Array
+		(
+		'laid'=>770,
+		'title'=>'EHS管理'
+		),
+	5=>Array
+		(
+		'laid'=>771,
+		'title'=>'其他'
+		)
+	);
+?>

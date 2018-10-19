@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {css file="jqueryUI.bootstrap" /}
+    {css file="bootstrap"}
+    {css file="__TPL__/css/public.css" /}
+    {js file="jquery" /}
+    {js file="jquery.validate" /}
+    {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+    {js file="jqueryUI" /}
+    {js file="datepicker" /}
+    {js file="__ROOT__/caches/js/linkage_data.js" /}
+    {js file="__ROOT__/public/js/linkage/linkage_style_1.js" /}
+</head>
+<body>
+<div id="tabs-2">
+    <style>
+        .table{ margin-top: 20px;}
+    </style>
+
+    <form action="__METH__" method="get" id="search-form">
+        <table class="table well" style="margin-bottom:-18px;">
+            <tr>
+                <th></th>
+                <th>公司名称</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" name="content" class="input-medium" value="{if value="$base.get.content|isset"}{$base.get.content}{/if}"></td>
+                <td>
+                    状态
+                    <select name="state" {if value="$base.get.state|isset"}select="{$base.get.state}"{/if}>
+                    <option value="">请选择</option>
+                    <option value="1">通过</option>
+                    <option value="0">未审核</option>
+                    <option value="2">拒绝</option>
+                    </select>
+                </td>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>
+                    <a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a>
+                </td>
+            </tr>
+        </table>
+
+    </form>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>公司名称</th>
+            <th>地址</th>
+            <th>状态</th>
+            <th>发布时间</th>
+            <th>操作</th>
+        </tr>
+        {foreach from="$company" value="$company"}
+        <tr>
+            <td>{$company.company_id}</td>
+            <td>{$company.name}</td>
+            <td>{$company.address}</td>
+            <td>
+                {if value="$company.state==0"}<span class="sys">未审核</span>
+                {elseif value="$company.state==1"}<span class="success">通过</span>
+                {else /}
+                <span class="sys">未通过</span>
+                {/if}
+            </td>
+
+            <td>{$company.created|date:'Y-m-d H:i:s',@@}</td>
+            <td><a href="__CONTROL__/delCompanyAddress/id/{$company.company_id}" title="删除" class="del_list_sns">删除</a></td>
+            <td><a href="__CONTROL__/acceptCompanyAddress/id/{$company.company_id}" title="通过">通过</a></td>
+            <td><a href="__CONTROL__/refuseCompanyAddress/id/{$company.company_id}" title="拒绝">拒绝</a></td>
+            <td><a href="__CONTROL__/updateCompanyAddress/id/{$company.company_id}/name/{$company.name}/address/{$company.address}" id="{$company.company_id}" class="opt-edit"><i class="icon-edit"></i>修改</a><td>
+            <!--<td> <a href="__CONTROL__/pushSns/sid/{$sns.sid}  class="opt-edit"><i class="icon-edit"></i>回复</a></td>-->
+        </tr>
+        {/foreach}
+        <tr class="well">
+            <td colspan="6"></td>
+            <td>{$pages}</td>
+        </tr>
+    </table>
+    <div id="dialog" class="hide" title="">
+        <img src="" alt="">
+    </div>
+    <script type="text/javascript">
+        $('#reset').click(function(){
+            $('#search-form :input').val('');
+            $('#search-form').submit();
+        });
+        $("select[select]").each(function(e,obj){
+            $(this).val($(this).attr('select'));
+        });
+        $(".del_list_sns").click(function(){
+            if(confirm('确认删除地址？一旦删除不可恢复')){
+                return true;
+            }else{
+                return false;
+            }
+        });
+        $('.opt-edit').click(function() {
+            var _this = $(this);
+            $.get($(this).attr('href'), function (data) {
+                $('#dialog').html(data);
+                $('#dialog').dialog({
+                    "title": "修改信息",
+                    "width": "470",
+                    "height": "452",
+                    "modal": true,
+                    "buttons": {
+                        "确定": function () {
+                            $("#dialog form").submit();
+                        }
+                    }
+                });
+            }, 'html');
+            return false;
+        });
+    </script>
+
+</div>
+
+</body>
+</html>

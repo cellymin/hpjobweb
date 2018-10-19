@@ -1,0 +1,51 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_0facfbf81201e4c5bb95195f7c57fc1b = Array
+	(
+	0=>Array
+		(
+		'field'=>'lid',
+		'type'=>'int(11) unsigned',
+		'null'=>'NO',
+		'key'=>1,
+		'default'=>'',
+		'extra'=>'auto_increment'
+		),
+	1=>Array
+		(
+		'field'=>'type',
+		'type'=>'tinyint(1)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	2=>Array
+		(
+		'field'=>'uid',
+		'type'=>'int(11)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	3=>Array
+		(
+		'field'=>'data_id',
+		'type'=>'int(11)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	4=>Array
+		(
+		'field'=>'create_at',
+		'type'=>'int(11)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		)
+	);
+?>

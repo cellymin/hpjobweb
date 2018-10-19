@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+    <script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+<div class="user-info">
+    <form action="__CONTROL__/addCompanyAddress" validate="true" method="post" class="sub">
+        <table class="table well">
+            <tr>
+                <!--<th>评论内容 </th>-->
+                <td>公司名称</td>
+                <td><input name="name" id ="content"  /></input></td>
+            </tr>
+            <tr>
+                <td>公司地址</td>
+                <td><input name="address" id="address"> </input></td>
+            </tr>
+
+        </table>
+        <button type="submit" class="btn btn-success" ><i class="icon-search icon-white"></i>&nbsp;提交</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+{include file="__TPL__/header.html" /}
+<div id="userList">
+
+    <table class="table well" style="margin-bottom:-18px;">
+        <tr>
+            <td colspan="2">
+                <a href="http://www.hap-job.com/index.php/backend/company/returnMoney">返回结果1</a>
+                <a id="exportResult" href="__CONTROL__/selectField" class="btn btn-small btn-primary" style="margin-left: 8px">导出格式</a>
+            </td>
+        </tr>
+    </table>
+
+    <div style="display: none">
+        <form id="export" action="__CONTROL__/exportResult" method="post" enctype="multipart/form-data" id="insertCommission" class="well form-horizontal">
+            <table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
+                <tr>
+                    <td>
+                        <input type="submit" value="导出" name="export">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <table class="table" id="recruit-list">
+        <tr>
+            <th width="12%">渠道</th>
+            <th width="18%">来源</th>
+            <th>附属中介</th>
+            <th>输入单位</th>
+            <th>工号</th>
+            <th>姓名</th>
+            <th>企业返利</th>
+            <th>工资月份</th>
+            <th>奖励方式</th>
+            <th>反馈日期</th>
+            <th>操作</th>
+        </tr>
+        {foreach from="$resultTwos" value="$resultTwo"}
+        <tr>
+            <td>{$resultTwo.origin}</td>
+            <td>{$resultTwo.originer}</td>
+            <td>{$resultTwo.membership_mediation}</td>
+            <td>{$resultTwo.company}</td>
+            <td>{$resultTwo.number}</td>
+            <td>{$resultTwo.name}</td>
+            <td>{$resultTwo.return_money}</td>
+            <td>{$resultTwo.salary_month}</td>
+            <td>{$resultTwo.reward_way}</td>
+            <td>{if value="$resultTwo.feedback_time==0"}无
+                {else /}
+                {$resultTwo.feedback_time|date:'Y-m-d',@@}
+                {/if}
+            </td>
+            <td><a href="__CONTROL__/editResultTwo/id/{$resultTwo.id}" value-id="{$resultTwo.id}" class="opt-edit"><i class="icon-edit"></i>编辑</a>
+                <a href="__CONTROL__/resultTwoInfo/id/{$resultTwo.id}" value-id="{$resultTwo.id}" class="opt-view">查看</a>
+            </td>
+        </tr>
+        {/foreach}
+        <tr class="well">
+            <td colspan="4">
+                {$pages}
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</div>
+
+<div id="dialog" style="z-idnex:999"></div>
+<script type="text/javascript">
+
+    $('#exportResult').click(function(){
+
+        $.get($(this).attr('href'), function (data) {
+            $('#dialog').html(data);
+            $('#dialog').dialog({
+                "title": "选择字段",
+                "width": "500",
+                "height": "750",
+                "modal": true,
+                "buttons": {
+                    "确定": function () {
+                        $('#dialog form').submit();
+//                        $('#export').submit();
+                    },
+                    "关闭": function () {
+                        $(this).dialog("close");
+                    }
+                }
+
+            });
+        }, 'html');
+        return false;
+        //$('#export').submit();
+    });
+
+    select_all('recruit-list');
+    //删除选中职位
+    function del_recruit(arg){
+        $.post('__CONTROL__/delRecruit',{"recruit_id":arg.id},function(data){
+            if(data==1){
+                arg.checked_obj.parents('tr').fadeOut(function(){
+                    arg.checked_obj.parents('tr').remove();
+                });
+            }
+        },'html');
+    }
+
+    $('.opt-view').click(function() {
+        var _this = $(this),
+                _id = _this.attr('href');
+        $.post($(this).attr('href'), function (data) {
+            $('#dialog').html(data);
+            $('#dialog').dialog({
+                "title": "返款信息",
+                "width": "500",
+                "height": "750",
+                "modal": true,
+                "buttons": {
+                    "关闭": function () {
+                        $(this).dialog("close");
+                    }
+                }
+
+            });
+        }, 'html');
+        return false;
+    });
+
+    $('.opt-edit').click(function() {
+        var _this = $(this),
+                _id = _this.attr('href');
+        $.get($(this).attr('href'), function (data) {
+            $('#dialog').html(data);
+            $('#dialog').dialog({
+                "title": "修改信息",
+                "width": "500",
+                "height": "750",
+                "modal": true,
+                "buttons": {
+                    "确定": function () {
+
+                        $('#dialog form').submit();
+                    }
+            }
+
+            });
+        }, 'html');
+        return false;
+    });
+
+</script>
+</body>
+</html>

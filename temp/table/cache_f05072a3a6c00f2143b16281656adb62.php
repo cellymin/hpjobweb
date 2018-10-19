@@ -1,0 +1,60 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_f05072a3a6c00f2143b16281656adb62 = Array
+	(
+	0=>Array
+		(
+		'field'=>'id',
+		'type'=>'int(11) unsigned',
+		'null'=>'NO',
+		'key'=>1,
+		'default'=>'',
+		'extra'=>'auto_increment'
+		),
+	1=>Array
+		(
+		'field'=>'uid',
+		'type'=>'int(11) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	2=>Array
+		(
+		'field'=>'username',
+		'type'=>'varchar(100)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	3=>Array
+		(
+		'field'=>'company',
+		'type'=>'varchar(200)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	4=>Array
+		(
+		'field'=>'querytime',
+		'type'=>'varchar(50)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	5=>Array
+		(
+		'field'=>'created_at',
+		'type'=>'int(11)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		)
+	);
+?>

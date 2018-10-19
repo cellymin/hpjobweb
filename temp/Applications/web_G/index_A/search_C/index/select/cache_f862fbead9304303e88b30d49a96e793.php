@@ -1,0 +1,46 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_f862fbead9304303e88b30d49a96e793 = Array
+	(
+	0=>Array
+		(
+		'laid'=>772,
+		'title'=>'项目经理/主管'
+		),
+	1=>Array
+		(
+		'laid'=>773,
+		'title'=>'石油天然气技术人员'
+		),
+	2=>Array
+		(
+		'laid'=>774,
+		'title'=>'空调/热能工程师'
+		),
+	3=>Array
+		(
+		'laid'=>775,
+		'title'=>'核力/火力工程师'
+		),
+	4=>Array
+		(
+		'laid'=>776,
+		'title'=>'电力工程师/技术员'
+		),
+	5=>Array
+		(
+		'laid'=>777,
+		'title'=>'地质勘查/选矿/采矿'
+		),
+	6=>Array
+		(
+		'laid'=>778,
+		'title'=>'水利/水电工程师'
+		),
+	7=>Array
+		(
+		'laid'=>779,
+		'title'=>'其他'
+		)
+	);
+?>

@@ -1,0 +1,14 @@
+{include file="__TPL__/header.html" /}
+<div id="userList">
+    {if value="$error|empty"}导入成功{else}
+        {foreach from="$errors" value="$error"}
+            <div>
+                第{$error['err_col']}行数据出错：{$error['err_msg']}
+            </div>
+
+        {/foreach}
+    {/if}
+</div>
+<div id="dialog" style="z-idnex:999"></div>
+</body>
+</html>

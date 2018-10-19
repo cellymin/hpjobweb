@@ -1,0 +1,33 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_0001d73e713e0f4c04e65d1c7d5bbcb1 = Array
+	(
+	0=>Array
+		(
+		'field'=>'id',
+		'type'=>'int(11)',
+		'null'=>'NO',
+		'key'=>1,
+		'default'=>'',
+		'extra'=>'auto_increment'
+		),
+	1=>Array
+		(
+		'field'=>'ip_address',
+		'type'=>'varchar(40)',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	2=>Array
+		(
+		'field'=>'time',
+		'type'=>'int(11)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		)
+	);
+?>

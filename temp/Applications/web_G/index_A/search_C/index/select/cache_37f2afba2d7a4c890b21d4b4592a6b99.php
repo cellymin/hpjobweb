@@ -1,0 +1,36 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_37f2afba2d7a4c890b21d4b4592a6b99 = Array
+	(
+	0=>Array
+		(
+		'laid'=>854,
+		'title'=>'保安'
+		),
+	1=>Array
+		(
+		'laid'=>855,
+		'title'=>'保洁'
+		),
+	2=>Array
+		(
+		'laid'=>856,
+		'title'=>'普工/操作工'
+		),
+	3=>Array
+		(
+		'laid'=>857,
+		'title'=>'话务员'
+		),
+	4=>Array
+		(
+		'laid'=>858,
+		'title'=>'家政人员'
+		),
+	5=>Array
+		(
+		'laid'=>859,
+		'title'=>'其他'
+		)
+	);
+?>

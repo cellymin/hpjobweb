@@ -1,0 +1,60 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_5b8b8f5ddc308811e3f64a8ef996d550 = Array
+	(
+	0=>Array
+		(
+		'field'=>'lid',
+		'type'=>'int(11) unsigned',
+		'null'=>'NO',
+		'key'=>1,
+		'default'=>'',
+		'extra'=>'auto_increment'
+		),
+	1=>Array
+		(
+		'field'=>'uid',
+		'type'=>'int(11) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	2=>Array
+		(
+		'field'=>'mid',
+		'type'=>'int(11) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	3=>Array
+		(
+		'field'=>'mission_name',
+		'type'=>'varchar(100)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	4=>Array
+		(
+		'field'=>'point',
+		'type'=>'int(11) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	5=>Array
+		(
+		'field'=>'created',
+		'type'=>'int(11)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		)
+	);
+?>

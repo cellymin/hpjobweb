@@ -1,0 +1,40 @@
+ <!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	{css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+	<script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+	<div class="user-info">
+
+	<form action="__CONTROL__/editPass" validate="true" method="post">
+	<table class="table well">
+
+		<tr>
+			<th>修改密码</th>
+			<td>
+				<input type="password" name="password" validate="{minlength:6}" id="pwd" value="">
+				<p class="help-inline">若密码为空则不修改密码</p>
+			</td>
+		</tr>
+		<tr>
+			<th>重复密码</th>
+			<td><input type="password" name="re_password" validate="{equalTo:'#pwd'}" value=""></td>
+		</tr>
+
+        <tr>
+            <td><button id="confirm" class="btn" type="submit">修改</button></td>
+            <td></td>
+        </tr>
+	</table>
+	</form>
+	</div>
+</body>
+</html>

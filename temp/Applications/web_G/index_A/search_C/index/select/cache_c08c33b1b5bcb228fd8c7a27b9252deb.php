@@ -1,0 +1,46 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_c08c33b1b5bcb228fd8c7a27b9252deb = Array
+	(
+	0=>Array
+		(
+		'id'=>344,
+		'name'=>'果洛'
+		),
+	1=>Array
+		(
+		'id'=>345,
+		'name'=>'黄南'
+		),
+	2=>Array
+		(
+		'id'=>346,
+		'name'=>'海西'
+		),
+	3=>Array
+		(
+		'id'=>347,
+		'name'=>'海东'
+		),
+	4=>Array
+		(
+		'id'=>348,
+		'name'=>'海北'
+		),
+	5=>Array
+		(
+		'id'=>349,
+		'name'=>'海南'
+		),
+	6=>Array
+		(
+		'id'=>350,
+		'name'=>'西宁'
+		),
+	7=>Array
+		(
+		'id'=>351,
+		'name'=>'玉树'
+		)
+	);
+?>

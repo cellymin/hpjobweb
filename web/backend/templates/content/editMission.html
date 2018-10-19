@@ -1,0 +1,74 @@
+ <!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	{css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+	<script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+
+<div id="mission-content" style="margin-top: 10px">
+	<form action="__CONTROL__/editMission" method="post">
+		<div id="tabs-add" title="修改任务">
+
+			<div id="tabs-1"><table>
+				<tr>
+					<th width="10%">任务名称</th>
+					<td><input type="text" name="mission_name" value="{$mission.mission_name}" /></td>
+				</tr>
+				<tr>
+					<th width="10%">性质</th>
+					<td><label style="display: inline-block"><input type="radio" name="daily_mission" value="1" {if value="$mission.daily_mission==1"} checked {/if} />每日</label>
+						&nbsp;&nbsp;<label style="display: inline-block"><input type="radio" name="daily_mission" value="2" {if value="$mission.daily_mission==2"}checked{/if} />新手</label>
+					</td>
+				</tr>
+				<tr>
+					<th>类别</th>
+					<td>
+						<select name="mission_type" class="input-medium" validate="{required:true}">
+							<option value="">请选择</option>
+
+							{foreach from="$mission_types" key="$k" value="$mission_type"}
+							{if value="$mission.mission_type==$k"}
+							<option value="{$k}" selected>{$mission_type}</option>
+							{else /}
+							<option value="{$k}">{$mission_type}</option>
+							{/if}
+							{/foreach}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>需要完成数量</th>
+					<td><input type="text" name="need_num" class="input-mini" value="{$mission.need_num}" validate="{required:true,regexp:/^[0-9]*$/,messages:'只能输入数字'}" /></td>
+				</tr>
+				<tr>
+					<th>奖励积分值</th>
+					<td><input type="text" name="point" class="input-mini" value="{$mission.point}" validate="{required:true,regexp:/^[0-9]*$/,messages:'只能输入数字'}" /></td>
+				</tr>
+				<tr>
+					<th>状态</th>
+					<td><label style="display: inline-block"><input type="radio" name="state" value="1" {if value="$mission.state==1"} checked {/if} />开启</label>
+						&nbsp;&nbsp;<label style="display: inline-block"><input type="radio" name="state" value="2" {if value="$mission.state==2"}checked{/if} />关闭</label>
+					</td>
+				</tr>
+
+				<tr>
+					<input type="hidden" name="mid" value="{$mission.mid}">
+					<th><input type="submit" value="提交" class="btn btn-primary" /></th>
+				</tr>
+
+			</table>
+			</div>
+		</div>
+	</form>
+</div>
+
+</body>
+</html>

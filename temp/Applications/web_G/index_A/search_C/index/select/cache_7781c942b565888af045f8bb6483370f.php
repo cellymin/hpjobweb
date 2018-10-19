@@ -1,0 +1,46 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_7781c942b565888af045f8bb6483370f = Array
+	(
+	0=>Array
+		(
+		'laid'=>814,
+		'title'=>'咨询总监'
+		),
+	1=>Array
+		(
+		'laid'=>815,
+		'title'=>'咨询经理/主管'
+		),
+	2=>Array
+		(
+		'laid'=>816,
+		'title'=>'咨询顾问'
+		),
+	3=>Array
+		(
+		'laid'=>817,
+		'title'=>'专业顾问'
+		),
+	4=>Array
+		(
+		'laid'=>818,
+		'title'=>'情报信息分析'
+		),
+	5=>Array
+		(
+		'laid'=>819,
+		'title'=>'培训师'
+		),
+	6=>Array
+		(
+		'laid'=>820,
+		'title'=>'市场调研'
+		),
+	7=>Array
+		(
+		'laid'=>821,
+		'title'=>'其他'
+		)
+	);
+?>

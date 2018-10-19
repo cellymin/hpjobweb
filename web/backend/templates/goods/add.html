@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        {css file="bootstrap" /}
+        {js file="jquery" /}
+        {js file="jquery.validate" /}
+        {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+        {js file="jquery.colorPicker" /}
+        {js file="datepicker" /}
+        {js file="__ROOT__/caches/js/linkage_data.js" /}
+        {js file="__ROOT__/caches/js/linkage_style_1.js" /}
+    </head>
+    <body>
+    <div id="tabs-1">
+        <div id="add-form">
+            <form action="__CONTROL__/add" method="post" validate="true" enctype="multipart/form-data">
+                <table>
+                    <tr>
+                        <th>商品标题：</th>
+                        <td><input type="text" name="goods_title" validate="{required:true}" /></td>
+                    </tr>
+                    <tr>
+                        <th>商品描述：</th>
+                        <td><textarea name="goods_desc" rows="3"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>价格/积分:</th>
+                        <td><input type="text" name="goods_price" id="price" class="input-mini" /></td>
+                    </tr>
+                    <tr>
+                        <th>开始时间：</th>
+                        <td><input type="text" name="goods_start_time" id="startTime" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})" /></td>
+                    </tr>
+                    <!--<tr>
+                        <th>结束时间：</th>
+                        <td><input type="text" name="goods_end_time" id="endTime" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',minDate:'#F{$dp.$D(\'startTime\',{m:1})}',autoPickDate:true})" /></td>
+                    </tr>-->
+                    <tr>
+                        <th>数量：</th>
+                        <td><input type="text" name="goods_amount" id="amount" class="input-mini" /></td>
+                    </tr>
+                    <tr>
+                        <th>状态：</th>
+                        <td class="status">
+                            <label><input type="radio" name="status" value="1" checked />开启</label>
+                            <label><input type="radio" name="status" value="0" />关闭</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>类型：</th>
+                        <td class="type">
+                            <label><input type="radio" name="type" value="1" checked />积分兑换</label>
+                            <label><input type="radio" name="type" value="0" />限时抢购</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>上传图片：</th>
+                        <td>{upload size="2" type="jpg,png,gif" limit="1" text="点击上传" name="path" dir="uploads/goods" /}<span>(图片宽高比：16：9 如320*180)</span></td>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <td><button type="submit" class="btn btn-primary"><i class="icon-plus icon-white"></i> 添加</button></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <style type="text/css">
+            #tabs-1{
+                margin-top: 20px;
+            }
+            .status label input{ float: left;}
+            .status label{
+                width:50px;
+                text-align: right;
+                float: left;
+                margin-right: 20px;
+            }
+            .type label input{ float: left;}
+            .type label{
+                width:70px;
+                text-align: right;
+                float: left;
+                margin-right: 20px;
+            }
+            table th{
+                width: 95px;
+                text-align:right;
+            }
+        </style>
+    </div>
+
+        <script type="text/javascript">
+
+        </script>
+
+    </body>
+</html>

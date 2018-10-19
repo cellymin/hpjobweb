@@ -1,0 +1,21 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_7f23327fbf6ddd5c23a45223e36235c9 = Array
+	(
+	0=>Array
+		(
+		'id'=>407,
+		'name'=>'海口'
+		),
+	1=>Array
+		(
+		'id'=>408,
+		'name'=>'三亚'
+		),
+	2=>Array
+		(
+		'id'=>409,
+		'name'=>'五指山'
+		)
+	);
+?>

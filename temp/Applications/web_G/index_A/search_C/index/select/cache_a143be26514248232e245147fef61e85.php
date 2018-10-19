@@ -1,0 +1,26 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_a143be26514248232e245147fef61e85 = Array
+	(
+	0=>Array
+		(
+		'laid'=>228,
+		'title'=>'高级硬件工程师'
+		),
+	1=>Array
+		(
+		'laid'=>229,
+		'title'=>'硬件工程师'
+		),
+	2=>Array
+		(
+		'laid'=>230,
+		'title'=>'硬件测试人员'
+		),
+	3=>Array
+		(
+		'laid'=>231,
+		'title'=>'其他'
+		)
+	);
+?>

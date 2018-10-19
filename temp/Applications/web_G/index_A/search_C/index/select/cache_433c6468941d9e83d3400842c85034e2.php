@@ -1,0 +1,36 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_433c6468941d9e83d3400842c85034e2 = Array
+	(
+	0=>Array
+		(
+		'laid'=>456,
+		'title'=>'农/林/牧/渔'
+		),
+	1=>Array
+		(
+		'laid'=>459,
+		'title'=>'农艺师'
+		),
+	2=>Array
+		(
+		'laid'=>458,
+		'title'=>'养殖人员'
+		),
+	3=>Array
+		(
+		'laid'=>457,
+		'title'=>'饲料业务'
+		),
+	4=>Array
+		(
+		'laid'=>461,
+		'title'=>'其他'
+		),
+	5=>Array
+		(
+		'laid'=>460,
+		'title'=>'畜牧师'
+		)
+	);
+?>

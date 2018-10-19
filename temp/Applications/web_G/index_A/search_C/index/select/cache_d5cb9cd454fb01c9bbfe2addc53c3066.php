@@ -1,0 +1,36 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_d5cb9cd454fb01c9bbfe2addc53c3066 = Array
+	(
+	0=>Array
+		(
+		'laid'=>628,
+		'title'=>'司机/驾驶员'
+		),
+	1=>Array
+		(
+		'laid'=>629,
+		'title'=>'航空/列车/船舶操作维修'
+		),
+	2=>Array
+		(
+		'laid'=>630,
+		'title'=>'航空/列车/船舶乘务'
+		),
+	3=>Array
+		(
+		'laid'=>631,
+		'title'=>'公交/地铁'
+		),
+	4=>Array
+		(
+		'laid'=>632,
+		'title'=>'飞机/列车/船舶设计与制造'
+		),
+	5=>Array
+		(
+		'laid'=>633,
+		'title'=>'其他'
+		)
+	);
+?>

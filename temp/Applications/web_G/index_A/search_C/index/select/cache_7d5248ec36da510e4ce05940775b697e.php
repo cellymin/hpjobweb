@@ -1,0 +1,46 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_7d5248ec36da510e4ce05940775b697e = Array
+	(
+	0=>Array
+		(
+		'laid'=>319,
+		'title'=>'采购总监/经理'
+		),
+	1=>Array
+		(
+		'laid'=>320,
+		'title'=>'采购主管'
+		),
+	2=>Array
+		(
+		'laid'=>321,
+		'title'=>'采购专员/助理'
+		),
+	3=>Array
+		(
+		'laid'=>322,
+		'title'=>'外贸/贸易专员/助理'
+		),
+	4=>Array
+		(
+		'laid'=>323,
+		'title'=>'外贸/贸易经理/主管'
+		),
+	5=>Array
+		(
+		'laid'=>324,
+		'title'=>'业务跟单'
+		),
+	6=>Array
+		(
+		'laid'=>325,
+		'title'=>'报关员'
+		),
+	7=>Array
+		(
+		'laid'=>326,
+		'title'=>'其他'
+		)
+	);
+?>

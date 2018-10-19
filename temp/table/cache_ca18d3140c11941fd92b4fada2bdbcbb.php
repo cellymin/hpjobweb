@@ -1,0 +1,87 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_ca18d3140c11941fd92b4fada2bdbcbb = Array
+	(
+	0=>Array
+		(
+		'field'=>'laid',
+		'type'=>'int(10) unsigned',
+		'null'=>'NO',
+		'key'=>1,
+		'default'=>'',
+		'extra'=>'auto_increment'
+		),
+	1=>Array
+		(
+		'field'=>'title',
+		'type'=>'varchar(100)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	2=>Array
+		(
+		'field'=>'pid',
+		'type'=>'int(11)',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	3=>Array
+		(
+		'field'=>'path',
+		'type'=>'varchar(50)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	4=>Array
+		(
+		'field'=>'sort',
+		'type'=>'mediumint(8) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	5=>Array
+		(
+		'field'=>'lcgid',
+		'type'=>'int(10) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	6=>Array
+		(
+		'field'=>'ishot',
+		'type'=>'int(1) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	7=>Array
+		(
+		'field'=>'img',
+		'type'=>'varchar(255)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	8=>Array
+		(
+		'field'=>'hot_time',
+		'type'=>'int(10) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		)
+	);
+?>

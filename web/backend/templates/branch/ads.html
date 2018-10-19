@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        {css file="jqueryUI.bootstrap" /}
+        {css file="bootstrap"}
+        {css file="__TPL__/css/public.css" /}
+        {js file="jquery" /}
+        {js file="jquery.validate" /}
+        {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+        {js file="jqueryUI" /}
+        {js file="datepicker" /}
+        {js file="__ROOT__/caches/js/linkage_data.js" /}
+        {js file="__ROOT__/public/js/linkage/linkage_style_1.js" /}
+    </head>
+    <body>
+        <div id="jquery-colour-picker" class="hide"></div>
+        <div id="tabs">
+            <ul>
+                <li><a href="#tabs-2">门店列表</a></li>
+                <li><a href="#tabs-1">添加门店</a></li>
+               
+            </ul>
+            <div id="tabs-1">
+                <div id="add-form">
+                    <form action="__METH__" method="post" validate="true" enctype="multipart/form-data">
+                        <table>
+                            <tr>
+                                <th>门店名称：</th>
+                                <td><input type="text" name="name" validate="{required:true}" /></td>
+                            </tr>
+
+                            <tr>
+                                <th>门店地址：</th>
+                                <td><input type="text" name="address" validate="{required:true}" /></td>
+                            </tr>
+
+
+                            <tr>
+                                <th>联系人：</th>
+                                <td><input type="text" name="contacter" validate="{required:true}" /></td>
+                            </tr> 
+                           
+                           
+                            <tr>
+                                <th>联系人手机号：</th>
+                                <td><input type="text" name="phonenumber" validate="{required:true}" /></td>
+                            </tr>
+                        </table>
+           
+                        <script type="text/javascript">
+                            $('#cate').change(function(){
+                                $('[class^=cate_c_]').hide();
+                                $('[class^=cate_c_] input').attr('disabled',true);
+                                $('.'+$(this).find(':checked').attr('cate')).show();
+                                $('.'+$(this).find(':checked').attr('cate')+' input').attr('disabled',false);
+                            });
+                        </script>
+                        <table>
+                            <tr>
+                                <th></th>
+                                <td><button type="submit" class="btn btn-primary"><i class="icon-plus icon-white"></i> 添加</button></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <style type="text/css">
+                    table th{
+                        width: 95px;
+                        text-align:right;
+                    }
+                    .cate-title{
+                        width: 200px;
+                        height: 40px;
+                    }
+                </style>
+            </div>
+
+
+
+            <div id="tabs-2">
+                <table class="table">
+                    <tr>
+                        <th>门店ID</th>
+                        <th>门店名称</th>
+                        <th>门店地址</th>
+                        <th>联系人</th>
+                        <th>联系人手机号</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    {foreach from="$ads" value="$value"}
+                    <tr>
+                        <td>{$value.id}</td>
+                        <td>{$value.name}</td>
+                        <td>{$value.address}</td>
+                        <td>{$value.contacter}</td>
+                        <td>{$value.phonenumber}</td>
+                        <td>{$value.addtime}</td>
+                        <td><a  href="__CONTROL__/editAds/id/{$value.id}"><i class="icon-edit"></i>编辑</a>&nbsp;&nbsp;
+                        <a href="__CONTROL__/del/id/{$value.id}"><i class="icon-trash"></i>删除</a>&nbsp;&nbsp;
+                        <a href="../../../{$value.phpqrcode}" target="_blank"><i class="icon-picture"></i>查看二维码</a>
+                        </td> 
+                    </tr>
+                    {/foreach}
+                    
+                </table>
+                <style type="text/css">
+                    .input-mini{
+                        width: 30px;
+                        text-align:center;
+                    }
+                </style>
+                <script type="text/javascript">
+                    $('.del-ads').click(function(){
+                        if(confirm('确认删除？')){
+                            var _obj=$(this).parents('tr');
+                            $.post(
+                            '__CONTROL__/delAds',
+                            {id:$(this).attr('href')},
+                            function(data) {
+                                if(data){
+                                    _obj.fadeOut(350);
+                                }
+                            },'html'
+                        );
+                        }
+                        return false;
+                    });
+                </script>
+            </div>
+
+ 
+        </div>
+        <script type="text/javascript">
+            $('#tabs').tabs({ selected: {if value="!$base.get.action|empty"}{$base.get.action}{else /}0{/if}});
+        </script>
+    </body>
+</html>

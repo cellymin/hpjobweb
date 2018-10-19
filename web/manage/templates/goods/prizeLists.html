@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {css file="jqueryUI.bootstrap" /}
+    {css file="bootstrap"}
+    {css file="__TPL__/css/public.css" /}
+    {js file="jquery" /}
+    {js file="jquery.validate" /}
+    {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+    {js file="jqueryUI" /}
+    {js file="datepicker" /}
+    {js file="__ROOT__/caches/js/linkage_data.js" /}
+    {js file="__ROOT__/public/js/linkage/linkage_style_1.js" /}
+</head>
+<body>
+<div id="tabs-2">
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>奖品标题</th>
+            <th>概率</th>
+            <th>奖励积分</th>
+            <th>类型</th>
+            <th>操作</th>
+        </tr>
+        {foreach from="$prizes" value="$prize"}
+        <tr>
+            <td>{$prize.prize_id}</td>
+            <td>{$prize.name}</td>
+            <td>{$prize.probability}%</td>
+            <td>{$prize.point}</td>
+            <td>{if value="$prize.type==1"}
+                <span class="success">实物</span>
+                {elseif value="$prize.type==2" /}
+                <span class="success">积分</span>
+                {else /}
+                <span class="success">未中奖</span>
+                {/if}
+            </td>
+            <td>
+                <a href="javascript:void (0)" class="change" title="修改奖品信息" value-id="{$prize.prize_id}" >修改</a>
+            </td>
+        </tr>
+        {/foreach}
+    </table>
+    {foreach from="$prizes" value="$prize"}
+    <div id="editPrize_{$prize.prize_id}" style="display: none">
+        <table>
+            <tr>
+                <td>奖品标题&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                {if value="$prize.prize_id==6"}
+                <td><input style="width: 250px;" id="prize_name_{$prize.prize_id}" name='name'  value="{$prize.name}" readonly></td>
+                {else}
+                <td><input style="width: 250px;" id="prize_name_{$prize.prize_id}" name='name' value="{$prize.name}"></td>
+                {/if}
+            </tr>
+            <tr>
+                <td>概率&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td><input style="width: 60px;" id="probability_{$prize.prize_id}" name='probability'; value="{$prize.probability}";></td>
+            </tr>
+            <tr>
+                <td>奖励积分&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td><input style="width: 60px;" id="point_{$prize.prize_id}" name='point'; value="{$prize.point}";></td>
+            </tr>
+            <tr>
+                <td>类别&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                {if value="$prize.prize_id==6"}
+                <td>
+                    <select id="type_{$prize.prize_id}" class="input-small" disabled>
+                        <option {if value="$prize.type==1"}selected{/if} value="1">实物</option>
+                        <option {if value="$prize.type==2"}selected{/if} value="2">积分</option>
+                        <option {if value="$prize.type==3"}selected{/if} value="3">未中奖</option>
+                    </select>
+                </td>
+                {else}
+                <td>
+                    <select id="type_{$prize.prize_id}" class="input-small" >
+                        <option {if value="$prize.type==1"}selected{/if} value="1">实物</option>
+                        <option {if value="$prize.type==2"}selected{/if} value="2">积分</option>
+                        <option {if value="$prize.type==3"}selected{/if} value="3">未中奖</option>
+                    </select>
+                </td>
+                {/if}
+            </tr>
+        </table>
+    </div>
+    {/foreach}
+    <script type="text/javascript">
+        $(".change").click(function(){
+            var _id = $(this).attr('value-id');
+            $("#editPrize_"+_id).dialog({
+                //modal:true,
+                title:'修改奖品信息',
+                resizable: true,
+                width:450,
+                buttons:{
+                    '确定':function(){
+                        var _name = $('#prize_name_'+_id).val();
+                        var _probability = $('#probability_'+_id).val();
+                        var _point = $('#point_'+_id).val();
+                        var _type = $('#type_'+_id).val();
+                        $.post('__CONTROL__/editPrize',{
+                            "id":_id,
+                            "name":_name,
+                            "probability":_probability,
+                            "point":_point,
+                            "type":_type
+                        },function(data){
+                            window.location.reload();
+                        },'html');
+                    }
+                }
+            });
+            $("#upload #title").val('').focus();
+            return false;
+        });
+    </script>
+
+</div>
+
+</body>
+</html>

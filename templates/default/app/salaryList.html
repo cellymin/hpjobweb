@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>工资查询</title>
+    <link href="__TPL__/app/css/css.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+</head>
+<style>
+    .contentnull{
+        display: flex;
+        vertical-align: middle;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+    }
+</style>
+<body class="body">
+    <div class="page">
+        {if value="!empty($salarys)"}
+        <article>
+            <div class="title">
+                <P><span>姓名：</span>{$salarys[0][name]}</P>
+                <P><span>身份证：</span>{$salarys[0][id_number]}</P>
+            </div>
+            <ul class="content">
+                {foreach from="$salarys" value="$salary"}
+                <a href="__CONTROL__/salaryInfo/id/{$salary.id}">
+                    <li>
+                        <P class="content_left">{$salary.salary_month}薪资</P>
+                        <P class="content_right">{$salary.company_name}</P>
+                    </li>
+                </a>
+                {/foreach}
+            </ul>
+        </article>
+
+        {else}
+        <article>
+            <div class="contentnull">亲，还没有工资记录噢~</div>
+
+        </article>
+        {/if}
+    </div>
+    <div>
+        <span style="position: fixed; left: 0; bottom: 28px;text-align: center"><font color="red">提示：工资查询以企业实际工资明细为准，本功能查询仅供参考！</font></span>
+    </div>
+</body>
+</html>

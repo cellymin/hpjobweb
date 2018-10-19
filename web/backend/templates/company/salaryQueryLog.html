@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {css file="jqueryUI.bootstrap" /}
+    {css file="bootstrap"}
+    {css file="__TPL__/css/public.css" /}
+    {js file="jquery" /}
+    {js file="jquery.validate" /}
+    {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+    {js file="jqueryUI" /}
+    {js file="datepicker" /}
+    {js file="__ROOT__/caches/js/linkage_data.js" /}
+    {js file="__ROOT__/public/js/linkage/linkage_style_1.js" /}
+</head>
+<body>
+<div id="tabs-2">
+    <style>
+        .table{ margin-top: 20px;}
+    </style>
+
+    <form action="__METH__" method="get" id="search-form">
+        <table class="table well" style="margin-bottom:-18px;">
+            <tr>
+                <th>公司名称<span class="tips">{if value="$count|isset"}{$count}{/if}</span></th>
+                <th>开始时间</th>
+                <th>终止时间</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="company" class="input-medium" value="{if value="$base.get.company|isset"}{$base.get.company}{/if}"></td>
+                <td><input type="text" name="start_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})" value="{if value="$base.get.start_time|isset"}{$base.get.start_time}{/if}"></td>
+                <td><input type="text" name="end_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})" value="{if value="$base.get.end_time|isset"}{$base.get.end_time}{/if}"></td>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>
+                    <a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>公司名称</th>
+            <th>查询时间</th>
+        </tr>
+        {foreach from="$log" value="$log"}
+        <tr>
+            <td>{$log.id}</td>
+            <td>{$log.company}</td>
+            <td>{$log.created_at | date:'Y-m-d H:i:s',@@}</td>
+        </tr>
+        {/foreach}
+        <tr class="well">
+            <td colspan="6"></td>
+            <td>{$pages}</td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        $('#reset').click(function(){
+            $('#search-form :input').val('');
+            $('#search-form').submit();
+        });
+    </script>
+
+</div>
+
+</body>
+</html>

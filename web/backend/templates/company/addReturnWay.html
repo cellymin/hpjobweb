@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+    <script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+<div class="user-info">
+
+    <form action="__CONTROL__/addReturnWay" validate="true" method="post" class="sub">
+        <table class="table well">
+            <tr>
+                <th>方式名称</th>
+                <td><input type="text" name="name" class="required"></td>
+                <td class="error"><span></span></td>
+            </tr>
+            <tr>
+                <th>返款天数</th>
+                <td><input type="text" name="day_num" class="required" onkeyup="this.value=this.value.replace(/[^0-9\.]/,'')" ></td>
+                <td class="error"><span></span></td>
+            </tr>
+
+        </table>
+    </form>
+</div>
+</body>
+</html>

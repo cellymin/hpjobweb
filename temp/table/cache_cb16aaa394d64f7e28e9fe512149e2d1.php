@@ -1,0 +1,87 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_cb16aaa394d64f7e28e9fe512149e2d1 = Array
+	(
+	0=>Array
+		(
+		'field'=>'sid',
+		'type'=>'int(11) unsigned',
+		'null'=>'NO',
+		'key'=>1,
+		'default'=>'',
+		'extra'=>'auto_increment'
+		),
+	1=>Array
+		(
+		'field'=>'uid',
+		'type'=>'int(11) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	2=>Array
+		(
+		'field'=>'username',
+		'type'=>'varchar(30)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	3=>Array
+		(
+		'field'=>'type',
+		'type'=>'tinyint(1) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	4=>Array
+		(
+		'field'=>'title',
+		'type'=>'varchar(200)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	5=>Array
+		(
+		'field'=>'num',
+		'type'=>'int(11) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	6=>Array
+		(
+		'field'=>'icon',
+		'type'=>'varchar(200)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	7=>Array
+		(
+		'field'=>'href',
+		'type'=>'varchar(200)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	8=>Array
+		(
+		'field'=>'created',
+		'type'=>'int(11)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		)
+	);
+?>

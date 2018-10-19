@@ -1,0 +1,159 @@
+<?php 
+  if(!defined('PATH_LC'))exit;
+$cache_49b9f6d400dc91cf70e117a71a0f72ca = Array
+	(
+	0=>Array
+		(
+		'field'=>'id',
+		'type'=>'int(10) unsigned',
+		'null'=>'NO',
+		'key'=>1,
+		'default'=>'',
+		'extra'=>'auto_increment'
+		),
+	1=>Array
+		(
+		'field'=>'ads_title',
+		'type'=>'varchar(20)',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	2=>Array
+		(
+		'field'=>'cate',
+		'type'=>'smallint(5) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	3=>Array
+		(
+		'field'=>'href',
+		'type'=>'text',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	4=>Array
+		(
+		'field'=>'addtime',
+		'type'=>'int(10) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	5=>Array
+		(
+		'field'=>'starttime',
+		'type'=>'int(10) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	6=>Array
+		(
+		'field'=>'endtime',
+		'type'=>'int(10) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	7=>Array
+		(
+		'field'=>'sort',
+		'type'=>'int(10) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	8=>Array
+		(
+		'field'=>'text',
+		'type'=>'varchar(250)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	9=>Array
+		(
+		'field'=>'path',
+		'type'=>'varchar(250)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	10=>Array
+		(
+		'field'=>'uid',
+		'type'=>'int(10) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	11=>Array
+		(
+		'field'=>'color',
+		'type'=>'char(7)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	12=>Array
+		(
+		'field'=>'state',
+		'type'=>'tinyint(3) unsigned',
+		'null'=>'NO',
+		'key'=>'',
+		'default'=>1,
+		'extra'=>''
+		),
+	13=>Array
+		(
+		'field'=>'width',
+		'type'=>'smallint(5) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	14=>Array
+		(
+		'field'=>'height',
+		'type'=>'smallint(5) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	15=>Array
+		(
+		'field'=>'city',
+		'type'=>'int(10) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		),
+	16=>Array
+		(
+		'field'=>'provice',
+		'type'=>'int(10) unsigned',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'',
+		'extra'=>''
+		)
+	);
+?>

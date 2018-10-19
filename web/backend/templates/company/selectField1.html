@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    {css file="jqueryUI.bootstrap" /}
+    {css file="bootstrap"}
+    {css file="__TPL__/css/public.css" /}
+    {js file="jquery" /}
+    {js file="jquery.validate" /}
+    {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+    {js file="jqueryUI" /}
+    {js file="datepicker" /}
+    {js file="__ROOT__/caches/js/linkage_data.js" /}
+    {js file="__ROOT__/public/js/linkage/linkage_style_1.js" /}
+    {js file="__TPL__/js/public.js" /}
+</head>
+<body>
+	<div class="user-info">
+		<div id="tabs">
+            <!--<div id="dialog" style="z-idnex:999"></div>-->
+			<div id="tabs-1">
+                <form action="__CONTROL__/exportResult1" validate="true" method="post" class="sub">
+                    <table class="table" id="select-field">
+
+                        <tr>
+                            <th><input type="checkbox" class="select-all input-checkbox"></th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="origin" value="渠道"></td>
+                            <th>渠道</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="originer" value="来源"></td>
+                            <th>来源</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="membership_mediation" value="附属中介"></td>
+                            <th>附属中介</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="company" value="输入单位"></td>
+                            <th>输入单位</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="number" value="工号"></td>
+                            <th>工号</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="name" value="姓名"></td>
+                            <th>姓名</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="sex" value="性别"></td>
+                            <th>性别</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="identity" value="身份证"></td>
+                            <th>身份证</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="interview_time" value="面试日期"></td>
+                            <th>面试日期</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="start_time" value="上班日期"></td>
+                            <th>上班日期</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="leave_time" value="离职日期"></td>
+                            <th>离职日期</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="salary" value="薪资"></td>
+                            <th>薪资</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="month" value="应发月份"></td>
+                            <th>应发月份</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="work_time" value="工时"></td>
+                            <th>工时</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="price" value="价格"></td>
+                            <th>价格</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="award" value="奖励"></td>
+                            <th>奖励</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="num" value="价格单据编号"></td>
+                            <th>价格单据编号</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="pay_time" value="付款日期"></td>
+                            <th>付款日期</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="membership_company" value="隶属公司"></td>
+                            <th>隶属公司</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="return_money_way" value="返款方式"></td>
+                            <th>返款方式</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="note" value="备注"></td>
+                            <th>备注</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="type" value="类型"></td>
+                            <th>类型</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="nature" value="性质"></td>
+                            <th>性质</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="school" value="学校"></td>
+                            <th>学校</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="resource_place" value="资源地"></td>
+                            <th>资源地</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="pnote" value="批注"></td>
+                            <th>批注</th>
+                        </tr>
+                        <tr>
+                            <td><input type="checkbox" class="input-checkbox" name="create_time" value="生成日期"></td>
+                            <th>生成日期</th>
+                        </tr>
+
+                        <script type="text/javascript">
+                            select_all('select-field');
+                            $("select[select]").each(function(e,obj){
+                                $(this).val($(this).attr('select'));
+                            });
+                        </script>
+
+                    </table>
+                </form>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>
