@@ -605,17 +605,16 @@ class userControl extends myControl {
         header('Content-Disposition: attachment; filename=用户列表.xls');
         header('Pragma: no-cache');
         header('Expires: 0');
-
-        echo iconv("UTF-8", "GBK","手机号码")."\t";
-        echo iconv("UTF-8", "GBK","注册时间")."\t";
-        echo iconv("UTF-8", "GBK","姓名")."\t";
-        echo iconv("UTF-8", "GBK","身份证号码")."\t";
-        echo iconv("UTF-8", "GBK","认证状态")."\t";
-        echo iconv("UTF-8", "GBK","积分")."\t";
-        echo iconv("UTF-8", "GBK","佣金")."\t";
-        echo iconv("UTF-8", "GBK","注册途径")."\t";
-        echo iconv("UTF-8", "GBK","来源")."\t";
-        echo "\n";
+        echo "<table border='1'><tr><th>";
+        echo iconv("UTF-8", "GBK","手机号码")."</th><th>";
+        echo iconv("UTF-8", "GBK","注册时间")."</th><th>";
+        echo iconv("UTF-8", "GBK","姓名")."</th><th>";
+        echo iconv("UTF-8", "GBK","身份证号码")."</th><th>";
+        echo iconv("UTF-8", "GBK","认证状态")."</th><th>";
+        echo iconv("UTF-8", "GBK","积分")."</th><th>";
+        echo iconv("UTF-8", "GBK","佣金")."</th><th>";
+        echo iconv("UTF-8", "GBK","注册途径")."</th><th>";
+        echo iconv("UTF-8", "GBK","来源")."</th>";
 
         $start_time = strtotime($_POST['start_time']);
 
@@ -636,14 +635,16 @@ class userControl extends myControl {
         foreach ($users as $key=>$user){
             $user_point = M('user_point')->where('uid = '.$user['uid'])->find();
             $user_role = M('user_role')->where('uid = '.$user['uid'])->find();
-            echo iconv("UTF-8", "GBK",empty($user['username'])) ? '' : $user['username']."\t";
-            echo iconv("UTF-8", "GBK",date('Y-m-d H:i:s',$user['created']))."\t";
-            echo iconv("UTF-8", "GBK",empty($user_info[$key]['name']) ? '暂无' :$user_info[$key]['name']) ."\t";
-            echo iconv("UTF-8", "GBK",empty($user_info[$key]['id_number']) ? '暂无' : $user['id_number'])."\t";
-            echo iconv("UTF-8", "GBK",$this->getUserVerifyCn($user_info[$key]['verify']))."\t";
-            echo iconv("UTF-8", "GBK",$user_point['point'])."\t";
-            echo iconv("UTF-8", "GBK",$user['commission'])."\t";
-            echo iconv("UTF-8", "GBK",$user['type'])."\t";
+           echo "<tr><td>";
+            echo iconv("UTF-8", "GBK",empty($user['username'])) ? '' : $user['username']."</td><td>";
+            echo iconv("UTF-8", "GBK",date('Y-m-d H:i:s',$user['created']))."</td><td>";
+            echo iconv("UTF-8", "GBK",empty($user_info[$key]['name']) ? '暂无' :$user_info[$key]['name']) ."</td><td>";
+            echo iconv("UTF-8", "GBK",empty($user_info[$key]['id_number']) ? '暂无' : $user['id_number'])."</td><td>";
+            echo iconv("UTF-8", "GBK",$this->getUserVerifyCn($user_info[$key]['verify']))."</td><td>";
+            echo iconv("UTF-8", "GBK",$user_point['point'])."</td><td>";
+            echo iconv("UTF-8", "GBK",$user['commission'])."</td><td>";
+            echo iconv("UTF-8", "GBK",$user['type'])."</td><td>";
+
             $a = array();
             if($user_role['rid'] == 8){
                if($user['type']){
@@ -665,9 +666,10 @@ class userControl extends myControl {
             }
             $user['laiyuan'] = implode(",", $a);
 
-            echo iconv("UTF-8", "GBK",$user['laiyuan'])."\t";
-            echo "\n";
+            echo iconv("UTF-8", "GBK",$user['laiyuan'])."</td>";
+            echo "</tr>";
         }
+        echo "</table>";
 
     }
 
