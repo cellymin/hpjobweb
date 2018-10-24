@@ -11,6 +11,17 @@
     </head>
     <body>
         <div id="userList">
+            <form action="__CONTROL__/export_resumes" method="post" enctype="multipart/form-data" id="export_users" class="well form-horizontal">
+                <table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
+                    <tr>
+                        <td><input id="c_time" name="created" value="" type="text" style="display: none"></td>
+                        <td><input id="u_time" name="updated" value="" type="text" style="display: none"></td>
+                        <td>
+                            <input type="submit" value="导出" name="upload" id="submit">
+                        </td>
+                    </tr>
+                </table>
+            </form>
             <form action="__METH__" method="get" id="search-form">
                 <table class="table well" style="margin-bottom:-18px;">
                     <tr>
@@ -29,7 +40,7 @@
                     <td><input type="text" name="telephone" class="input-medium" value="{if value="$base.get.telephone|isset"}{$base.get.telephone}{/if}"></td>
                     <td><input type="text" name="name" class="input-medium" value="{if value="$base.get.name|isset"}{$base.get.name}{/if}"></td>
                     <td>
-                        <select name="created" class="input-medium" style="z-index:99" {if value="$base.get.created|isset"}select="{$base.get.created}"{/if}>
+                        <select name="created" id="created_time" class="input-medium" style="z-index:99" {if value="$base.get.created|isset"}select="{$base.get.created}"{/if}>
                             <option value="">请选择</option>
                             <option value="-1week">1星期内</option>
                             <option value="-1month">1月内</option>
@@ -38,7 +49,7 @@
                         </select>
                     </td>
                     <td>
-                        <select name="updated" class="input-medium" style="z-index:99" {if value="$base.get.updated|isset"}select="{$base.get.updated}"{/if}>
+                        <select name="updated" id="update_time" class="input-medium" style="z-index:99" {if value="$base.get.updated|isset"}select="{$base.get.updated}"{/if}>
                             <option value="">请选择</option>
                             <option value="-1week">1星期内</option>
                             <option value="-1month">1月内</option>
@@ -79,6 +90,7 @@
                     <th>手机</th>
                     <th width="18%">创建时间</th>
             		<th>更新时间</th>
+                    <th>来源</th>
                     <th>头像</th>
             		<th>浏览次数</th>
                     <th>是否为默认简历</th>
@@ -93,6 +105,28 @@
                     <td>{$resume.telephone}</td>
                     <td>{$resume.created|date:'Y-m-d H:i:s',@@}</td>
                     <td>{$resume.updated|date:'Y-m-d H:i:s',@@}</td>
+                    <td>
+                        {if value="$resume.type"}
+                        {if value="$resume.branchname"}
+                        {$resume.branchname}&nbsp;
+                        {/if}
+                        {if value="$resume.salesmanname"}
+                        {$resume.salesmanname}[ID:{$resume.salesmanid}]&nbsp;
+                        {/if}
+                        {if value="$resume.salesmanphoneno"}
+                        {$resume.salesmanphoneno}
+                        {/if}
+
+                        {if value="$resume.normalmanid"}
+                        <?php
+                            $normalman = M('user')->where(array('uid'=>$resume['normalmanid']))->find();
+
+
+                        ?>
+                        {$normalman.username}[ID:{$resume.normalmanid}]
+                        {/if}
+                        {/if}
+                    </td>
                     <td>{if value="!$resume.avatar|empty"} <a href="" path="{$resume.avatar}" class="view-avatar">查看</a> {else /} <span class="tips">无</span> {/if}</td>
                     <td>{$resume.views}</td>
                     <td>{if value="$resume.default==1"}
@@ -190,6 +224,26 @@
                 _checked.attr('checked',false);
             }
         	return false;
+        });
+        $('#submit').click(function(){
+            var created = $('#created_time').val();
+            var updated = $('#update_time').val();
+
+            if(created == '' && updated == ''){
+
+                alert('请在搜索栏输入时间');
+
+                return false;
+            }
+
+            $('#c_time').val(created);
+
+            $('#u_time').val(updated);
+
+            $('#export_users').submit();
+
+            return false;
+
         });
         </script>
     </body>

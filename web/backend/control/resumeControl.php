@@ -23,7 +23,12 @@ class resumeControl extends myControl {
 				'type'=>'inner',
 				'on'=>'resume.uid=resume_basic.uid',
 //				'field'=>'name,telephone'
-			)
+			),
+            'user'=>array(
+                'type'=>'inner',
+                'on'=>'resume.uid=user.uid',
+				'field'=>'uid,type,branchname,salesmanname,salesmanid,salesmanphoneno,normalmanid'
+            )
 		);
 		$cond=array();
 
@@ -38,10 +43,8 @@ class resumeControl extends myControl {
         }
 
 		if(isset($_GET['created'])){
-            $cond['created']=array(
-                'gt'=>strtotime($_GET['created']),
-                'lt'=>time()
-            );
+            $cond[] = 'hp_resume.created >' . strtotime($_GET['created']);
+            $cond[] = 'hp_resume.created <' . time();
         }
         if(!empty($_GET['start_time'])){
             $start_time = strtotime($_GET['start_time']);
@@ -61,10 +64,13 @@ class resumeControl extends myControl {
         if(isset($_GET['verify'])){
             $cond['verify']=$_GET['verify'];
         }
-
+//        var_dump($_GET);
+//        die();
         $nums=$db->where($cond)->count();
         $page = new page($nums,13);
 		$resumes=$db->where($cond)->findall($page->limit());
+//		echo '<pre/>';
+//        var_dump($resumes);die();
 		$this->assign('resumes',$resumes);
 		$this->assign('page',$page->show());
 		$this->display();
@@ -101,4 +107,98 @@ class resumeControl extends myControl {
 		echo 1;
 		exit;
 	}
+    /**
+     * @Title: export_users
+     * @Description: todo(导出用户列表)
+     * @author liuzhipeng
+     * @return  void  返回类型
+     */
+    public function export_resumes(){
+
+        header('Content-Type: application/vnd.ms-excel;');
+        header('Content-Disposition: attachment; filename=用户列表.xls');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+        echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\" /></head><body><table border='1'><tr><th>";
+        echo iconv("UTF-8", "GBK","创建者")."</th><th>";
+        echo iconv("UTF-8", "GBK","手机号码")."</th><th>";
+        echo iconv("UTF-8", "GBK","创建时间")."</th><th>";
+        echo iconv("UTF-8", "GBK","更新时间")."</th><th>";
+        echo iconv("UTF-8", "GBK","来源")."</th><th>";
+        echo iconv("UTF-8", "GBK","浏览次数")."</th><th>";
+        echo iconv("UTF-8", "GBK","是否默认简历")."</th><th>";
+        echo iconv("UTF-8", "GBK","审核")."</th></tr>";
+
+        $db=V('resume');
+        $db->view=array(
+            'resume_basic'=>array(
+                'type'=>'inner',
+                'on'=>'resume.uid=resume_basic.uid',
+//				'field'=>'name,telephone'
+            ),
+            'user'=>array(
+                'type'=>'inner',
+                'on'=>'resume.uid=user.uid',
+                'field'=>'uid,type,branchname,salesmanname,salesmanid,salesmanphoneno,normalmanid'
+            )
+        );
+        $cond=array();
+        if(!empty($_POST['created'])){
+            $cond[] = 'hp_resume.created >' . strtotime($_POST['created']);
+            $cond[] = 'hp_resume.created <' . time();
+            echo 1;
+            die();
+        }
+        if(isset($_POST['updated'])){
+                $cond['updated']=array(
+                    'gt'=>strtotime($_POST['updated']),
+                    'lt'=>time()
+                );
+        }else{
+            $cond[] = 'hp_resume.updated >' . strtotime("-2month");
+            $cond[] = 'hp_resume.updated <' . time();
+        }
+        $resumes=$db->where($cond)->findall();
+        foreach ($resumes as $k=>$v){
+               echo "<tr><td>".iconv("UTF-8", "GBK",$v['name'])."</td><td>";
+               echo $v['telephone']."</td><td>";
+               echo date('Y-m-d',$v['created'])."</td><td>";
+               echo date('Y-m-d',$v['updated'])."</td><td>";
+               if(!empty($v['type'])){
+                 if(!empty($v['branchname'])){
+                   echo iconv('UTF-8', 'GBK',$v['branchname']);
+                 }
+                 if(!empty($v['salesmanname'])){
+                   echo iconv('UTF-8', 'GBK',$v['salesmanname']).'[ID:'.$v['salesmanid'].']';
+                 }
+                  if(!empty($v['salesmanphoneno'])){
+                   echo $v['salesmanphoneno'];
+                 }
+                  if(!empty($v['normalmanid'])){
+                    $normalman = M('user')->where(array('uid'=>$v['normalmanid']))->find();
+                    echo iconv('UTF-8', 'GBK',$normalman['username']).'[ID:'.$v['normalmanid'].']';
+                 }
+               }else{
+                   echo iconv('UTF-8', 'GBK','无');
+               }
+               echo "</td><td>";
+               echo $v['views']."</td><td>";
+               if($v['default']==1){
+                   echo "<font color='green'>".iconv('UTF-8', 'GBK','是')."</font></td><td>";
+               }else if($v['default']==0){
+                   echo "<font color='green'>".iconv('UTF-8', 'GBK','否')."</font></td><td>";
+               }
+              if($v['verify']==1){
+                  echo "<font color='green'>".iconv('UTF-8', 'GBK','通过')."</font></td><td>";
+              }else if($v['verify']==2){
+                  echo "<font color='green'>".iconv('UTF-8', 'GBK','审核中')."</font></td><td>";
+              }else{
+                  echo "<font color='green'>".iconv('UTF-8', 'GBK','未通过')."</font></td>";
+              }
+               echo "</tr>";
+        }
+        echo "</table></body></html>";
+
+    }
+
 }
