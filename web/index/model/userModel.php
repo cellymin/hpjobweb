@@ -113,7 +113,7 @@ class userModel extends Model {
             $users=array();
             $users['user']=$this->user_r_model->where($cond['user'])->order('created desc')->findall($page->limit());
             $users['page']=$page->show();
-            $users['page']=$nums;
+            $users['num']=$nums;
         }
         return $users;
     }

@@ -24,7 +24,7 @@ class userControl extends myControl {
             'group'=>array(),
             'user'=>array()
         );
-
+        //$cond['group']='user_role.rid!=0';
         if(isset($_GET['type'])){
             $cond['user']['type']=$_GET['type'];
         }
@@ -61,8 +61,8 @@ class userControl extends myControl {
         if(!empty($users['num'])){
             $count = $users['num'];
         }
-        
-
+//           echo '<pre/>';echo $count;
+//         die();
         foreach($users['user'] as $key=>$val){
             $verify= M('user_info')->where(array('uid'=>$val['uid']))->find();
 
@@ -611,6 +611,7 @@ class userControl extends myControl {
         echo iconv("UTF-8", "GBK","姓名")."</th><th>";
         echo iconv("UTF-8", "GBK","身份证号码")."</th><th>";
         echo iconv("UTF-8", "GBK","认证状态")."</th><th>";
+        echo iconv("UTF-8", "GBK","角色")."</th><th>";
         echo iconv("UTF-8", "GBK","积分")."</th><th>";
         echo iconv("UTF-8", "GBK","佣金")."</th><th>";
         echo iconv("UTF-8", "GBK","注册途径")."</th><th>";
@@ -641,6 +642,7 @@ class userControl extends myControl {
             echo iconv("UTF-8", "GBK",empty($user_info[$key]['name']) ? '暂无' :$user_info[$key]['name']) ."</td><td>";
             echo iconv("UTF-8", "GBK",empty($user_info[$key]['id_number']) ? '暂无' : $user['id_number'])."</td><td>";
             echo iconv("UTF-8", "GBK",$this->getUserVerifyCn($user_info[$key]['verify']))."</td><td>";
+            echo iconv("UTF-8", "GBK",$this->getUserRole($user['uid']))."</td><td>";
             echo iconv("UTF-8", "GBK",$user_point['point'])."</td><td>";
             echo iconv("UTF-8", "GBK",$user['commission'])."</td><td>";
             echo iconv("UTF-8", "GBK",$user['type'])."</td><td>";
@@ -692,6 +694,19 @@ class userControl extends myControl {
         }else{
             return '不详';
         }
+    }
+
+    /**
+     * @Title: getUserRole
+     * @Description: todo(得到用户角色名称(在导出用户列表方法被使用))
+     * @param $uid
+     * @return  string  返回类型
+     */
+    public  function  getUserRole($uid){
+       // $uid = $_GET['uid'];
+        $db = M('user');
+        $res = $db->query("SELECT a.title FROM hp_role as a LEFT JOIN hp_user_role AS b ON a.rid=b.rid LEFT JOIN hp_user AS c ON b.uid=c.uid WHERE c.uid=".$uid." LIMIT 1");
+        return $res[0]['title'];
     }
 
     public function getUserCommission(){
