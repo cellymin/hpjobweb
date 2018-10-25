@@ -605,7 +605,7 @@ class userControl extends myControl {
         header('Content-Disposition: attachment; filename=用户列表.xls');
         header('Pragma: no-cache');
         header('Expires: 0');
-        echo "<table border='1'><tr><th>";
+        echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\" /></head><body><table border='1'><tr><th>";
         echo iconv("UTF-8", "GBK","手机号码")."</th><th>";
         echo iconv("UTF-8", "GBK","注册时间")."</th><th>";
         echo iconv("UTF-8", "GBK","姓名")."</th><th>";
@@ -671,7 +671,7 @@ class userControl extends myControl {
             echo iconv("UTF-8", "GBK",$user['laiyuan'])."</td>";
             echo "</tr>";
         }
-        echo "</table>";
+        echo "</table></body></html>";
 
     }
 

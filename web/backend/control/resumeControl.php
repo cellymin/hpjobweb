@@ -146,17 +146,12 @@ class resumeControl extends myControl {
         if(!empty($_POST['created'])){
             $cond[] = 'hp_resume.created >' . strtotime($_POST['created']);
             $cond[] = 'hp_resume.created <' . time();
-            echo 1;
-            die();
         }
         if(isset($_POST['updated'])){
                 $cond['updated']=array(
                     'gt'=>strtotime($_POST['updated']),
                     'lt'=>time()
                 );
-        }else{
-            $cond[] = 'hp_resume.updated >' . strtotime("-2month");
-            $cond[] = 'hp_resume.updated <' . time();
         }
         $resumes=$db->where($cond)->findall();
         foreach ($resumes as $k=>$v){

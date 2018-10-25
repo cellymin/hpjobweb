@@ -1,7 +1,6 @@
 .idea
 table
 database.php
-temp/session
 temp
 !temp\Applications\web_G\APP_GROUP_web.php
 
