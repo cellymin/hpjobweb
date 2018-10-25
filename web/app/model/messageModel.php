@@ -118,7 +118,7 @@ class messageModel extends Model
      * @return bool|mixed 返回类型
      */
     public function createMessage($data){//type 3评论/回复/点赞 2工作通知 4账号信息 1系统信息
-        if(empty($data['uid']||empty($data['type']||empty($data['data_type']))))return false;
+        if(empty($data['uid']||empty($data['type']||empty($data['data_type']) ) ) )return false;
         $user = $this->user_model->getUserInfo($data['uid'],['nickname','avatar']);
         if(empty($user))return false;
         $data['unickname'] = $user['nickname'];

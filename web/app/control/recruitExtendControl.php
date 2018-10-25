@@ -237,7 +237,7 @@ class recruitExtendControl extends Control {
     public function test()
     {
 
-        $href = '/var/www/html/hpjobweb';
+        $href = '/usr/share/nginx/html/hpjobweb';
         $data = validateIdCardImg(base64_encode(file_get_contents($href.'/'.$_POST['face_base'])),base64_encode(file_get_contents($href.'/'.$_POST['back_base'])));
         var_dump($data[0]['num']);
     }

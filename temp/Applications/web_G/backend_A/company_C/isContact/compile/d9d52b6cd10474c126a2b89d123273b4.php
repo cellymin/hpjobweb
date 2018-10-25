@@ -4,8 +4,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>操作成功---<?php echo $_CONFIG['web_name'];?></title>
-            <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/base.css"/>
-            <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/success.css"/>
+            <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/base.css"/>
+            <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/success.css"/>
             <script type="text/javascript">
                 window.setTimeout("<?php echo $url;?>",<?php echo $time;?>*1000);
             </script>
@@ -21,7 +21,7 @@
                         </tr>
                     </table>
                 </div>
-                <p class="link"><span id="time"><?php echo $time;?></span>秒钟后将进行<a href="javascript:<?php echo $url;?>">跳转</a>也可以<a href="http://www.hap-job.com/index.php/backend">返回首页</a></p>
+                <p class="link"><span id="time"><?php echo $time;?></span>秒钟后将进行<a href="javascript:<?php echo $url;?>">跳转</a>也可以<a href="http://www.192.168.3.131/hpjobweb/index.php/backend">返回首页</a></p>
             </div>
         </div>
         <script type="text/javascript">

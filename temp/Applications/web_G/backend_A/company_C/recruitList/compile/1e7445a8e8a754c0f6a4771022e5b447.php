@@ -4,14 +4,14 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>后台管理</title>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/web/backend/templates/js/public.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.validate.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.metadata.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/My97DatePicker/WdatePicker.js"></script>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/web/backend/templates/js/public.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/My97DatePicker/WdatePicker.js"></script>
 </head>
 <body>

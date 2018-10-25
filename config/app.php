@@ -95,7 +95,7 @@
     'CACHE_DEFAULT_TYPE' => 'file',
     'CACHE_SELECT_TIME' => 0,
     'TPL_CACHE_TIME' => 0,
-    'CACHE_DIR' => '/var/www/html/hpjobweb/recruit/temp/cache',
+    'CACHE_DIR' => '/usr/share/nginx/html/hpjobweb/recruit/temp/cache',
     'THUMB_ON' => 0,
     'UPLOAD_EXT_SIZE' =>
         array (
@@ -111,7 +111,7 @@
             'swf' => 300000,
             'apk' => 3000000000,
         ),
-    'UPLOAD_PATH' => '/var/www/html/hpjobweb/uploads',
+    'UPLOAD_PATH' => '/usr/share/nginx/html/hpjobweb/uploads',
     'UPLOAD_IMG_DIR' => 'img',
     'UPLOAD_IMG_RESIZE_ON' => 0,
     'UPLOAD_IMG_MAX_WIDTH' => 2000000,
@@ -119,7 +119,7 @@
     'TPL_FIX' => '.html',
     'TPL_TAG_LEFT' => '{',
     'TPL_TAG_RIGHT' => '}',
-    'TPL_DIR' => '/var/www/html/hpjobweb/templates',
+    'TPL_DIR' => '/usr/share/nginx/html/hpjobweb/templates',
     'TPL_TAGS' => 'MyTags',
     'TPL_STYLE' => 'default',
     'TPL_COMPILE' => true,

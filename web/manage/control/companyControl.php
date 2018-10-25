@@ -450,7 +450,7 @@ class companyControl extends myControl {
                     M('recruit')->where('recruit_id in ('.$ids.')')->update(array('star'=>$_POST['star']));
                 }
 
-                $this->success('修改成功','http://www.hap-job.com/index.php/backend/company/companyLists');
+                $this->success('修改成功','http://192.168.3.131/hpjobweb/index.php/backend/company/companyLists');
             }
         }else{
             $company = M('company_info')->where(array('uid'=>$_GET['uid']))->find();

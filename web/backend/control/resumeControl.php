@@ -109,14 +109,14 @@ class resumeControl extends myControl {
 	}
     /**
      * @Title: export_users
-     * @Description: todo(导出用户列表)
+     * @Description: todo(导出简历列表)
      * @author liuzhipeng
      * @return  void  返回类型
      */
     public function export_resumes(){
 
         header('Content-Type: application/vnd.ms-excel;');
-        header('Content-Disposition: attachment; filename=用户列表.xls');
+        header('Content-Disposition: attachment; filename=简历列表.xls');
         header('Pragma: no-cache');
         header('Expires: 0');
         echo "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=gb2312\" /></head><body><table border='1'><tr><th>";
@@ -186,14 +186,14 @@ class resumeControl extends myControl {
                if($v['default']==1){
                    echo "<font color='green'>".iconv('UTF-8', 'GBK','是')."</font></td><td>";
                }else if($v['default']==0){
-                   echo "<font color='green'>".iconv('UTF-8', 'GBK','否')."</font></td><td>";
+                   echo "<font color='red'>".iconv('UTF-8', 'GBK','否')."</font></td><td>";
                }
               if($v['verify']==1){
                   echo "<font color='green'>".iconv('UTF-8', 'GBK','通过')."</font></td><td>";
               }else if($v['verify']==2){
-                  echo "<font color='green'>".iconv('UTF-8', 'GBK','审核中')."</font></td><td>";
+                  echo "<font color='red'>".iconv('UTF-8', 'GBK','审核中')."</font></td><td>";
               }else{
-                  echo "<font color='green'>".iconv('UTF-8', 'GBK','未通过')."</font></td>";
+                  echo "<font color='red'>".iconv('UTF-8', 'GBK','未通过')."</font></td>";
               }
                echo "</tr>";
         }

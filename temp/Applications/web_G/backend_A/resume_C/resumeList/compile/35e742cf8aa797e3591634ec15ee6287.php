@@ -4,15 +4,26 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
-        <link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
-        <link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-        <script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="http://localhost/hpjobweb/web/backend/templates/css/public.css"/>
+        <link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
     </head>
     <body>
         <div id="userList">
-            <form action="http://192.168.3.131/hpjobweb/index.php/backend/resume/resumeList" method="get" id="search-form">
+            <form action="http://localhost/hpjobweb/index.php/backend/resume/export_resumes" method="post" enctype="multipart/form-data" id="export_users" class="well form-horizontal">
+                <table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
+                    <tr>
+                        <td><input id="c_time" name="created" value="" type="text" style="display: none"></td>
+                        <td><input id="u_time" name="updated" value="" type="text" style="display: none"></td>
+                        <td>
+                            <input type="submit" value="导出" name="upload" id="submit">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <form action="http://localhost/hpjobweb/index.php/backend/resume/resumeList" method="get" id="search-form">
                 <table class="table well" style="margin-bottom:-18px;">
                     <tr>
                         <th></th>
@@ -30,7 +41,7 @@
                     <td><input type="text" name="telephone" class="input-medium" value="<?php if(isset($_GET['telephone'])){?><?php echo $_GET['telephone'];?><?php }?>"></td>
                     <td><input type="text" name="name" class="input-medium" value="<?php if(isset($_GET['name'])){?><?php echo $_GET['name'];?><?php }?>"></td>
                     <td>
-                        <select name="created" class="input-medium" style="z-index:99" <?php if(isset($_GET['created'])){?>select="<?php echo $_GET['created'];?>"<?php }?>>
+                        <select name="created" id="created_time" class="input-medium" style="z-index:99" <?php if(isset($_GET['created'])){?>select="<?php echo $_GET['created'];?>"<?php }?>>
                             <option value="">请选择</option>
                             <option value="-1week">1星期内</option>
                             <option value="-1month">1月内</option>
@@ -39,7 +50,7 @@
                         </select>
                     </td>
                     <td>
-                        <select name="updated" class="input-medium" style="z-index:99" <?php if(isset($_GET['updated'])){?>select="<?php echo $_GET['updated'];?>"<?php }?>>
+                        <select name="updated" id="update_time" class="input-medium" style="z-index:99" <?php if(isset($_GET['updated'])){?>select="<?php echo $_GET['updated'];?>"<?php }?>>
                             <option value="">请选择</option>
                             <option value="-1week">1星期内</option>
                             <option value="-1month">1月内</option>
@@ -80,6 +91,7 @@
                     <th>手机</th>
                     <th width="18%">创建时间</th>
             		<th>更新时间</th>
+                    <th>来源</th>
                     <th>头像</th>
             		<th>浏览次数</th>
                     <th>是否为默认简历</th>
@@ -89,11 +101,33 @@
             	<?php if(is_array($resumes)):?><?php  foreach($resumes as $resume){ ?>
             	<tr>
             		<td><input type="checkbox" class="input-checkbox" name="resume_id" value="<?php echo $resume['resume_id'];?>"> </td>
-                    <td><a href="http://192.168.3.131/hpjobweb/index.php/app/auth/viewResume/resume_id/<?php echo $resume['resume_id'];?>" target="_blank">查看</a></td>
+                    <td><a href="http://www.hap-job.com/index.php/app/auth/viewResume/resume_id/<?php echo $resume['resume_id'];?>" target="_blank">查看</a></td>
                     <td><?php echo $resume['name'];?></td>
                     <td><?php echo $resume['telephone'];?></td>
                     <td><?php echo date('Y-m-d H:i:s',$resume['created']);?></td>
                     <td><?php echo date('Y-m-d H:i:s',$resume['updated']);?></td>
+                    <td>
+                        <?php if($resume['type']){?>
+                        <?php if($resume['branchname']){?>
+                        <?php echo $resume['branchname'];?>&nbsp;
+                        <?php }?>
+                        <?php if($resume['salesmanname']){?>
+                        <?php echo $resume['salesmanname'];?>[ID:<?php echo $resume['salesmanid'];?>]&nbsp;
+                        <?php }?>
+                        <?php if($resume['salesmanphoneno']){?>
+                        <?php echo $resume['salesmanphoneno'];?>
+                        <?php }?>
+
+                        <?php if($resume['normalmanid']){?>
+                        <?php
+                            $normalman = M('user')->where(array('uid'=>$resume['normalmanid']))->find();
+
+
+                        ?>
+                        <?php echo $normalman['username'];?>[ID:<?php echo $resume['normalmanid'];?>]
+                        <?php }?>
+                        <?php }?>
+                    </td>
                     <td><?php if(!empty($resume['avatar'])){?> <a href="" path="<?php echo $resume['avatar'];?>" class="view-avatar">查看</a> <?php  }else{ ?> <span class="tips">无</span> <?php }?></td>
                     <td><?php echo $resume['views'];?></td>
                     <td><?php if($resume['default']==1){?>
@@ -148,7 +182,7 @@
         });
         //删除选中职位
         function del_resume(arg){
-        	$.post('http://192.168.3.131/hpjobweb/index.php/backend/resume/delResume',{"resume_id":arg.id},function(data){
+        	$.post('http://localhost/hpjobweb/index.php/backend/resume/delResume',{"resume_id":arg.id},function(data){
                 if(data==1){
                     arg.checked_obj.parents('tr').fadeOut(function(){
                         arg.checked_obj.parents('tr').remove();
@@ -158,7 +192,7 @@
         }
         //开启、审核职位
         function verify_resume(arg){
-            $.post('http://192.168.3.131/hpjobweb/index.php/backend/resume/verifyResume',{"resume_id":arg.id,type:arg.a_type},function(data){
+            $.post('http://localhost/hpjobweb/index.php/backend/resume/verifyResume',{"resume_id":arg.id,type:arg.a_type},function(data){
                 if(data==1){
                     window.location.reload();
                 }
@@ -191,6 +225,26 @@
                 _checked.attr('checked',false);
             }
         	return false;
+        });
+        $('#submit').click(function(){
+            var created = $('#created_time').val();
+            var updated = $('#update_time').val();
+
+            if(created == '' && updated == ''){
+
+                alert('请在搜索栏输入时间');
+
+                return false;
+            }
+
+            $('#c_time').val(created);
+
+            $('#u_time').val(updated);
+
+            $('#export_users').submit();
+
+            return false;
+
         });
         </script>
     </body>

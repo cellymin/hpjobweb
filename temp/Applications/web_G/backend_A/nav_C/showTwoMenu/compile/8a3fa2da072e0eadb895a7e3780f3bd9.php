@@ -4,7 +4,7 @@
 <span><a href=""><?php echo $menu['menu_name'];?></a></span>
 <ul class="son">
 	<?php if(is_array($menu['three_menu'])):?><?php  foreach($menu['three_menu'] as $three_menu){ ?>
-	<li><a href="http://192.168.3.131/hpjobweb/index.php/<?php echo $three_menu['app'];?>/<?php echo $three_menu['control'];?>/<?php echo $three_menu['method'];?><?php echo $three_menu['query_string'];?>" target="opt"><?php echo $three_menu['menu_name'];?></a></li>
+	<li><a href="http://localhost/hpjobweb/index.php/<?php echo $three_menu['app'];?>/<?php echo $three_menu['control'];?>/<?php echo $three_menu['method'];?><?php echo $three_menu['query_string'];?>" target="opt"><?php echo $three_menu['menu_name'];?></a></li>
 	<?php }?><?php endif;?>
 </ul>
 </li>

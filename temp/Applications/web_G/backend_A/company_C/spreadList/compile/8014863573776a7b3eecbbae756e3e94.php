@@ -4,13 +4,13 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.validate.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.metadata.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+        <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
         <style type="text/css">
         .ui-widget-content a{
             color: #08C;
@@ -44,14 +44,14 @@
                         <?php if(is_array($spread_lists)):?><?php  foreach($spread_lists as $spread_l){ ?>
                         <tr>
                             <td><input type="checkbox" name="r-id" class="input-checkbox" value="<?php echo $spread_l['id'];?>"></td>
-                            <td><a href="http://www.hap-job.com/index.php/index/search/jobs/id/<?php echo $spread_l['recruit_id'];?>" target="_blank"><?php echo $spread_l['recruit_name'];?></a></td>
-                            <td><a href="http://www.hap-job.com/index.php/index/index/company/id/<?php echo $spread_l['uid'];?>" target="_blank"><?php echo $spread_l['company_name'];?></a></td>
+                            <td><a href="http://www.192.168.3.131/hpjobweb/index.php/index/search/jobs/id/<?php echo $spread_l['recruit_id'];?>" target="_blank"><?php echo $spread_l['recruit_name'];?></a></td>
+                            <td><a href="http://www.192.168.3.131/hpjobweb/index.php/index/index/company/id/<?php echo $spread_l['uid'];?>" target="_blank"><?php echo $spread_l['company_name'];?></a></td>
                             <td><?php echo $spread_l['cate_name'];?></td>
                             <td><?php echo $spread_l['uid'];?></td>
                             <td><?php echo date('Y-m-d H:i:s',$spread_l['starttime']);?></td>
                             <td><?php echo date('Y-m-d H:i:s',$spread_l['endtime']);?></td>
                             <td>
-                                <a href="http://www.hap-job.com/index.php/backend/company/editSpread/id/<?php echo $spread_l['id'];?>" class="edit-spread"><i class="icon-edit"></i>修改</a>
+                                <a href="http://www.192.168.3.131/hpjobweb/index.php/backend/company/editSpread/id/<?php echo $spread_l['id'];?>" class="edit-spread"><i class="icon-edit"></i>修改</a>
                             </td>
                         </tr>
                         <?php }?><?php endif;?>
@@ -100,7 +100,7 @@
                                     <td><input type="text" class="input-medium" name="recruit_id" validate={digits:true} /></td>
                                 </tr>
                             </table>
-                        <form validate="true" id="add-s-form" action="http://www.hap-job.com/index.php/backend/company/addSpread.html" method="post">
+                        <form validate="true" id="add-s-form" action="http://www.192.168.3.131/hpjobweb/index.php/backend/company/addSpread.html" method="post">
                             <input type="hidden" name="uid" id="ruid" value="">
                             <table>
                                 <tr>
@@ -201,15 +201,15 @@
                             <td><?php if($spread['state']){?>开启<?php  }else{ ?><span class="warning">禁用</span><?php }?></td>
                             <td><?php if($spread['is_sys']){?><span class="sys">内置</span><?php  }else{ ?>自定义<?php }?></td>
                             <td>
-                                <a href="http://www.hap-job.com/index.php/backend/company/editSpreadCate/cate/<?php echo $spread['id'];?>.html"><i class="icon-edit"></i>修改</a>
-                                <?php if($spread['is_sys']){?><span style="cursor: default" title="系统方案，禁止删除。">删除</span><?php  }else{ ?><a href="http://www.hap-job.com/index.php/backend/company/delSpreadCate/cate/<?php echo $spread['id'];?>.html"><i class="icon-trash"></i>删除</a><?php }?>
+                                <a href="http://www.192.168.3.131/hpjobweb/index.php/backend/company/editSpreadCate/cate/<?php echo $spread['id'];?>.html"><i class="icon-edit"></i>修改</a>
+                                <?php if($spread['is_sys']){?><span style="cursor: default" title="系统方案，禁止删除。">删除</span><?php  }else{ ?><a href="http://www.192.168.3.131/hpjobweb/index.php/backend/company/delSpreadCate/cate/<?php echo $spread['id'];?>.html"><i class="icon-trash"></i>删除</a><?php }?>
                             </td>
                         </tr>
                         <?php }?><?php endif;?>
                     </table>
                 </div>
                 <!-- <div id="add-spread-cate">
-                    <form validate="true" action="http://www.hap-job.com/index.php/backend/company/addSpreadCate.html" class="well form-horizontal" method="post">
+                    <form validate="true" action="http://www.192.168.3.131/hpjobweb/index.php/backend/company/addSpreadCate.html" class="well form-horizontal" method="post">
                         <div class="control-group">
                             <label for="cate_name" class="control-label">方案名称</label>
                             <div class="controls">
@@ -263,9 +263,9 @@
 		<script type="text/javascript" src="__LCPHP__/org/ueditor/editor_all.js"></script>
 		<link rel="stylesheet" href="__LCPHP__/org/ueditor/themes/default/ueditor.css"><script type="text/plain" name="cate_desc" id="cate_desc" style=" width:340px"></script><script type="text/javascript" >var editorOption = {
                          toolbars:[['Undo', 'Redo','Bold','Italic','Underline','JustifyLeft', 'JustifyCenter', 'JustifyRight','InsertOrderedList','InsertUnorderedList','FormatMatch','Link','Horizontal']],
-                         imageUrl:"http://www.hap-job.com/index.php/backend/company/ueditorupload",
+                         imageUrl:"http://www.192.168.3.131/hpjobweb/index.php/backend/company/ueditorupload",
                          imagePath:"",
-                         fileUrl:"http://www.hap-job.com/index.php/backend/company/ueditorupload",
+                         fileUrl:"http://www.192.168.3.131/hpjobweb/index.php/backend/company/ueditorupload",
                          filePath:"",
                          maximumWords:100000,
                          minFrameHeight:130
@@ -323,7 +323,7 @@
                     _id.push($(this).val());
                 });
                 if(confirm("确认"+_confirm_msg+"选中的推广？")){
-                $.post('http://www.hap-job.com/index.php/backend/company/delSpread',{id:_id},function(data){
+                $.post('http://www.192.168.3.131/hpjobweb/index.php/backend/company/delSpread',{id:_id},function(data){
                     if(data==1){
                         _checked.parents('tr').fadeOut('slow',function(){
                             _checked.parents('tr').remove();
@@ -355,7 +355,7 @@
             $('#search_form input').keyup(function(e){
                 if(e.keyCode==13){//如果按下回车
                     var _way=$(this).attr('name');
-                    $.get('http://www.hap-job.com/index.php/backend/company/findRecruit',{'value':$(this).val(),'way':_way},function(data){
+                    $.get('http://www.192.168.3.131/hpjobweb/index.php/backend/company/findRecruit',{'value':$(this).val(),'way':_way},function(data){
                     $('#recruit_list').html(data);
                     },'html');
                 }

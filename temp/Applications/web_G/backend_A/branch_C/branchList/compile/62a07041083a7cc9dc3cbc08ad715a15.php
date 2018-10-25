@@ -4,16 +4,16 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.validate.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.metadata.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/My97DatePicker/WdatePicker.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/caches/js/linkage_data.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/linkage/linkage_style_1.js"></script>
+        <link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+        <link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="http://localhost/hpjobweb/web/backend/templates/css/public.css"/>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="http://localhost//hpjobweb/caches/js/linkage_data.js"></script>
+        <script type="text/javascript" src="http://localhost//hpjobweb/public/js/linkage/linkage_style_1.js"></script>
     </head>
     <body>
         <div id="jquery-colour-picker" class="hide"></div>
@@ -25,7 +25,7 @@
             </ul>
             <div id="tabs-1">
                 <div id="add-form">
-                    <form action="http://www.hap-job.com/index.php/backend/branch/branchList" method="post" validate="true" enctype="multipart/form-data">
+                    <form action="http://localhost/hpjobweb/index.php/backend/branch/branchList" method="post" validate="true" enctype="multipart/form-data">
                         <table>
                             <tr>
                                 <th>门店名称：</th>
@@ -99,8 +99,8 @@
                         <td><?php echo $value['contacter'];?></td>
                         <td><?php echo $value['phonenumber'];?></td>
                         <td><?php echo $value['addtime'];?></td>
-                        <td><a  href="http://www.hap-job.com/index.php/backend/branch/editAds/id/<?php echo $value['id'];?>"><i class="icon-edit"></i>编辑</a>&nbsp;&nbsp;
-                        <a href="http://www.hap-job.com/index.php/backend/branch/del/id/<?php echo $value['id'];?>"><i class="icon-trash"></i>删除</a>&nbsp;&nbsp;
+                        <td><a  href="http://localhost/hpjobweb/index.php/backend/branch/editAds/id/<?php echo $value['id'];?>"><i class="icon-edit"></i>编辑</a>&nbsp;&nbsp;
+                        <a href="http://localhost/hpjobweb/index.php/backend/branch/del/id/<?php echo $value['id'];?>"><i class="icon-trash"></i>删除</a>&nbsp;&nbsp;
                         <a href="../../../<?php echo $value['phpqrcode'];?>" target="_blank"><i class="icon-picture"></i>查看二维码</a>
                         </td> 
                     </tr>
@@ -118,7 +118,7 @@
                         if(confirm('确认删除？')){
                             var _obj=$(this).parents('tr');
                             $.post(
-                            'http://www.hap-job.com/index.php/backend/branch/delAds',
+                            'http://localhost/hpjobweb/index.php/backend/branch/delAds',
                             {id:$(this).attr('href')},
                             function(data) {
                                 if(data){

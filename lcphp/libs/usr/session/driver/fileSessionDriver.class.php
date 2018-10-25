@@ -38,7 +38,7 @@ class fileSessionDriver extends sessionAbstract {
     function destroy($sid) {
         if (is_file($this->session_file)) {
 
-            file_put_contents('/var/www/html/hpjobweb/time.txt',date('Y-m-d H:i:s',time()).'----'.$sid.PHP_EOL,FILE_APPEND);
+            file_put_contents('/usr/share/nginx/html/hpjobweb/time.txt',date('Y-m-d H:i:s',time()).'----'.$sid.PHP_EOL,FILE_APPEND);
 
             unlink($this->session_file);
         }
@@ -50,7 +50,7 @@ class fileSessionDriver extends sessionAbstract {
 
             if (filemtime($file) + $this->session_lifetime < time()) {
 
-                file_put_contents('/var/www/html/hpjobweb/time.txt',date('Y-m-d H:i:s',time()).'------'.$this->session_lifetime.'----'.filemtime($file).'----'.time().PHP_EOL,FILE_APPEND);
+                file_put_contents('/usr/share/nginx/html/hpjobweb/time.txt',date('Y-m-d H:i:s',time()).'------'.$this->session_lifetime.'----'.filemtime($file).'----'.time().PHP_EOL,FILE_APPEND);
 
                 unlink($file);
             }

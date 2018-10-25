@@ -5,19 +5,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>后台管理</title>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/web/backend/templates/js/public.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.validate.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.metadata.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/My97DatePicker/WdatePicker.js"></script>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/web/backend/templates/js/public.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/My97DatePicker/WdatePicker.js"></script>
 </head>
 <body>
 <div id="userList">
-    <form action="http://www.hap-job.com/index.php/backend/company/recruitList" method="get" id="search-form">
+    <form action="http://www.192.168.3.131/hpjobweb/index.php/backend/company/recruitList" method="get" id="search-form">
         <table class="table well" style="margin-bottom:-18px;">
             <tr>
                 <th></th>
@@ -115,13 +115,13 @@
                 <?php }?>
             </td>
             <td>
-                <!--<a href="http://www.hap-job.com/index.php/index/search/jobs/id/<?php echo $recruit['recruit_id'];?>" target="_blank">查看</a>-->
-                <a href="http://www.hap-job.com/index.php/backend/company/highSalary/recruit_id/<?php echo $recruit['recruit_id'];?>" class ="high-salary" title="设为热门" value-id="<?php echo $recruit['recruit_id'];?>" ><?php if($recruit['high_salary']==0){?>设为热门<?php  }else{ ?><span class="warning">取消热门</span></a> <?php }?>
-                <a href="http://www.hap-job.com/index.php/backend/company/isTop/recruit_id/<?php echo $recruit['recruit_id'];?>" class ="istop" title="设为置顶" value-id="<?php echo $recruit['recruit_id'];?>" ><?php if($recruit['istop']==0){?>设为置顶<?php  }else{ ?>取消置顶</a> <?php }?>
-                <a href="http://www.hap-job.com/index.php/backend/company/editRecruit/recruit_id/<?php echo $recruit['recruit_id'];?>" title="修改职位信息" >修改</a>
+                <!--<a href="http://www.192.168.3.131/hpjobweb/index.php/index/search/jobs/id/<?php echo $recruit['recruit_id'];?>" target="_blank">查看</a>-->
+                <a href="http://www.192.168.3.131/hpjobweb/index.php/backend/company/highSalary/recruit_id/<?php echo $recruit['recruit_id'];?>" class ="high-salary" title="设为热门" value-id="<?php echo $recruit['recruit_id'];?>" ><?php if($recruit['high_salary']==0){?>设为热门<?php  }else{ ?><span class="warning">取消热门</span></a> <?php }?>
+                <a href="http://www.192.168.3.131/hpjobweb/index.php/backend/company/isTop/recruit_id/<?php echo $recruit['recruit_id'];?>" class ="istop" title="设为置顶" value-id="<?php echo $recruit['recruit_id'];?>" ><?php if($recruit['istop']==0){?>设为置顶<?php  }else{ ?>取消置顶</a> <?php }?>
+                <a href="http://www.192.168.3.131/hpjobweb/index.php/backend/company/editRecruit/recruit_id/<?php echo $recruit['recruit_id'];?>" title="修改职位信息" >修改</a>
                 <a href="javascript:void (0)" class="code" value-id="<?php echo $recruit['recruit_id'];?>">查看二维码</a>
                 <!-- <a href="">删除</a> -->
-                <a href="http://www.hap-job.com/index.php/backend/company/pushRecruit/id/<?php echo $recruit['recruit_id'];?>" title="推送职位" class="opt-edit" >推送</a>
+                <a href="http://www.192.168.3.131/hpjobweb/index.php/backend/company/pushRecruit/id/<?php echo $recruit['recruit_id'];?>" title="推送职位" class="opt-edit" >推送</a>
             </td>
         </tr>
         <?php }?><?php endif;?>
@@ -148,7 +148,7 @@
 </div>
 
 <div id="insertRecruits" style="display: none">
-    <form action="http://www.hap-job.com/index.php/backend/company/insertRecruits" method="post" enctype="multipart/form-data" id="insert_recruits" class="well form-horizontal">
+    <form action="http://www.192.168.3.131/hpjobweb/index.php/backend/company/insertRecruits" method="post" enctype="multipart/form-data" id="insert_recruits" class="well form-horizontal">
         <table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
             <tr>
                 <td width=55 height=20 align="center"><input type="hidden" name="MAX_FILE_SIZE" value="2000000">文件： </td>
@@ -173,7 +173,7 @@
     select_all('recruit-list');
     //删除选中职位
     function del_recruit(arg){
-        $.post('http://www.hap-job.com/index.php/backend/company/delRecruit',{"recruit_id":arg.id},function(data){
+        $.post('http://www.192.168.3.131/hpjobweb/index.php/backend/company/delRecruit',{"recruit_id":arg.id},function(data){
             if(data==1){
                 arg.checked_obj.parents('tr').fadeOut(function(){
                     arg.checked_obj.parents('tr').remove();
@@ -197,7 +197,7 @@
     //生成二维码
     $(".code").click(function(){
         var _id = $(this).attr('value-id');
-        $('#qr').attr('src','http://www.hap-job.com/index.php/backend/company/getRecruitQR/recruitId/'+_id);
+        $('#qr').attr('src','http://www.192.168.3.131/hpjobweb/index.php/backend/company/getRecruitQR/recruitId/'+_id);
         $("#showQR").dialog({
             //modal:true,
             title:'查看二维码',
@@ -206,7 +206,7 @@
             buttons:{
                 '确定':function(){
 
-                    $('#qr').attr('src','http://www.hap-job.com/index.php/backend/company/getRecruitQR/recruitId/'+_id);
+                    $('#qr').attr('src','http://www.192.168.3.131/hpjobweb/index.php/backend/company/getRecruitQR/recruitId/'+_id);
                 }
             }
         });
@@ -214,7 +214,7 @@
     });
     //开启、审核职位
     function verify_recruit(arg){
-        $.post('http://www.hap-job.com/index.php/backend/company/verifyRecruit',{"recruit_id":arg.id,type:arg.a_type},function(data){
+        $.post('http://www.192.168.3.131/hpjobweb/index.php/backend/company/verifyRecruit',{"recruit_id":arg.id,type:arg.a_type},function(data){
             if(data==1){
                 window.location.reload();
             }

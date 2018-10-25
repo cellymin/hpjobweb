@@ -806,7 +806,7 @@ class indexControl extends Control {
      */
     public function directCallBack(){
 
-        $url = 'http://m.hap-job.com/login.html?code='.$_GET['code'];
+        $url = 'http://m.192.168.3.131/hpjobweb/login.html?code='.$_GET['code'];
 
         Header("Location: $url");
 

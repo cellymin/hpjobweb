@@ -720,10 +720,10 @@ class userControl extends myControl {
 
     //生成二维码
     public function getRecruitQR(){
-        //include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
+        //include_once('/usr/share/nginx/html/hpjobweb/web/backend/libs/phpqrcode.php');
         $object = new QRcode(); 
         $uid = $_GET['id'];
-        $url='http://www.hap-job.com/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&salesmanid='.$uid;
+        $url='http://192.168.3.131/hpjobweb/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&salesmanid='.$uid;
         $level=3;  
         $size=4;  
         $path = "./uploads/person_qrcode/";//创建路径

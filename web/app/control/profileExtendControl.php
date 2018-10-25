@@ -384,19 +384,19 @@ class profileExtendControl extends Control {
 
         if ($this->auth->is_logged_in()) {
 
-            include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
+           // include_once('/usr/share/nginx/html/hpjobweb/web/backend/libs/phpqrcode.php');
 
             $uid = $_SESSION['uid'];
 
-            $qrcode = @file_get_contents('/var/www/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
+            $qrcode = @file_get_contents('/usr/share/nginx/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
 
             if(empty($qrcode)){
 
-                QRcode::png ("http://www.hap-job.com/app/auth/share/from/$uid?from=singlemessage&isappinstalled=1",'/var/www/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
+                QRcode::png ("http://192.168.3.131/hpjobweb/app/auth/share/from/$uid?from=singlemessage&isappinstalled=1",'/usr/share/nginx/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
             }
 
             $data = [
-                'code'=>'http://www.hap-job.com/uploads/user_qrcode/'.$uid.'.png'
+                'code'=>'http://192.168.3.131/hpjobweb/uploads/user_qrcode/'.$uid.'.png'
             ];
 
             Json_success('获取成功',$data);
@@ -422,7 +422,7 @@ class profileExtendControl extends Control {
             //普通用户的二维码
             if($user_role['rid'] == 8){
                 //生成二维码
-                $url='http://www.hap-job.com/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&normalmanid='.$uid;
+                $url='http://192.168.3.131/hpjobweb/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&normalmanid='.$uid;
                 $level=3;  
                 $size=4;  
                 $path = "./uploads/person_qrcode/";//创建路径
@@ -443,7 +443,7 @@ class profileExtendControl extends Control {
             //业务员的二维码
             if($user_role['rid'] == 7){
                 //生成二维码
-                $url='http://www.hap-job.com/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&salesmanid='.$uid;
+                $url='http://192.168.3.131/hpjobweb/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&salesmanid='.$uid;
                 $level=3;  
                 $size=4;  
                 $path = "./uploads/person_qrcode/";//创建路径
@@ -462,15 +462,15 @@ class profileExtendControl extends Control {
         
             Json_success('获取成功',$data);
 
-            // $qrcode = @file_get_contents('/var/www/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
+            // $qrcode = @file_get_contents('/usr/share/nginx/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
 
             // if(empty($qrcode)){
 
-            //     QRcode::png ("http://www.hap-job.com/app/auth/share/from/$uid?from=singlemessage&isappinstalled=1",'/var/www/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
+            //     QRcode::png ("http://192.168.3.131/hpjobweb/app/auth/share/from/$uid?from=singlemessage&isappinstalled=1",'/usr/share/nginx/html/hpjobweb/uploads/user_qrcode/'.$uid.'.png');
             // }
 
             // $data = [
-            //     'code'=>'http://www.hap-job.com/uploads/user_qrcode/'.$uid.'.png'
+            //     'code'=>'http://192.168.3.131/hpjobweb/uploads/user_qrcode/'.$uid.'.png'
             // ];
 
             // Json_success('获取成功',$data);
@@ -603,7 +603,7 @@ class profileExtendControl extends Control {
 
             foreach ($ads as $k=>$v){
 
-                $ads[$k]['path'] = 'http://www.hap-job.com/'.$v['path'];
+                $ads[$k]['path'] = 'http://192.168.3.131/hpjobweb/'.$v['path'];
             }
 
             $user = M('user')->where(['uid'=>$_SESSION['uid']])->find();
@@ -831,7 +831,7 @@ class profileExtendControl extends Control {
 
                     $month[$i]['date'] = $i;
                     $month[$i]['href'] = '';
-                    $month[$i]['icon'] = 'http://www.hap-job.com/uploads/bonus_icon/img/65171489636509.png';
+                    $month[$i]['icon'] = 'http://192.168.3.131/hpjobweb/uploads/bonus_icon/img/65171489636509.png';
                     $month[$i]['is_sign'] = 0;
 
                     if ($i >= date('j')) {//得出今日之后的数据

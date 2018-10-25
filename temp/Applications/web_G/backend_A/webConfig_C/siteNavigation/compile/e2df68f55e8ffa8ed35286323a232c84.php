@@ -4,13 +4,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title></title>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.validate.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.metadata.js"></script>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
+<link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
 <style type="text/css">
     .input-mini{
         width: 25px;
@@ -58,7 +58,7 @@
         <span></span>
 </div></div>
 <div id="tabs-1" style="clear:both">
-	<form action="http://www.hap-job.com/index.php/backend/webConfig/sortNavigation" method="post">
+	<form action="http://www.192.168.3.131/hpjobweb/index.php/backend/webConfig/sortNavigation" method="post">
 	<table class="table">
 		<tr>
 			<th>ID</th>
@@ -73,12 +73,12 @@
                 <tr>
 			<td><?php echo $nav['id'];?></td>
 			<td><?php echo $nav['mark'];?></td>
-			<td><a href="<?php if(substr($nav['href'],0,4)!='http'){?>http://www.hap-job.com/index.php<?php echo $nav['href'];?><?php  }else{ ?><?php echo $nav['href'];?><?php }?>" target="<?php echo $nav['target'];?>"><?php echo $nav['title'];?></a></td>
+			<td><a href="<?php if(substr($nav['href'],0,4)!='http'){?>http://www.192.168.3.131/hpjobweb/index.php<?php echo $nav['href'];?><?php  }else{ ?><?php echo $nav['href'];?><?php }?>" target="<?php echo $nav['target'];?>"><?php echo $nav['title'];?></a></td>
                         <td><?php if($nav['state']){?> <span class="success">显示</span><?php  }else{ ?><span class="waring">不显示</span><?php }?></td>
                         <td><?php if($nav['target']=='_blank'){?>新窗口<?php  }else{ ?>本页<?php }?></td>
 			<td><input type="text" name="sort[<?php echo $nav['id'];?>]" class="input-mini" value="<?php echo $nav['sort'];?>" /></td>
                         <td>
-                            <a href="http://www.hap-job.com/index.php/backend/webConfig/editNavigation/id/<?php echo $nav['id'];?>" class="edit-item"><i class="icon-edit"></i>编辑</a>
+                            <a href="http://www.192.168.3.131/hpjobweb/index.php/backend/webConfig/editNavigation/id/<?php echo $nav['id'];?>" class="edit-item"><i class="icon-edit"></i>编辑</a>
                             <a href="<?php echo $nav['id'];?>" class="del-item"><i class="icon-trash"></i>删除</a>
                         </td>
 		</tr>
@@ -92,7 +92,7 @@
 	</form>
 </div>
 <div id="dialog" class="hide">
-<form action="http://www.hap-job.com/index.php/backend/webConfig/addNavigation" method="post">
+<form action="http://www.192.168.3.131/hpjobweb/index.php/backend/webConfig/addNavigation" method="post">
 <div id="tabs-add" title="添加导航">
 	<ul>
 		<li><a href="#tabs-1">基本设置</a></li>
@@ -145,7 +145,7 @@
 $('.del-item').click(function(){
 	var _obj=$(this).parents('tr');
 	if(confirm("确认删除此导航？")){
-	$.post('http://www.hap-job.com/index.php/backend/webConfig/delNavigation',{id:$(this).attr('href')},function(data){
+	$.post('http://www.192.168.3.131/hpjobweb/index.php/backend/webConfig/delNavigation',{id:$(this).attr('href')},function(data){
 		if(data==1){
 			_obj.fadeOut();
 		}else{
@@ -169,7 +169,7 @@ $('#addNav').click(function(){
 					alert('请输入调用标记');
 					return false;
 				}
-				 $.post('http://www.hap-job.com/index.php/backend/webConfig/addNavigation',_obj.serialize(),function(data){
+				 $.post('http://www.192.168.3.131/hpjobweb/index.php/backend/webConfig/addNavigation',_obj.serialize(),function(data){
                                      if(data==1){
                                          $('#dialog').dialog( "close" );
                                          $('.alert-success').slideDown().children('span').html('添加导航成功！');

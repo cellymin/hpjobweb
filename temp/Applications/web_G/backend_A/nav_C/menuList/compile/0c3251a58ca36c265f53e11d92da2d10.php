@@ -4,14 +4,14 @@
 <head>
 	<meta charset="UTF-8">
 	<title></title>
-	<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-	<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-	<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-	<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+	<link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
+	<script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+	<link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+	<script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
 </head>
 <body style="padding:10px;">
-	<form action="http://www.hap-job.com/index.php/backend/nav/menuList" method="post">
+	<form action="http://192.168.3.131/hpjobweb/index.php/backend/nav/menuList" method="post">
 	<table class="table">
 		<tr>
 			<th width="2%"><input type="checkbox" class="select-all input-checkbox"> </th>
@@ -31,7 +31,7 @@
 			<td><input type="text" name="sort[<?php echo $value['id'];?>]" value="<?php echo $value['sort'];?>" class="input-min"></td>
 			<td><?php if($value['state']){?> <span class="success">显示中</span> <?php  }else{ ?> <span class="warning">已关闭</span> <?php }?></td>
 			<td>
-				<a href="http://www.hap-job.com/index.php/backend/nav/editMenu/id/<?php echo $value['id'];?>" class="edit-item"><i class="icon-edit"></i>修改</a>
+				<a href="http://192.168.3.131/hpjobweb/index.php/backend/nav/editMenu/id/<?php echo $value['id'];?>" class="edit-item"><i class="icon-edit"></i>修改</a>
 			</td>
 		</tr>
 		<?php if(is_array($value['son_data'])):?><?php  foreach($value['son_data'] as $two){ ?>
@@ -43,7 +43,7 @@
 			<td><input type="text" name="sort[<?php echo $two['id'];?>]" value="<?php echo $two['sort'];?>" class="input-min"></td>
 			<td><?php if($two['state']){?> <span class="success">显示中</span> <?php  }else{ ?> <span class="warning">已关闭</span> <?php }?></td>
 			<td>
-				<a href="http://www.hap-job.com/index.php/backend/nav/editMenu/id/<?php echo $two['id'];?>" class="edit-item"><i class="icon-edit"></i>修改</a>
+				<a href="http://192.168.3.131/hpjobweb/index.php/backend/nav/editMenu/id/<?php echo $two['id'];?>" class="edit-item"><i class="icon-edit"></i>修改</a>
 			</td>
 		</tr>
 		<?php if(is_array($two['son_data'])):?><?php  foreach($two['son_data'] as $three){ ?>
@@ -55,7 +55,7 @@
 				<td><input type="text" name="sort[<?php echo $three['id'];?>]" value="<?php echo $three['sort'];?>" class="input-min"></td>
 				<td><?php if($three['state']){?> <span class="success">显示中</span> <?php  }else{ ?> <span class="warning">已关闭</span> <?php }?></td>
 				<td>
-					<a href="http://www.hap-job.com/index.php/backend/nav/editMenu/id/<?php echo $three['id'];?>" class="edit-item"><i class="icon-edit"></i>修改</a>
+					<a href="http://192.168.3.131/hpjobweb/index.php/backend/nav/editMenu/id/<?php echo $three['id'];?>" class="edit-item"><i class="icon-edit"></i>修改</a>
 				</td>
 			</tr>
 			<?php }?><?php endif;?>
@@ -94,7 +94,7 @@
 				_id.push($(this).attr('m-id'));
 			});
 			if($(this).attr('action')=='del' && confirm("确认删除选中后台菜单？")){
-				$.post('http://www.hap-job.com/index.php/backend/nav/delMenu',{"id":_id},function(data){
+				$.post('http://192.168.3.131/hpjobweb/index.php/backend/nav/delMenu',{"id":_id},function(data){
 					if(data==1){
 						_checked.parents('tr').fadeOut(function(){
 							_checked.parents('tr').remove();

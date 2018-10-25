@@ -1262,7 +1262,7 @@ class authControl extends Control {
 
             if(!empty($base64)&&!empty($format)){
 
-                $upload = file_put_contents('/var/www/html/hpjobweb/uploads/user_info/'.$name.'.'.$format, $img);
+                $upload = file_put_contents('/usr/share/nginx/html/hpjobweb/uploads/user_info/'.$name.'.'.$format, $img);
 
             }
 
@@ -1337,7 +1337,7 @@ class authControl extends Control {
                      */
                     if(!empty($_POST['face_base'])&&!empty($_POST['back_base'])){
 
-                        $href = '/var/www/html/hpjobweb';
+                        $href = '/usr/share/nginx/html/hpjobweb';
 
                         $data = validateIdCardImg(base64_encode(file_get_contents($href.'/'.$_POST['face_base'])),base64_encode(file_get_contents($href.'/'.$_POST['back_base'])));
 

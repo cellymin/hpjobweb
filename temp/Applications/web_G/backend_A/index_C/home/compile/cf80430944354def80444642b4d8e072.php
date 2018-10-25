@@ -4,8 +4,8 @@
   <head>
     <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-    <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/home.css"/>
+    <link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/web/backend/templates/css/home.css"/>
     <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
     <script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
   </head>

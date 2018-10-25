@@ -7,7 +7,7 @@ class branchControl extends myControl {
    
     function branchList() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
+           // include_once('/usr/share/nginx/html/hpjobweb/web/backend/libs/phpqrcode.php');
             $object = new QRcode();  
             //var_dump($_POST);die;
             $name = $_POST['name'];

@@ -4,16 +4,16 @@
     <head>
         <title></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-        <link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.validate.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.metadata.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/My97DatePicker/WdatePicker.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/caches/js/linkage_data.js"></script>
-        <script type="text/javascript" src="http://www.hap-job.com/public/js/linkage/linkage_style_1.js"></script>
+        <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+        <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+        <link type="text/css" rel="stylesheet" href="http://www.192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/My97DatePicker/WdatePicker.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/caches/js/linkage_data.js"></script>
+        <script type="text/javascript" src="http://www.192.168.3.131/hpjobweb/public/js/linkage/linkage_style_1.js"></script>
     </head>
     <body>
         <div id="jquery-colour-picker" class="hide"></div>
@@ -26,7 +26,7 @@
             </ul>
             <div id="tabs-1">
                 <div id="add-form">
-                    <form action="http://www.hap-job.com/index.php/backend/ads/addAds" method="post" validate="true" enctype="multipart/form-data">
+                    <form action="http://www.192.168.3.131/hpjobweb/index.php/backend/ads/addAds" method="post" validate="true" enctype="multipart/form-data">
                         <table>
                             <tr>
                                 <th>广告标题：</th>
@@ -101,13 +101,13 @@
                             </tr>
                             <tr>
                                 <th>上传图片：</th>
-                                <td><?php $swfupload_path="http://www.hap-job.com/lcphp/org/swfupload250"?><?php $url="http://www.hap-job.com/index.php/backend/ads/swfupload"?><?php $delurl="http://www.hap-job.com/index.php/backend/ads/swfuploaddel"?><?php $size="2MB"?><?php $water_on="0"?><?php $upload_display_width="200"?><?php $upload_display_height="200"?><?php $imagesize=""?><?php $swfupload_size="2000000"?><?php $limit="1"?><?php $text="点击上传"?><?php $dir="uploads/ads"?><?php $session_name="sessionid"?><?php $session_id="kohut8l8c3ukqoque7eau4pm56"?><?php $type="*.jpg;*.png;*.gif"?><?php $swfupload_id=isset($swfupload_id)?++$swfupload_id:0?><?php $input_hidden="path"?><?php if($swfupload_id==0):?>
-<link href='http://www.hap-job.com/lcphp/org/swfupload250/css/default.css' rel='stylesheet' type='text/css' />
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/js/handlers.js'></script>
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/swfupload/swfupload.js'></script>
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/swfupload/swfupload.queue.js'></script>
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/js/fileprogress.js'></script>
-  <script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/lc_set.js'></script>
+                                <td><?php $swfupload_path="http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250"?><?php $url="http://www.192.168.3.131/hpjobweb/index.php/backend/ads/swfupload"?><?php $delurl="http://www.192.168.3.131/hpjobweb/index.php/backend/ads/swfuploaddel"?><?php $size="2MB"?><?php $water_on="0"?><?php $upload_display_width="200"?><?php $upload_display_height="200"?><?php $imagesize=""?><?php $swfupload_size="2000000"?><?php $limit="1"?><?php $text="点击上传"?><?php $dir="uploads/ads"?><?php $session_name="sessionid"?><?php $session_id="kohut8l8c3ukqoque7eau4pm56"?><?php $type="*.jpg;*.png;*.gif"?><?php $swfupload_id=isset($swfupload_id)?++$swfupload_id:0?><?php $input_hidden="path"?><?php if($swfupload_id==0):?>
+<link href='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/css/default.css' rel='stylesheet' type='text/css' />
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/js/handlers.js'></script>
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/swfupload/swfupload.js'></script>
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/swfupload/swfupload.queue.js'></script>
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/js/fileprogress.js'></script>
+  <script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/lc_set.js'></script>
 <?php endif;?><script type="text/javascript">
 
     if(typeof swfupload=='undefined'){
@@ -212,13 +212,13 @@
                             </tr>
                             <tr>
                                 <th>上传FLASH：</th>
-                                <td><?php $swfupload_path="http://www.hap-job.com/lcphp/org/swfupload250"?><?php $url="http://www.hap-job.com/index.php/backend/ads/swfupload"?><?php $delurl="http://www.hap-job.com/index.php/backend/ads/swfuploaddel"?><?php $size="2MB"?><?php $water_on="0"?><?php $upload_display_width="200"?><?php $upload_display_height="200"?><?php $imagesize=""?><?php $swfupload_size="2000000"?><?php $limit="1"?><?php $text="点击上传"?><?php $dir="uploads/ads/flash"?><?php $session_name="sessionid"?><?php $session_id="kohut8l8c3ukqoque7eau4pm56"?><?php $type="*.swf"?><?php $swfupload_id=isset($swfupload_id)?++$swfupload_id:0?><?php $input_hidden="path"?><?php if($swfupload_id==0):?>
-<link href='http://www.hap-job.com/lcphp/org/swfupload250/css/default.css' rel='stylesheet' type='text/css' />
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/js/handlers.js'></script>
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/swfupload/swfupload.js'></script>
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/swfupload/swfupload.queue.js'></script>
-<script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/js/fileprogress.js'></script>
-  <script type='text/javascript' src='http://www.hap-job.com/lcphp/org/swfupload250/lc_set.js'></script>
+                                <td><?php $swfupload_path="http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250"?><?php $url="http://www.192.168.3.131/hpjobweb/index.php/backend/ads/swfupload"?><?php $delurl="http://www.192.168.3.131/hpjobweb/index.php/backend/ads/swfuploaddel"?><?php $size="2MB"?><?php $water_on="0"?><?php $upload_display_width="200"?><?php $upload_display_height="200"?><?php $imagesize=""?><?php $swfupload_size="2000000"?><?php $limit="1"?><?php $text="点击上传"?><?php $dir="uploads/ads/flash"?><?php $session_name="sessionid"?><?php $session_id="kohut8l8c3ukqoque7eau4pm56"?><?php $type="*.swf"?><?php $swfupload_id=isset($swfupload_id)?++$swfupload_id:0?><?php $input_hidden="path"?><?php if($swfupload_id==0):?>
+<link href='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/css/default.css' rel='stylesheet' type='text/css' />
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/js/handlers.js'></script>
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/swfupload/swfupload.js'></script>
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/swfupload/swfupload.queue.js'></script>
+<script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/js/fileprogress.js'></script>
+  <script type='text/javascript' src='http://www.192.168.3.131/hpjobweb/lcphp/org/swfupload250/lc_set.js'></script>
 <?php endif;?><script type="text/javascript">
 
     if(typeof swfupload=='undefined'){
@@ -375,7 +375,7 @@
                             <?php }?>
                         </td>
                         <td><input type="text" name="sort" class="input-mini" value="<?php echo $value['sort'];?>" /></td>
-                        <td><a href="http://www.hap-job.com/index.php/backend/ads/editAds/id/<?php echo $value['id'];?>"><i class="icon-edit"></i>编辑</a>&nbsp;&nbsp;<a href="<?php echo $value['id'];?>" class="del-ads"><i class="icon-trash"></i>删除</a></td>
+                        <td><a href="http://www.192.168.3.131/hpjobweb/index.php/backend/ads/editAds/id/<?php echo $value['id'];?>"><i class="icon-edit"></i>编辑</a>&nbsp;&nbsp;<a href="<?php echo $value['id'];?>" class="del-ads"><i class="icon-trash"></i>删除</a></td>
                     </tr>
                     <?php }?><?php endif;?>
                     <tr class="well">
@@ -395,7 +395,7 @@
                         if(confirm('确认删除？')){
                             var _obj=$(this).parents('tr');
                             $.post(
-                            'http://www.hap-job.com/index.php/backend/ads/delAds',
+                            'http://www.192.168.3.131/hpjobweb/index.php/backend/ads/delAds',
                             {id:$(this).attr('href')},
                             function(data) {
                                 if(data){
@@ -437,7 +437,7 @@
                         if(confirm('确认删除？')){
                             var _obj=$(this).parents('tr');
                             $.post(
-                            'http://www.hap-job.com/index.php/backend/ads/delAdvert',
+                            'http://www.192.168.3.131/hpjobweb/index.php/backend/ads/delAdvert',
                             {id:$(this).attr('href')},
                             function(data) {
                                 if(data){
@@ -454,13 +454,13 @@
                         $('tr:eq(0) input',$(_edit)).val($(this).parent().siblings('td:eq(0)').text());
                         $('tr:eq(1) input',$(_edit)).val($(this).parent().siblings('td:eq(2)').text());
                         $('tr:eq(2) label:contains('+$(this).parent().siblings('td:eq(2)').text()+') input',$(_edit)).attr('checked',true);
-                        $('form',$(_edit)).attr('action','http://www.hap-job.com/index.php/backend/ads/editAdvert');
+                        $('form',$(_edit)).attr('action','http://www.192.168.3.131/hpjobweb/index.php/backend/ads/editAdvert');
                         $(_edit).dialog({
                             width:540,title:'修改广告位',modal:true,buttons:{
                                 '更新':function(){
                                     var _data=$('form',$(_edit)).serializeArray();
                                     $.post(
-                                    'http://www.hap-job.com/index.php/backend/ads/editAdvert',
+                                    'http://www.192.168.3.131/hpjobweb/index.php/backend/ads/editAdvert',
                                     _data,
                                     function(data) {
                                         if(data){
@@ -476,7 +476,7 @@
                 </script>
             </div>
             <div id="tabs-4">
-                <form validate="true" action="http://www.hap-job.com/index.php/backend/ads/addAdvert" method="post">
+                <form validate="true" action="http://www.192.168.3.131/hpjobweb/index.php/backend/ads/addAdvert" method="post">
                     <table>
                         <tr>
                             <th>广告位名称：</th>

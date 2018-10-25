@@ -16,5 +16,5 @@ return array(
     'TPL_DIR' =>PATH_ROOT.'/templates',
     'VERIFY_RECRUIT'=>true,//审核招聘信息
     'DATA_CACHE_DIR'=>PATH_ROOT.'/caches/',
-    'DEBUG'=>0
+    'DEBUG'=>1
 );

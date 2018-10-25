@@ -3,16 +3,17 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-            <title>操作成功---<?php echo $_CONFIG['web_name'];?></title>
-            <link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/base.css"/>
-            <link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/success.css"/>
+            <title>操作失败--<?php echo $_CONFIG['web_name'];?></title>
+            {hd_seo /}
+            <link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/base.css"/>
+            <link type="text/css" rel="stylesheet" href="http://localhost//hpjobweb/public/css/success.css"/>
             <script type="text/javascript">
-                window.setTimeout("<?php echo $url;?>",<?php echo $time;?>*1000);
+                window.parent.setTimeout("<?php echo $url;?>",<?php echo $time;?>*1000);
             </script>
     </head>
     <body>
-        <div class="opt-notice">
-            <h2>操作成功！</h2>
+         <div class="opt-notice opt-notice-error">
+            <h2>操作失败！</h2>
             <div class="notice-con">
                 <div class="msg">
                     <table width="100%" height="100%">
@@ -21,11 +22,11 @@
                         </tr>
                     </table>
                 </div>
-                <p class="link"><span id="time"><?php echo $time;?></span>秒钟后将进行<a href="javascript:<?php echo $url;?>">跳转</a>也可以<a href="http://192.168.3.131/hpjobweb/index.php/backend">返回首页</a></p>
+                <p class="link"><span id="time"><?php echo $time;?></span>秒钟后将进行<a href="javascript:http://localhost/hpjobweb/index.php/backend/auth/index">跳转</a>也可以<a href="http://localhost/hpjobweb/index.php/backend">返回首页</a></p>
             </div>
         </div>
         <script type="text/javascript">
-         var _w=document.documentElement.clientWidth,
+        var _w=document.documentElement.clientWidth,
             _h=document.documentElement.clientHeight,
             _time=document.getElementById("time").innerHTML;
             document.body.style.cssText="width:"+_w+'px;height:'+_h+'px';

@@ -50,7 +50,7 @@ class indexControl extends myControl {
             if(M('user')->where('uid='.$_SESSION['uid'])->update($data)){
                 setcookie(C('AUTH_AUTOLOGIN_COOKIE_NAME'), '', time() - 100000, '/'); //删除cookie
                 $this->session_destroy();
-                $this->success('修改成功','http://www.hap-job.com/index.php/backend/auth/index');
+                $this->success('修改成功','http://192.168.3.131/hpjobweb/index.php/backend/auth/index');
             }
 
         }

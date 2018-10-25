@@ -5,15 +5,15 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>后台管理</title>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/bootstrap/bootstrap.min.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
-<link type="text/css" rel="stylesheet" href="http://www.hap-job.com/web/backend/templates/css/public.css"/>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/web/backend/templates/js/public.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jquery-ui-1.8.21.custom.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.validate.min.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/jqueryValidate/jquery.metadata.js"></script>
-<script type="text/javascript" src="http://www.hap-job.com/public/js/My97DatePicker/WdatePicker.js"></script>
+<link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/bootstrap/bootstrap.min.css"/>
+<link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/public/css/jqueryUI.bootstrap/jquery-ui-1.8.16.custom.css"/>
+<link type="text/css" rel="stylesheet" href="http://192.168.3.131/hpjobweb/web/backend/templates/css/public.css"/>
+<script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://192.168.3.131/hpjobweb/web/backend/templates/js/public.js"></script>
+<script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/jqueryValidate/jquery.metadata.js"></script>
+<script type="text/javascript" src="http://192.168.3.131/hpjobweb/public/js/My97DatePicker/WdatePicker.js"></script>
 </head>
 <body>
 <style type="text/css">
@@ -90,7 +90,7 @@
 			</table>
 		</div>
 		<div id="tabs-2">
-			<form validate="true" action="http://www.hap-job.com/index.php/backend/webConfig/links" method="post" enctype="multipart/form-data">
+			<form validate="true" action="http://192.168.3.131/hpjobweb/index.php/backend/webConfig/links" method="post" enctype="multipart/form-data">
 				<table>
 					<tr>
 						<th>网站名称：</th>
@@ -149,14 +149,14 @@
 			</table>
 		</div>
 		<div id="tabs-4">
-			<form validate="true" action="http://www.hap-job.com/index.php/backend/webConfig/addLinkCate" method="post" class="well form-inline">
+			<form validate="true" action="http://192.168.3.131/hpjobweb/index.php/backend/webConfig/addLinkCate" method="post" class="well form-inline">
 		        <label for="cate-title">分类名：</label><input id="cate-title" validate="{required:true}" type="text" name="title" />&nbsp;&nbsp;
 		        <button type="submit" class="btn btn-primary">添加</button>
 			</form>
 		</div>
 	</div>
 	<div id="dialog" title="修改友情连接分类" class="hide">
-		<form validate="true" action="http://www.hap-job.com/index.php/backend/webConfig/editLinkCate" method="post" class="well form-inline" style="margin-bottom: 0px;">
+		<form validate="true" action="http://192.168.3.131/hpjobweb/index.php/backend/webConfig/editLinkCate" method="post" class="well form-inline" style="margin-bottom: 0px;">
 			<input type="hidden" name="lcid" value="" />
 		    <label for="cate-title">分类名：</label><input id="cate-title" validate="{required:true}" type="text" name="title" />
 			</form>
@@ -164,9 +164,9 @@
 <script type="text/javascript">
 $('.del-item').click(function() {
 	var _obj=$(this),
-	_url='http://www.hap-job.com/index.php/backend/webConfig/delLinkCate';
+	_url='http://192.168.3.131/hpjobweb/index.php/backend/webConfig/delLinkCate';
 	if($(this).attr('type')=='ads'){
-		_url='http://www.hap-job.com/index.php/backend/webConfig/delLink';
+		_url='http://192.168.3.131/hpjobweb/index.php/backend/webConfig/delLink';
 	}
 	if(confirm('确认删除？')){
 		$.post(_url,{id:$(this).attr('href')},function(data){
