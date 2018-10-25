@@ -2023,7 +2023,8 @@ class authControl extends Control {
             }
 
         }else{
-
+            $shareurl = '/app/images/yingdao.png';
+            $this->assign('shareurl',$shareurl);
             $this->display('app/share');
 
         }
