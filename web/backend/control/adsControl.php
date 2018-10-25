@@ -94,6 +94,8 @@ class adsControl extends myControl {
         $ads = $db->field('ads.id,ads_title,cate,href,addtime,starttime,endtime,sort,text,path,uid,color,state,width,height,title,type')
                     ->order('addtime desc')
                     ->findall();
+//        echo '<pre/>';
+//        var_dump($ads);die();
         $this->assign('cates', $cates);
         $this->assign('ads', $ads);
         $this->assign('ads_type', $this->ads_type);

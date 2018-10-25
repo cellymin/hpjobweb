@@ -1,0 +1,46 @@
+{include file="__TPL__/header.html" /}
+<div id="userList">
+    <table id="user-list" class="table">
+        <tr>
+            <th width="10%">标题</th>
+            <th>类型</th>
+            <th>地址</th>
+            <th>生成时间</th>
+            <th>更新时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td>{$user.username}<span class="tips">[ID:{$user.uid}]</span></td>
+            <td>类型</td>
+            <td>地址</td>
+            <td>{$user.created|date:'Y-m-d H:i:s',@@}</td>
+            <td>{$user.created|date:'Y-m-d H:i:s',@@}</td>
+            <td class="status">
+                {if value="$user.verify==0"}
+                <span class="warning">未认证</span>
+                {elseif value="$user.verify==1"}
+                <span class="warning">待审核</span>
+                {elseif value="$user.verify==3"}
+                <span class="success">已通过审核</span>
+                {elseif value="$user.verify==2"}
+                <span class="warning">未通过审核</span>
+                {/if}
+            </td>
+            <td>
+                <a href="__CONTROL__/verifyRole?name=3&uid={$user.uid}">修改</a>
+                <a href="__CONTROL__/verifyRole?name=2&uid={$user.uid}">删除</a>
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+
+<div id="dialog"></div>
+<script type="text/javascript">
+
+
+</script>
+</body>
+</html>
