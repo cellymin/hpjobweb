@@ -636,10 +636,16 @@ class userControl extends myControl {
         foreach ($users as $key=>$user){
             $user_point = M('user_point')->where('uid = '.$user['uid'])->find();
             $user_role = M('user_role')->where('uid = '.$user['uid'])->find();
+           if(is_numeric($user['username'])){
+               $user['username'] = number_format($user['username'] ,0, '', ' ');
+           }
+           if(is_numeric($user_info[$key]['name'])){
+               $user_info[$key]['name']=number_format($user_info[$key]['name'] ,0, '', ' ');
+           }
            echo "<tr><td>";
-            echo iconv("UTF-8", "GBK",empty($user['username'])) ? '' : $user['username']."</td><td>";
+            echo iconv("UTF-8", "GBK",empty($user['username']) ? '' : $user['username'])."</td><td>";
             echo iconv("UTF-8", "GBK",date('Y-m-d H:i:s',$user['created']))."</td><td>";
-            echo iconv("UTF-8", "GBK",empty($user_info[$key]['name']) ? '暂无' :$user_info[$key]['name']) ."</td><td>";
+            echo iconv("UTF-8", "GBK",empty($user_info[$key]['name']) ? '暂无' : $user_info[$key]['name']) ."</td><td>";
             echo iconv("UTF-8", "GBK",empty($user_info[$key]['id_number']) ? '暂无' : $user['id_number'])."</td><td>";
             echo iconv("UTF-8", "GBK",$this->getUserVerifyCn($user_info[$key]['verify']))."</td><td>";
             echo iconv("UTF-8", "GBK",$this->getUserRole($user['uid']))."</td><td>";

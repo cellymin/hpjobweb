@@ -754,9 +754,9 @@ class authControl extends Control {
             Json_error('绑定失败');
         }
 
-        if ($this->user->userExist($username)) {
+        /*if ($this->user->userExist($username)) {
             Json_error('手机号已被绑定');
-        }
+        }*/
 
         if(M('user')->where(array('uid'=>$uid))->update(array('username'=>$username,'is_bind'=>'1'))){
             $this->updateUser($uid,$username);
