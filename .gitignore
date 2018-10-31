@@ -3,5 +3,5 @@ table
 database.php
 temp/session
 temp
-!temp\Applications\web_G\APP_GROUP_web.php
-
+temp/Applications/web_G/index_A/search_C/jobs/compile
+temp/Applications/web_G/index_A/search_C/index/select
