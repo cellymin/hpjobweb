@@ -1,0 +1,60 @@
+*{ margin:0; padding:0;}
+html{ height:100%;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:transparent;-webkit-touch-callout: none;  -webkit-user-select: none;}
+body{font-family:Verdana, Geneva,"΢���ź�";color:#333; font-size:12px; line-height:1.5;-webkit-text-size-adjust:none;background: #34495e;}
+img{vertical-align:top;border:0;max-width: 100%;}
+input,button{ border:0;}
+h1,h2{ font-weight:normal;}
+a{ text-decoration:none;color:#545460;}
+a:hover{ color:#545460;}
+ul {list-style:none;}
+.clear{ clear:both;}
+
+
+/*����*/
+.page{max-width: 100%;overflow: hidden;}
+section{max-width: 100%; overflow:hidden; margin: 5%;}
+.bottom p{ text-align: center; border-radius:5px;overflow: hidden; margin: 5% 0;}
+.bottom p input{ width: 100%; height:44px; text-align: center; color: #c5c5c5; font-size:16px;}
+.bottom .yzm input{ width:68%; float:left;}
+.bottom .yzm button{ float: right; width:32%;height:44px; background:url("../../app/images/yzm.png") center no-repeat; color: #fff;background-size: 100%;}
+
+
+/*���ʲ�ѯ*/
+.body { background:#f8f8f8;}
+article{}
+.title{ border-top:1px solid #dedede; border-bottom: 0.5px solid #dedede; background:#f8f8f8;}
+.title p{padding:0 5%; font-size:16px; color: #545460; line-height:36px;}
+.title p span{color: #8a837d;}
+.content li{
+    margin-top:8px;
+    border-top:0.5px solid #dedede;
+    border-bottom: 0.5px solid #dedede;
+    background: #fff;
+    line-height: 44px;
+    overflow: hidden;
+    padding: 0 5%;
+    color: #545460;
+    font-size:16px;
+            }
+.content_left{ float: left;}
+.content_right{ float: right;}
+
+/*н��*/
+.xingzi p,#xingzi1 p{ line-height: 44px;border-bottom:1px solid #dedede;padding-left: 5%;color: #545460; }
+.xingzi p span,#xingzi1 p span{color: #8a837d;}
+.djckxq{ text-align: center; color: #2ebffe; line-height: 44px;border-top:0.5px solid #dedede; border-bottom: 0.5px solid #dedede; margin-top: 20px;background: #fff;}
+.djckxq a{color: #2ebffe;}
+
+/*����*/
+.jl_nr{ max-width: 100%; overflow: hidden;}
+.jl_nr p{ padding: 0 18px;color: #818181; line-height: 24px;font-size: 14px;}
+.jl_nr p span{ color: #535353;}
+.tx_jl{ font-size: 14px;}
+.tx_jl img{ float: left;}
+.tx_jl span:nth-child(1){float: left;line-height: 70px;display: block; color: #818181;}
+.tx_jl span:nth-child(2){float: left;display: block; padding-bottom: 5px; height:70px;width:70px;background:url("../images/toux.png") no-repeat center;}
+.jl_title{ width: 100%; line-height:38px; background: #e6f7fe;padding-left: 18px; color: #48b2dc; margin: 8px 0;font-size: 16px;}
+
+#yem{ background: url('../../app/images/yingdao.png') no-repeat center;background-size: 100%;}
+
+

@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+    <script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+<div class="user-info">
+    <?php
+		$data=new data('resume_basic');
+		$user=$data->convert($user);
+    ?>
+    <form action="__CONTROL__/editUserCommission/id/{$user.uid}" validate="true" method="post">
+        <table class="table well">
+            <tr>
+                <th>转出者用户名</th>
+                <td><input type="text" name="username" value="" class="input"> </td>
+            </tr>
+            <tr>
+                <th>再次输入</th>
+                <td><input type="text" name="re_name" value="" class="input"> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

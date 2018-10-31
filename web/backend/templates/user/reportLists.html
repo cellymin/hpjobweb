@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        {css file="jqueryUI.bootstrap" /}
+        {css file="bootstrap"}
+        {css file="__TPL__/css/public.css" /}
+        {js file="jquery" /}
+        {js file="jquery.validate" /}
+        {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+        {js file="jqueryUI" /}
+        {js file="datepicker" /}
+        {js file="__ROOT__/caches/js/linkage_data.js" /}
+        {js file="__ROOT__/public/js/linkage/linkage_style_1.js" /}
+    </head>
+    <body>
+    <div id="tabs-2">
+        <style>
+            .table{ margin-top: 20px;}
+        </style>
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>被举报人</th>
+                <th>举报人</th>
+                <th width="300px">内容</th>
+                <th>图片</th>
+                <th>理由</th>
+                <th>举报时间</th>
+                <th>操作</th>
+            </tr>
+            {foreach from="$reports" value="$reports"}
+            <tr>
+                <td>{$reports.rid}</td>
+                <td>{$reports.busername}</td>
+                <td>{$reports.username}</td>
+                <td>{$reports.content}</td>
+                <td>{if value="$reports.imgs!=null"}<a href="{$reports.imgs}" target="_blank"><img src="{$reports.imgs}" style="width: 80px;height: 60px;margin-left: 20px"></a>{else /}无{/if}</td>
+                <td>{$reports.reason}</td>
+                <td>{$reports.time|date:'Y-m-d H:i:s',@@}</td>
+                <td>{if value="$reports.status==0"}<a href="__CONTROL__/delSns/id/{$reports.rid}" class ="status" title="标记已处理" value-id="{$reports.rid}" >删除该动态</a>{else /}<span class="warning">已删除</span>{/if}</td>
+            </tr>
+            {/foreach}
+            <tr class="well">
+                <td colspan="6"></td>
+                <td>{$pages}</td>
+            </tr>
+        </table>
+        <script type="text/javascript">
+            $(".status").click(function(){
+                if(confirm('确认删除该举报下的动态？一旦删除不可恢复')){
+                    return true;
+                }else{
+                    return false;
+                }
+            });
+        </script>
+
+    </div>
+
+    </body>
+</html>

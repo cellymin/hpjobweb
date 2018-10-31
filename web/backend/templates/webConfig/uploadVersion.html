@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+    <script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+<div class="user-info">
+    <?php
+		$data=new data('resume_basic');
+		$user=$data->convert($user);
+    ?>
+    <form action="__CONTROL__/createVersion" validate="true" method="post" enctype="multipart/form-data">
+        <table class="table well">
+            <tr>
+                <th>标识</th>
+                <td><input type="text" name="title" value="" class="input"> </td>
+            </tr>
+            <tr>
+                <th>版本号</th>
+                <td><input type="text" name="version" value="" class="input"> </td>
+            </tr>
+            <tr>
+                <th>更新内容</th>
+                <td><input type="text" name="desc" value="" class="input"> </td>
+            </tr>
+            <tr>
+                <td>文件</td>
+                <td><input type="file" name="down_url"></td>
+            </tr>
+            <tr><td><font color="#00bfff">温馨提示：文件较大，如遇到停顿现象，切勿退出，请耐心等待</font></td></tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

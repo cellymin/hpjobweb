@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html lang="en-US" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="jqueryUI.bootstrap" /}
+    {css file="__TPL__/css/public.css" /}
+    {js file="jquery" /}
+    {js file="__TPL__/js/public.js" /}
+    {js file="jqueryUI" /}
+    {js file="jquery.validate" /}
+    {js file="datepicker" /}
+    {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+</head>
+<body>
+<div id="userList">
+    <!--<form action="__CONTROL__/insertCommission" method="post" enctype="multipart/form-data" id="insertCommission" class="well form-horizontal">-->
+        <!--<table border=0 cellspacing=0 cellpadding=0 align=center width="100%">-->
+            <!--<tr>-->
+                <!--<td width=55 height=20 align="center"><input type="hidden" name="MAX_FILE_SIZE" value="2000000">文件： </td>-->
+                <!--<td height="16">-->
+                    <!--<input name="file" type="file"  value="浏览" >-->
+                <!--</td>-->
+                <!--<input name="laid" type="hidden" id="upload_laid">-->
+                <!--<td>-->
+                    <!--<input type="submit" value="导入" name="upload">-->
+                <!--</td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+    <form action="__METH__" method="get" id="search-form">
+        <table class="table well" style="margin-bottom:-18px;">
+            <tr>
+                <th></th>
+                <th>身份证号</th>
+                <th>佣金</th>
+                <th>公司名称</th>
+                <th>工作时间</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="text" name="id_number" class="input-medium" value="{if value="$base.get.id_number|isset"}{$base.get.id_number|urldecode}{/if}"></td>
+                <td><input type="text" name="commission" class="input-medium" value="{if value="$base.get.commission|isset"}{$base.get.commission|urldecode}{/if}"></td>
+                <td><input type="text" name="company_name" class="input-medium" value="{if value="$base.get.company_name|isset"}{$base.get.company_name|urldecode}{/if}"></td>
+                <td><input type="text" name="start_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></td>
+                <td><input type="text" name="end_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></td>
+                <td colspan="2">
+                    <button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>
+                    <a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a>
+                </td>
+
+                <script type="text/javascript">
+
+                    $('#reset').click(function(){
+                        $('#search-form :input').val('');
+                        $('#search-form').submit();
+                    });
+                </script>
+            </tr>
+        </table>
+    </form>
+    <table id="user-list" class="table">
+        <tr>
+            <th><input type="checkbox" class="select-all input-checkbox"></th>
+            <th>id</th>
+            <th>内容</th>
+            <th>返现佣金</th>
+            <th>公司名称</th>
+            <th>工作时间</th>
+            <th>身份证号</th>
+        </tr>
+        {foreach from="$commissions" value="$commission"}
+        <tr>
+            <td><input type="checkbox" class="input-checkbox" name="uid" value="{$commission.id}"> </td>
+            <td>{$commission.id}</td>
+            <td>{$commission.content}</td>
+            <td>{$commission.commission}</td>
+            <td>{$commission.company_name}</td>
+            <td>{$commission.job_time}</td>
+            <td>{$commission.id_number}</td>
+        </tr>
+        {/foreach}
+
+        <tr class="well">
+            <td><input type="checkbox" class="select-all input-checkbox"></td>
+            <td class="opt" colspan="2">
+                <a class="btn btn-mini btn-warning" action="ban"><i class="icon-ban-circle icon-white"></i>删除</a>
+            </td>
+            <td colspan="6">
+                {$page}
+            </td>
+        </tr>
+
+    </table>
+</div>
+<div id="dialog" style="z-idnex:999"></div>
+<script type="text/javascript">
+    $('.config-role').click(function(){
+        $('#config-role .user').text($(this).attr('username'));
+        $('#config-uid').val($(this).attr('uid'));
+        var rid=$(this).attr('rid').split('#');
+        $('#config-role :checkbox').each(function(){
+            if(jQuery.inArray($(this).val(),rid)>=0){
+                $(this).attr('checked',true);
+            }else{
+                $(this).attr('checked',false);
+            }
+        });
+        //导入入职返现记录
+        $("#insertCommission").click(function(){
+            $("#insertCommission").dialog({
+                //modal:true,
+                title:'导入职位',
+                resizable: true,
+                width:450
+
+            });
+            $("#upload #title").val('').focus();
+            return false;
+        });
+        return false;
+    });
+    select_all('user-list');//全选
+    //删除选中用户
+
+    function delInto(arg){
+        console.log(arg);
+        $.post('__CONTROL__/delInto',{id:arg.id},function(data){
+            if(data.status==1){
+
+                    location.reload();
+            }
+        },'Json');
+    }
+    $('.opt a').click(function(){
+        var _id_arr=[],
+                _confirm_msg='删除',
+                _action=$(this).attr('action'),
+                _fun="delInto",//处理函数
+                _name="",
+                _checked=$('.table :checkbox[name]:checked');
+        _checked.each(function(){
+            _id_arr.push($(this).val());
+        });
+        if(_checked.length==0){
+            alert("请选择你需要操作的记录!");
+            return false;
+        }
+
+        switch(_action){
+            case "ban":_confirm_msg="删除";_fun="delInto";_name=2;break;
+        }
+        if(confirm("确定"+_confirm_msg+"选择记录？")){
+
+            eval(_fun+"({id:_id_arr,checked_obj:_checked,a_name:_name})");
+
+        }
+        return false;
+    });
+</script>
+</body>
+</html>

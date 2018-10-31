@@ -1,0 +1,58 @@
+ <!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	{css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+	<script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+
+<div id="mission-content" style="margin-top: 10px">
+	<form action="__CONTROL__/addBonus" method="post">
+		<div id="tabs-add" title="添加奖励规则">
+
+			<div id="tabs-1"><table>
+				<tr>
+					<th width="10%">名称</th>
+					<td><input type="text" name="title" /></td>
+				</tr>
+				<tr>
+					<th width="10%">连续签到天数</th>
+					<td><input type="text" name="days_num" /></td>
+				</tr>
+				<tr>
+					<th>类型</th>
+					<td><label style="display: inline-block"><input type="radio" name="type" value="1" checked />积分</label>&nbsp;&nbsp;<label style="display: inline-block"><input type="radio" name="type" value="2" />线下实物</label></td>
+				</tr>
+				<tr>
+					<th>奖励数目</th>
+					<td><input type="text" name="bonus_num" class="input-mini" validate="{required:true,regexp:/^[0-9]*$/,messages:'只能输入数字'}" /></td>
+				</tr>
+				<tr>
+					<th width="10%">链接</th>
+					<td><input type="text" name="href" /></td>
+				</tr>
+
+				<tr>
+					<th>图标</th>
+					<td>{upload size="2" type="jpg,png,gif" limit="1" text="上传icon" name="icon" dir="uploads/bonus_icon" /}</td>
+				</tr>
+
+				<tr>
+					<th><input type="submit" value="提交" class="btn btn-primary" /></th>
+				</tr>
+
+			</table>
+			</div>
+		</div>
+	</form>
+</div>
+
+</body>
+</html>

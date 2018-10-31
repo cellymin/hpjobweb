@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+    <script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+<!--/page-nav-->
+<form action="__CONTROL__/editPrice/id/{$price.id}" validate="true" method="post" class="sub">
+    <table class="table well">
+        <tr>
+            <th>单据编号</th>
+            <td><input type="text" name="num" value="{$price.num}"></td>
+        </tr>
+        <tr>
+            <th>来源</th>
+            <td><input type="text" name="origin" value="{$price.origin}"></td>
+        </tr>
+        <tr>
+            <th>面试日期</th>
+            <td><input type="text" name="interview_time" value="{$price.interview_time}"></td>
+        </tr>
+        <tr>
+            <th>输入单位</th>
+            <td><input type="text" name="company" value="{$price.company}"></td>
+        </tr>
+        <tr>
+            <th>性别</th>
+            <td><input type="text" name="sex" value="{$price.sex}"></td>
+        </tr>
+        <tr>
+            <th>返款方式</th>
+            <td><input type="text" name="return_money_way" value="{$price.return_money_way}"></td>
+        </tr>
+        <tr>
+            <th>隶属公司</th>
+            <td><input type="text" name="membership_company" value="{$price.membership_company}"></td>
+        </tr>
+        <tr>
+            <th>类型</th>
+            <td><input type="text" name="type" value="{$price.type}"></td>
+        </tr>
+        <tr>
+            <th>性质</th>
+            <td><input type="text" name="nature" value="{$price.nature}"></td>
+        </tr>
+        <tr>
+            <th>资源地</th>
+            <td><input type="text" name="resource_place" value="{$price.resource_place}"></td>
+        </tr>
+        <tr>
+            <th>价格</th>
+            <td><input type="text" name="price" value="{$price.price}"></td>
+        </tr>
+        <tr>
+            <th>奖励</th>
+            <td><input type="text" name="award" value="{$price.award}"></td>
+        </tr>
+        <tr>
+            <th>备注</th>
+            <td><input type="text" name="note" value="{$price.note}"></td>
+        </tr>
+        <tr>
+            <th>学校</th>
+            <td><input type="text" name="school" value="{$price.school}"></td>
+        </tr>
+        <tr>
+            <th>工资额度</th>
+            <td><input type="text" name="salary_line" value="{$price.salary_line}"></td>
+        </tr>
+
+    </table>
+</form>
+<!--/opt-->
+</div>
+
+<script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+    {js file="jquery.validate" /}
+    <script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</head>
+<body>
+<!--/page-nav-->
+<form action="__CONTROL__/editSupplier/sid/{$supplier.sid}" validate="true" method="post" class="sub">
+    <table class="table well">
+        <tr>
+            <th>供应商编号</th>
+            <td><input type="text" name="number" value="{$supplier.number}"></td>
+        </tr>
+        <tr>
+            <th>职介全称</th>
+            <td><input type="text" name="name_co" value="{$supplier.name_co}"></td>
+        </tr>
+        <tr>
+            <th>供应商姓名</th>
+            <td><input type="text" name="username" value="{$supplier.username}"></td>
+        </tr>
+        <tr>
+            <th>联系方式</th>
+            <td><input type="text" name="mobile" value="{$supplier.mobile}"></td>
+        </tr>
+        <tr>
+            <th>身份证号码</th>
+            <td><input type="text" name="identity" value="{$supplier.identity}"></td>
+        </tr>
+        <tr>
+            <th>卡号</th>
+            <td><input type="text" name="card_num" value="{$supplier.card_num}"></td>
+        </tr>
+        <tr>
+            <th>银行类别</th>
+            <td><input type="text" name="bank" value="{$supplier.bank}"></td>
+        </tr>
+        <tr>
+            <th>联系地址</th>
+            <td><input type="text" name="address" value="{$supplier.address}"></td>
+        </tr>
+
+    </table>
+</form>
+<!--/opt-->
+</div>
+
+<script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="__ROOT__/public/js/jqueryValidate/jquery.metadata.js"></script>
+</body>
+</html>

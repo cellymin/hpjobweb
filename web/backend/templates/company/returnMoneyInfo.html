@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	{css file="bootstrap" /}
+    {css file="__TPL__/css/public.css"}
+    {css file="jqueryUI.bootstrap" /}
+    {jquery /}
+    {js file="jqueryUI"}
+</head>
+<body>
+	<div class="user-info">
+		<div id="tabs">
+
+			<div id="tabs-1">
+				<table class="table">
+					<tr>
+						<th>记录ID</th>
+						<td>{$returnMoneyInfo.id}</td>
+					</tr>
+					<tr>
+						<th>渠道</th>
+						<td>{$returnMoneyInfo.origin}</td>
+					</tr>
+					<tr>
+						<th>来源</th>
+						<td>{$returnMoneyInfo.originer}</td>
+					</tr>
+					<tr>
+						<th>附属中介</th>
+						<td>{$returnMoneyInfo.membership_mediation}</td>
+					</tr>
+                    <tr>
+                        <th>输入单位</th>
+                        <td>{$returnMoneyInfo.company}</td>
+                    </tr>
+					<tr>
+						<th>工号</th>
+						<td>{$returnMoneyInfo.number}</td>
+					</tr>
+					<tr>
+						<th>姓名</th>
+						<td>{$returnMoneyInfo.name}</td>
+					</tr>
+					<tr>
+						<th>性别</th>
+						<td>{$returnMoneyInfo.sex}</td>
+					</tr>
+                    <tr>
+                        <th>身份证</th>
+                        <td>{$returnMoneyInfo.identity}</td>
+                    </tr>
+                    <tr>
+                        <th>面试日期</th>
+                        <td>
+                            {if value="$returnMoneyInfo.interview_time==0"}无
+                            {else /}
+                            {$returnMoneyInfo.interview_time|date:'Y-m-d',@@}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>上班日期</th>
+                        <td>
+                            {if value="$returnMoneyInfo.start_time==0"}无
+                            {else /}
+                            {$returnMoneyInfo.start_time|date:'Y-m-d',@@}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>离职日期</th>
+                        <td>{if value="$returnMoneyInfo.leave_time==0"}无
+                            {else /}
+                            {$returnMoneyInfo.leave_time|date:'Y-m-d',@@}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>薪资</th>
+                        <td>{$returnMoneyInfo.salary}</td>
+                    </tr>
+                    <tr>
+                        <th>应发月份</th>
+                        <td>{$returnMoneyInfo.month}</td>
+                    </tr>
+                    <tr>
+                        <th>工时</th>
+                        <td>{$returnMoneyInfo.work_time}</td>
+                    </tr>
+                    <tr>
+                        <th>价格</th>
+                        <td>{$returnMoneyInfo.price}</td>
+                    </tr>
+                    <tr>
+                        <th>奖励</th>
+                        <td>{$returnMoneyInfo.award}</td>
+                    </tr>
+                    <tr>
+                        <th>价格单据编号</th>
+                        <td>{$returnMoneyInfo.num}</td>
+                    </tr>
+                    <tr>
+                        <th>付款日期</th>
+                        <td>
+                            {if value="$returnMoneyInfo.pay_time==0"}无
+                            {else /}
+                            {$returnMoneyInfo.pay_time|date:'Y-m-d',@@}
+                            {/if}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>隶属公司</th>
+                        <td>{$returnMoneyInfo.membership_company}</td>
+                    </tr>
+                    <tr>
+                        <th>返款方式</th>
+                        <td>{$returnMoneyInfo.return_money_way}</td>
+                    </tr>
+                    <tr>
+                        <th>备注</th>
+                        <td>{$returnMoneyInfo.note}</td>
+                    </tr>
+                    <tr>
+                        <th>类型</th>
+                        <td>{$returnMoneyInfo.type}</td>
+                    </tr>
+                    <tr>
+                        <th>性质</th>
+                        <td>{$returnMoneyInfo.nature}</td>
+                    </tr>
+                    <tr>
+                        <th>学校</th>
+                        <td>{$returnMoneyInfo.school}</td>
+                    </tr>
+                    <tr>
+                        <th>资源地</th>
+                        <td>{$returnMoneyInfo.resource_place}</td>
+                    </tr>
+                    <tr>
+                        <th>批注</th>
+                        <td>{$returnMoneyInfo.pnote}</td>
+                    </tr>
+                    <tr>
+                        <th>创建时间</th>
+                        <td>{$returnMoneyInfo.create_time|date:'Y-m-d H:i:s',@@}</td>
+                    </tr>
+
+				</table>
+			</div>
+
+		</div>
+	</div>
+</body>
+</html>

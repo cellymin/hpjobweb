@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html lang="en-US" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta charset="UTF-8">
+<title></title>
+{css file="bootstrap" /}
+{css file="jqueryUI.bootstrap" /}
+{css file="__TPL__/css/public.css" /}
+{js file="jquery" /}
+{js file="__TPL__/js/public.js" /}
+{js file="jqueryUI" /}
+{js file="jquery.validate" /}
+{js file="datepicker" /}
+{js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+</head>
+<body>
+<form action="__METH__" method="get" id="search-form">
+    <table class="table well" style="margin-bottom:-18px;">
+        <tr>
+            <th></th>
+            <th>用户名</th>
+            <th>姓名</th>
+            <th>投递公司</th>
+            <th>开始时间</th>
+            <th>结束时间</th>
+            <th>性别</th>
+            <th>职位名称</th>
+            <th>联系状态</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="text" name="username" class="input-medium" value="{if value="$base.get.username|isset"}{$base.get.username}{/if}"></td>
+            <td><input type="text" name="rel_name" class="input-medium" value="{if value="$base.get.rel_name|isset"}{$base.get.rel_name|urldecode}{/if}"></td>
+            <td><input type="text" name="company_name" class="input-medium" value="{if value="$base.get.company_name|isset"}{$base.get.company_name|urldecode}{/if}"></td>
+            <td><input type="text" name="start_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})" value="{if value="$base.get.start_time|isset"}{$base.get.start_time|urldecode}{/if}"></td>
+            <td><input type="text" name="end_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})" value="{if value="$base.get.end_time|isset"}{$base.get.end_time|urldecode}{/if}"></td>
+            <td>
+                <select name="gender" class="input-mini" {if value="$base.get.gender|isset"}select="{$base.get.gender}"{/if}>
+                <option value="">请选择</option>
+                <option value="0">男</option>
+                <option value="1">女</option>
+                </select>
+            </td>
+            <td><input type="text" name="recruit_name" class="input-medium" value="{if value="$base.get.recruit_name|isset"}{$base.get.recruit_name|urldecode}{/if}"></td>
+            <td>
+                <select name="is_contact" class="input-mini" {if value="$base.get.is_contact|isset"}select="{$base.get.is_contact}"{/if}>
+                <option value="">请选择</option>
+                <option value="0">未联系</option>
+                <option value="1">已联系</option>
+                </select>
+            </td>
+            <td colspan="2">
+                <button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>
+                <a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a>
+            </td>
+
+            <script type="text/javascript">
+
+                $('#reset').click(function(){
+                    $('#search-form :input').val('');
+                    $('#search-form').submit();
+                });
+            </script>
+        </tr>
+    </table>
+</form>
+<table class="table" id="deliver-list">
+	<tr>
+        <th><input type="checkbox" class="select-all input-checkbox"></th>
+		<th>姓名</th>
+        <th>用户名</th>
+        <th>联系方式</th>
+        <th>性别</th>
+        <th>年龄</th>
+		<th>投递公司</th>
+		<th>职位名称</th>
+		<th>投递时间</th>
+        <th>查看简历</th>
+        <th>操作</th>
+        <th>联系时间</th>
+        <th>联系人</th>
+	</tr>
+	{foreach from="$deliver" value="$deliver"}
+	<tr>
+        <td><input type="checkbox" class="input-checkbox" name="deliver_id" value="{$deliver.id}"> </td>
+		<td>{$deliver.rel_name}</td>
+        <td>{$deliver.username}</td>
+        <td>{$deliver.phone}</td>
+        <td>{if value="$deliver.gender==0"} 男
+            {elseif value="$deliver.gender==1"} 女
+            {/if}
+        </td>
+        <td>{$deliver.age}</td>
+		<td>{$deliver.company_name}</td>
+		<td>{$deliver.recruit_name}</td>
+		<td>{$deliver.sendtime|date:'Y-m-d H:i:s',@@}</td>
+		<td><a href="http://www.hap-job.com/index.php/app/auth/viewResume/resume_id/{$deliver.resume_id}" target="_blank">查看</a></td>
+        <td>{if value="$deliver.is_contact==0"}<a href="__CONTROL__/isContact/id/{$deliver.id}" class ="is_contact" title="标记已联系" value-id="{$deliver.id}" >标记已联系</a>
+            {else /}<span class="success">已联系&nbsp;&nbsp;<a href="__CONTROL__/restore/id/{$deliver.id}" class ="restore" title="恢复操作" value-id="{$deliver.id}" >恢复操作</a></span>
+            {/if}
+        </td>
+        <td>{if value="$deliver.contact_time!=0"}{$deliver.contact_time|date:'Y-m-d H:i:s',@@}{/if}</td>
+        <td>{if value="$deliver.contact==''"}暂未联系{/if}<span class="success">{$deliver.contact}</span></td>
+	</tr>
+	{/foreach}
+    <tr class="well">
+        <td><input type="checkbox" class="select-all input-checkbox"></td>
+        <td class="opt" colspan="4">
+            <a class="btn btn-mini btn-success" action="verify-pass"><i class="icon-ok icon-white"></i> 一键联系</a>
+        </td>
+        <td colspan="4">
+            {$pages}
+        </td>
+        <td></td>
+    </tr>
+</table>
+<div id="dialog" class="hide" title="">
+	<img src="" alt="">
+</div>
+<script type="text/javascript">
+    select_all('deliver-list');
+
+    function contact(arg){
+        $.post('__CONTROL__/contact',{"id":arg.id},function(data){
+            if(data==1){
+                window.location.reload();
+            }
+        },'html');
+    }
+
+    $('.opt a').click(function(){
+        var _id_arr=[],
+                _confirm_msg='一键联系',
+                _action='contact',
+                _fun="contact",//处理函数
+                _checked=$('#deliver-list :checkbox[name]:checked');
+        if(_checked.length==0){
+            alert("请选择你需要操作的记录!");
+            return false;
+        }
+        _checked.each(function(){
+            _id_arr.push($(this).val());
+        });
+
+        if(confirm("确定"+_confirm_msg+"选中记录？")){
+            eval(_fun+"({id:_id_arr,checked_obj:_checked})");
+        }
+        return false;
+    });
+
+    $("select[select]").each(function(e,obj){
+        $(this).val($(this).attr('select'));
+    });
+
+    $(".is_contact").click(function(){
+        if(confirm('确认标记已联系？')){
+            return true;
+        }else{
+            return false;
+        }
+    });
+
+    $(".restore").click(function(){
+        if(confirm('确认恢复到未联系状态？')){
+            return true;
+        }else{
+            return false;
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html lang="en-US" xmlns="http://www.w3.org/1999/html">
+<head>
+<meta charset="UTF-8">
+<title></title>
+{css file="bootstrap" /}
+{css file="jqueryUI.bootstrap" /}
+{css file="__TPL__/css/public.css" /}
+{js file="jquery" /}
+{js file="__TPL__/js/public.js" /}
+{js file="jqueryUI" /}
+{js file="jquery.validate" /}
+{js file="datepicker" /}
+{js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+</head>
+<body>
+<form action="__METH__" method="get" id="search-form">
+    <table class="table well" style="margin-bottom:-18px;">
+        <tr>
+            <th></th>
+            <th>供应商编号</th>
+            <th>职介全称</th>
+            <th>银行类别</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="text" name="number" class="input-medium" value="{if value="$base.get.number|isset"}{$base.get.number}{/if}"></td>
+            <td><input type="text" name="name_co" class="input-medium" value="{if value="$base.get.name_co|isset"}{$base.get.name_co|urldecode}{/if}"></td>
+            <td><input type="text" name="bank" class="input-medium" value="{if value="$base.get.bank|isset"}{$base.get.bank|urldecode}{/if}"></td>
+
+            <td colspan="2">
+                <button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>
+                <a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a>
+                <a id="insert" class="btn btn-small btn-primary"><i class="icon-plus-sign icon-white"></i>&nbsp;&nbsp;导入供应商</a>
+            </td>
+
+            <script type="text/javascript">
+
+                $('#reset').click(function(){
+                    $('#search-form :input').val('');
+                    $('#search-form').submit();
+                });
+            </script>
+        </tr>
+    </table>
+</form>
+<table class="table" id="deliver-list">
+	<tr>
+        <th><input type="checkbox" class="select-all input-checkbox"></th>
+        <th>供应商编号</th>
+        <th>职介全称</th>
+        <th>供应商姓名</th>
+        <th>联系方式</th>
+        <th>身份证号码</th>
+        <th>卡号</th>
+        <th>银行类别</th>
+        <th>联系地址</th>
+        <th>添加时间</th>
+        <th>操作</th>
+	</tr>
+	{foreach from="$suppliers" value="$supplier"}
+	<tr>
+        <td><input type="checkbox" class="input-checkbox" name="deliver_id" value="{$deliver.id}"> </td>
+		<td>{$supplier.number}</td>
+        <td>{$supplier.name_co}</td>
+        <td>{$supplier.username}</td>
+        <td>{$supplier.mobile}</td>
+		<td>{$supplier.identity}</td>
+		<td>{$supplier.card_num}</td>
+		<td>{$supplier.bank}</td>
+		<td>{$supplier.address}</td>
+		<td>{$supplier.time|date:'Y-m-d H:i:s',@@}</td>
+        <td><a href="__CONTROL__/editSupplier/sid/{$supplier.sid}" value-id="{$supplier.sid}" class="opt-edit"><i class="icon-edit"></i>编辑</a>
+        </td>
+	</tr>
+	{/foreach}
+    <tr class="well">
+        <td><input type="checkbox" class="select-all input-checkbox"></td>
+
+        <td colspan="4">
+            {$pages}
+        </td>
+        <td></td>
+    </tr>
+</table>
+<div id="dialog" class="hide" title="">
+	<img src="" alt="">
+</div>
+
+<div id="insertSuppliers" style="display: none">
+    <form action="__CONTROL__/insertSuppliers" method="post" enctype="multipart/form-data" id="insert_suppliers" class="well form-horizontal">
+        <table border=0 cellspacing=0 cellpadding=0 align=center width="100%">
+            <tr>
+                <td width=55 height=20 align="center"><input type="hidden" name="MAX_FILE_SIZE" value="2000000">文件： </td>
+                <td height="16">
+                    <input name="file" type="file"  value="浏览" >
+                </td>
+                <input name="laid" type="hidden" id="upload_laid">
+                <td>
+                    <input type="submit" value="导入" name="upload">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    select_all('deliver-list');
+
+    $("#insert").click(function(){
+        $("#insertSuppliers").dialog({
+            //modal:true,
+            title:'导入供应商',
+            resizable: true,
+            width:450
+
+        });
+        $("#upload #title").val('').focus();
+        return false;
+    });
+
+    $('.opt-edit').click(function() {
+        var _this = $(this),
+                _sid = _this.attr('href');
+        $.get($(this).attr('href'), function (data) {
+            $('#dialog').html(data);
+            $('#dialog').dialog({
+                "title": "修改信息",
+                "width": "500",
+                "height": "750",
+                "modal": true,
+                "buttons": {
+                    "确定": function () {
+
+                        $('#dialog form').submit();
+                    }
+                }
+
+            });
+        }, 'html');
+        return false;
+    });
+
+</script>
+</body>
+</html>
