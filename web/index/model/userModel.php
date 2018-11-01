@@ -34,7 +34,7 @@ class userModel extends Model {
     /**
      * 添加用户
      * @param type $user_data POST数据
-     * @return boolean 
+     * @return boolean
      */
     function addUser($user_data = '', $table = 'user') {
         if ($user_data == '') {
@@ -104,18 +104,18 @@ class userModel extends Model {
             $nums=$db->where($cond['user'],$cond['group'])->count();
             $page=new page($nums,20);
             $users=array();
-            $users['user']=$db->where($cond['user'],$cond['group'])->findall($page->limit());
+            $users['user']=$db->where($cond['user'],$cond['group'])->order('created desc')->findall($page->limit());
             $users['page']=$page->show();
             $users['num']=$nums;
         }else{
             $db=V('user');
             $db->view=array(
                 'user_role'=>array(
-                    'type'=>'inner',
+                    'type'=>'left',
                     'on'=>'user.uid =user_role.uid',
                 ),
                 'role'=>array(
-                    'type'=>'inner',
+                    'type'=>'left',
                     'on'=>'user_role.rid=role.rid'
                 )
             );

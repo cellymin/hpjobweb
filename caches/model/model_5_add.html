@@ -1,3 +1,10 @@
+<style>
+
+     select { /* for ie */
+        /*font: 12px/1 Tahoma, Helvetica, Arial, "宋体", sans-serif;*/
+        font: 12px/1 Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif; /* 用 ascii 字符表示，使得在任何编码下都无问题 */
+    }
+</style>
 <script type="text/javascript" src="__ROOT__/caches/js/linkage_data.js"></script><script type="text/javascript" src="__ROOT__/public/js/linkage/linkage_style_1.js"></script><script type="text/javascript" src="__ROOT__/public/js/linkage/linkage_style_2.js"></script><table class="table-form">
         <tr>
         <th>职位名称</th>
@@ -5,8 +12,20 @@
     </tr>
         <tr>
         <th>入职返现金额</th>
-        <td><input type="text" name="return_money"   value="0" /><span>福利中有入职返现再填此项</span></td>
+            <td>
+                <input class="sex1" style="width:23px;  !important" value="男" />
+                <select class="return_day1" style="width:80px;margin-left: 1px; !important" onchange="returnday(this)"><option>选择</option><option>月返</option><option>45日返</option><option>60日返</option></select>
+                <input class="money1" type="text" style="width:100px;margin-left: 2px; " onchange="returnday(this)" value=""/><span style="width:100px;margin-left: 4px; ">福利中有入职返现再填此项</span> </td></tr>
+    <tr>
+        <th></th>
+            <td><input class="sex2" style="width:23px;  !important" value="女" />
+                <select class="return_day2" style="width:80px;margin-left: 1px; !important" onchange="returnday(this)" ><option>选择</option><option>月返</option><option>45日返</option><option>60日返</option></select>
+                <input class="money2" type="text" style="width:100px;margin-left: 2px;" onchange="returnday(this)" > <span>福利中有入职返现再填此项</span></td>
+        <input type="hidden" name="return_money"   value="0" />
+
+        <!--<td><span>福利中有入职返现再填此项</span></td>-->
     </tr>
+    <!--<tr><th></th><td></td></tr>-->
         <tr>
         <th>企业用户ID</th>
         <td><input type="text" name="uid"   value="" /><span>请填写正确的公司id!</span></td>
@@ -121,3 +140,32 @@
         <td><input type="text" name="rece_mail"   validate={"email":true}  value="" /><span></span></td>
     </tr>
     </table>
+<script>
+
+    function returnday(e){
+
+     var cname = $(e).attr('class');
+     if(cname=='return_day1' || cname=='money1'){
+         var returnday1 = $('.return_day1 option:selected').text();
+         var moneyval1 = $('.money1').val();
+         $('.return_day2').val(returnday1);
+         $('.money2').val(moneyval1);
+     }
+     var reday1 =$('.return_day1 option:selected').text();;
+     var mon1 = $('.money1').val();
+     var reday2 =$('.return_day2 option:selected').text();;
+     var mon2 = $('.money2').val();
+     if((reday1 !='' && mon1 !=''&& reday1!='选择') || ((reday1 =='' || reday1=='选择') && mon1=='')
+         || (reday2 !='' && mon2 !='' && reday2!='选择') || ((reday2 =='' || reday2=='选择') && mon2=='') ){//同时设置返现周期，返现金额或者同时不设置返现周期金额
+         if(reday1!='' && reday2!=''&& mon1!='' && mon2!='' && reday1!='选择' && reday2!='选择'){
+             var re_money = '男 '+reday1+' '+mon1+',女 '+reday2+' '+mon2;
+         }else if(reday1!='' && mon1!='' && reday1!='选择'){
+             var re_money = '男 '+reday1+' '+mon1;
+         }else if( reday2!='' && mon2!='' && reday2!='选择'){
+             var re_money = '女 '+reday2+' '+mon2;
+         }
+     }
+     console.log(re_money);
+    }
+
+</script>
