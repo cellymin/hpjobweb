@@ -3,5 +3,6 @@ table
 database.php
 temp/session
 temp
+temp/table
 !temp\Applications\web_G\APP_GROUP_web.php
 
