@@ -757,7 +757,7 @@ class companyControl extends myControl {
      */
     public function deliverLists(){
         $_GET = urldecode_array($_GET);
-        $db=M('deliver');
+        $db=M('deliver');//新加的字段会暂时读不到要清除一下相应控制器的缓存，才会起作用
         //组合条件
         $cond=array();
 
@@ -807,12 +807,16 @@ class companyControl extends myControl {
         $count = $db->where($cond)->count();
         $page = new page($count,20);
         $deliver = $db->where($cond)->order('is_contact asc,sendtime desc')->findall($page->limit());
+//        echo '<pre/>';
+//        var_dump($deliver);
+//        die();
         foreach ($deliver as $key=>$value){
             $resume_basic = M('resume_basic')->where('resume_id=' . $value['resume_id'])->find();
             $birthday = $resume_basic['birthday'];
             $deliver[$key]['age'] = date('Y',time())-date('Y',$birthday);
             $deliver[$key]['phone'] = $resume_basic['telephone'];
         }
+
         $this->assign('pages',$page->show());
         $this->assign('deliver',$deliver);
         $this->display();
@@ -864,7 +868,37 @@ class companyControl extends myControl {
             };
         }
     }
-    /**
+    public  function  entry()
+    {
+        $id = intval($_GET['id']);//投递id
+        $entry_time = $_GET['entry_time'];//入职时间
+        $companyname = $_GET['companyname'];//公司名称
+        $recruit_id = intval($_GET['recruitid']);//职位id
+        $uid = intval($_GET['uid']);//用户id
+        $info = [];
+        $info['id'] = $id;
+        $companyname = urldecode($companyname);//公司名称
+        $info['entry_time'] = strtotime($entry_time);//用户入职时间x年x月x日0:0:0
+        $info['company'] = $companyname;//
+        $info['recruitid'] = $recruit_id;//职位id
+        $info['uid='] = $uid;//用户id
+
+        //点入职之后
+        //职位id 入职时间  公司名称
+        //入职操作更改 投递记录入职状态入职时间
+        //@param entry_status入职状态   entry_time入职时间
+        //点击入职之后更新投递记录的入职状态，入职时间
+        var_dump($info) ;
+        $db = M('deliver');
+        //更新投递记录中的入职状态
+        $res1 = $db->exe('update hp_deliver set entry_status=1,entry_time=' . $info['entry_time'] . ' where id=' . $id);
+        if ($res1) {//更新人员基础表入职时间，入职状态，入职公司
+            $res2 = $db->exe("update hp_user set entry_status=1,entry_time=" . $info['entry_time'] . ",company_name='".$companyname."' where uid=".$uid);
+            //$res2 = $db2->where(array('uid'=>$uid))->update(array('entry_status'=>1,'entry_time'=>$info['entry_time'],'company_name'=>$companyname));
+        }
+
+    }
+        /**
      * 修改推广
      */
     public function editSpread()

@@ -92,12 +92,20 @@
             {/if}
         </td>
         <td>{$deliver.age}</td>
-		<td>{$deliver.company_name}</td>
-		<td>{$deliver.recruit_name}</td>
+		<td class="company_name">{$deliver.company_name}</td>
+		<td class="recruit_id" attid="{$deliver.recruit_id}">{$deliver.recruit_name}</td>
 		<td>{$deliver.sendtime|date:'Y-m-d H:i:s',@@}</td>
 		<td><a href="http://www.hap-job.com/index.php/app/auth/viewResume/resume_id/{$deliver.resume_id}" target="_blank">查看</a></td>
         <td>{if value="$deliver.is_contact==0"}<a href="__CONTROL__/isContact/id/{$deliver.id}" class ="is_contact" title="标记已联系" value-id="{$deliver.id}" >标记已联系</a>
-            {else /}<span class="success">已联系&nbsp;&nbsp;<a href="__CONTROL__/restore/id/{$deliver.id}" class ="restore" title="恢复操作" value-id="{$deliver.id}" >恢复操作</a></span>
+            {else /}<span class="success">已联系&nbsp;&nbsp;<a href="__CONTROL__/restore/id/{$deliver.id}" class ="restore" title="恢复操作" value-id="{$deliver.id}" >恢复操作</a>
+               {if value="$deliver.entry_status==0"} <a hr="__CONTROL__/entry/id/{$deliver.id}" class="ruzhi" onclick="ruzhi_do(this)">&nbsp;&nbsp;入职</a></span>
+            <input placeholder="请输入入职时间" type="text" name="ruzhi_time" id="ruzhi_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',autoPickDate:true})"
+                   value="{if value="$base.get.ruzhi_time|isset"}{$base.get.ruzhi_time|urldecode}{/if}">
+            {else}
+            <span>&nbsp;&nbsp;已入职</span></span>
+            <input placeholder="请输入入职时间" type="text" name="" id="" class="input-medium"
+                   value="{$deliver.entry_time|date:'Y-m-d',@@}" disabled>
+            {/if}
             {/if}
         </td>
         <td>{if value="$deliver.contact_time!=0"}{$deliver.contact_time|date:'Y-m-d H:i:s',@@}{/if}</td>
@@ -168,6 +176,22 @@
             return false;
         }
     });
+    function ruzhi_do(e){
+        var ruzhi_time= $(e).parent().parent().parent().find(" input[ name=\'ruzhi_time\' ] ").val();//入职时间
+        if(ruzhi_time==''){
+            alert('请填写入职时间');
+            return false;
+        }else{
+            var link = $(e).attr('hr');
+            var companyname = encodeURIComponent($(e).parent().parent().parent().find('.company_name').text());
+            //alert(companyname);
+            var recruitid = $(e).parent().parent().parent().find('.recruit_id').attr('attid');
+            var uid = $(e).parent().parent().parent().find('.uid').attr('uid');
+            // alert(recruitid);
+            // return false;
+            $('.ruzhi').attr('href',link+'/uid/'+uid+'/entry_time/'+ruzhi_time+'/companyname/'+companyname+'/recruitid/'+recruitid);
+        }
+    }
 </script>
 </body>
 </html>
