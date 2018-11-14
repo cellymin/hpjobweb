@@ -593,6 +593,16 @@ class companyControl extends myControl {
             $recruit = M('recruit')->where(array('recruit_id'=>$recruit_id))->find();
             $recruit['start_time'] = date('Y-m-d H:i:s',$recruit['start_time']);
             $recruit['expiration_time'] = date('Y-m-d H:i:s',$recruit['expiration_time']);
+           // $returnmon = $recruit['return_money'];
+            if(!empty($recruit['return_money'])){//如果有入职返现描述
+                $reinfo =  explode(',',$recruit['return_money']);
+                if(count($reinfo)>1){//男士女士分开写，同时都有
+                    echo (count('男 月返 800，女 月返 800'));
+
+                }else{//1，只有一个，没有分性别 2，只有男士返现 3，只有女士返现
+
+                }
+            }
             $this->assign('field',$recruit);
             $this->display();
         }
@@ -759,6 +769,7 @@ class companyControl extends myControl {
         $_GET = urldecode_array($_GET);
         $db=M('deliver');//新加的字段会暂时读不到要清除一下相应控制器的缓存，才会起作用
         //组合条件
+        $res = $db->query("desc hp_deliver");
         $cond=array();
 
         if(!empty($_GET['username'])){
@@ -884,17 +895,59 @@ class companyControl extends myControl {
         $info['uid='] = $uid;//用户id
 
         //点入职之后
+        $ifentry = M('user')->field('entry_status')->where(array('uid'=>$uid))->find();
+        if(intval($ifentry['entry_status'])==1){//已经在职用户不可以在入职
+            $this->error('该用户已在职');
+        }
         //职位id 入职时间  公司名称
         //入职操作更改 投递记录入职状态入职时间
         //@param entry_status入职状态   entry_time入职时间
         //点击入职之后更新投递记录的入职状态，入职时间
-        var_dump($info) ;
         $db = M('deliver');
         //更新投递记录中的入职状态
         $res1 = $db->exe('update hp_deliver set entry_status=1,entry_time=' . $info['entry_time'] . ' where id=' . $id);
         if ($res1) {//更新人员基础表入职时间，入职状态，入职公司
             $res2 = $db->exe("update hp_user set entry_status=1,entry_time=" . $info['entry_time'] . ",company_name='".$companyname."' where uid=".$uid);
             //$res2 = $db2->where(array('uid'=>$uid))->update(array('entry_status'=>1,'entry_time'=>$info['entry_time'],'company_name'=>$companyname));
+        }
+        if($res1 && $res2){
+            $this->success('操作成功');
+        }
+
+    }
+    public  function  resign()
+    {
+        $id = intval($_GET['id']);//投递id
+        $resign_time = $_GET['resign_time'];//入职时间
+        $companyname = $_GET['companyname'];//公司名称
+        $recruit_id = intval($_GET['recruitid']);//职位id
+        $uid = intval($_GET['uid']);//用户id
+        $info = [];
+        $info['id'] = $id;
+        $companyname = urldecode($companyname);//公司名称
+        $info['resign_time'] = strtotime($resign_time);//用户入职时间x年x月x日0:0:0
+        $info['company'] = $companyname;//
+        $info['recruitid'] = $recruit_id;//职位id
+        $info['uid='] = $uid;//用户id
+
+        //点离职之后
+        $ifentry = M('user')->field('entry_status')->where(array('uid'=>$uid))->find();
+        if(intval($ifentry['entry_status'])==-1){//已经离职的用户
+          //  $this->error('该用户已离职');
+        }
+        //职位id 入职时间  公司名称
+        //入职操作更改 投递记录入职状态入职时间
+        //@param entry_status入职状态   entry_time入职时间
+        //点击入职之后更新投递记录的入职状态，入职时间
+        $db = M('deliver');
+        //更新投递记录中的入职状态
+        $res1 = $db->exe('update hp_deliver set entry_status=-1,resign_time=' . $info['resign_time'] . ' where id=' . $id);
+        if ($res1) {//更新人员基础表离职状态
+            $res2 = $db->exe("update hp_user set entry_status=-1 where uid=".$uid);
+            //$res2 = $db2->where(array('uid'=>$uid))->update(array('entry_status'=>1,'entry_time'=>$info['entry_time'],'company_name'=>$companyname));
+        }
+        if($res1 && $res2){
+            $this->success('操作成功');
         }
 
     }

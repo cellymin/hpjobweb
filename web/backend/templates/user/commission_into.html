@@ -73,6 +73,7 @@
             <th>工作时间</th>
             <th>身份证号</th>
             <th>导入人</th>
+            <th>操作</th>
         </tr>
         {foreach from="$commissions" value="$commission"}
         <tr>
@@ -84,6 +85,10 @@
             <td>{$commission.job_time}</td>
             <td>{$commission.id_number}</td>
             <td>{$commission.root}</td>
+            <td>
+                {if value="$commission.type == 3 "}{if value="$commission.status == 0" }<a href="__CONTROL__/entryVerify?name=3&uid={$commission.uid}&id={$commission.id}&mon={$commission.commission}">审核通过</a>
+                <a href="__CONTROL__/entryVerify?name=2&uid={$commission.uid}&id={$commission.id}"><font color=" ">审核不通过</font></a>{else}已审核{/if}{/if}
+               </td>
         </tr>
         {/foreach}
 
@@ -98,7 +103,7 @@
         </tr>
 
     </table>
-    <button style="margin-left: 20px;">生成入职返现</button>
+    <a href="__METH__?action=ruzhifanxian" style="margin-left: 20px;">生成入职返现</a>
 </div>
 <div id="dialog" style="z-idnex:999"></div>
 <script type="text/javascript">

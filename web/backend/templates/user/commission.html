@@ -154,8 +154,38 @@
             			{$page}
             		</td>
             	</tr>
-
+                <tr><td style="padding-right:4px;!important;">
+                    <select name="" style="width:100px;!important;" class="chyear">
+                    <option value="0">请选择年份</option>
+                    <option value="2005">2005</option>
+                    <option value="2006">2006</option>
+                    <option value="2007">2007</option>
+                    <option value="2008">2008</option>
+                    <option value="2009">2009</option>
+                    <option value="2010">2010</option>
+                    <option value="2011">2011</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="2014">2014</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                </select>
+                </td>
+                    <td style="padding:8px 4px;!important;" class="chquarter">
+                        <select style="width:100px;!important;">
+                            <option value="0">请选择季度</option>
+                            <option value="1">第一季度</option>
+                            <option value="2">第二季度</option>
+                            <option value="3">第三季度</option>
+                            <option value="4">第四季度</option>
+                        </select>
+                    </td>
+                    <td><button class="btn btn-mini jidufan" style="width:100px;height: 27px;!important;">生成季度返现</button></td>
+                </tr>
             </table>
+
         </div>
         <div id="dialog" style="z-idnex:999"></div>
         <script type="text/javascript">
@@ -237,8 +267,42 @@
             }
             return false;
         });
+        function quarterCreate(arg){
+            $.post('__CONTROL__/quarterCreate',{year:arg.year,quarter:arg.quarter},function(data){
+                console.log(data);
+                return false;
+                if(data.status==1){
+                    console.log(data);
+                  //  arg.checked_obj.parents('td').fadeOut(function(){
+                       // location.reload();
+                   // });
+                }else{
 
-
+                    alert('操作失败');
+                }
+            },'json');
+        }
+        $('.jidufan').click(function(){
+            var _id_arr=[],
+                _confirm_msg='审核',
+                _fun="quarterCreate",//处理函数
+                _name="";
+            var year =  $('.chyear  option:selected').val();
+            var quarter = $('.chquarter  option:selected').val();
+            if(year==0){
+                alert("请选择年度!");
+                return false;
+            }
+            if(quarter==0){
+                alert("请选择季度!");
+                return false;
+            }
+            //_confirm_msg="通过";_fun="quarterCreate";_name=1;
+            if(confirm("确定"+_confirm_msg+"选择用户？")){
+                eval(_fun+"({year:year,quarter:quarter})");
+            }
+            return false;
+        });
         </script>
     </body>
 </html>

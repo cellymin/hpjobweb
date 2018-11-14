@@ -1115,6 +1115,10 @@ class userControl extends myControl {
         $count = M('commission_log')->where($cond)->count();
         $page = new page($count,10);
         $commissions = M('commission_log')->order('id desc')->where($cond)->findall($page->limit());
+//        echo '<pre/>';
+//        var_dump($cond);
+//        var_dump($commissions);
+        //die();
         foreach($commissions as $key=>$val){
             $uid = $val['uid'];//邀请人uid
             $resume = M('user_info')->where('uid = '.$uid)->find();
@@ -1230,6 +1234,400 @@ class userControl extends myControl {
      */
     public function commission_into(){
         $_GET = urldecode_array($_GET);
+        if($_GET['action']=='ruzhifanxian'){
+            //获取所有62天之内入职的人员，
+            //符合入职标准1，达到相应时间2，符合性别设定 gender=0 男 gender=1 女
+            $db = M('deliver');
+            //有离职时间;
+            //和离职时间相比，没有离职和当前时间相比，71天中所有入职，且未生成返现佣金的人员，最多返现时长60天
+            $res = $db->query("SELECT COUNT(a.uid) as unum,a.id,a.uid,a.username,a.rel_name,a.recruit_id,a.company_name,a.company_id,a.entry_time,a.gender,b.recruit_name,b.welfare,b.return_money,u.id_number,a.resign_time
+                                FROM hp_deliver AS a INNER JOIN hp_recruit AS b ON a.recruit_id=b.recruit_id INNER JOIN hp_user_info as u ON a.uid=u.uid
+                        WHERE ( (unix_timestamp(DATE_SUB(NOW() ,INTERVAL 71 DAY)) <= a.entry_time AND a.resign_time=0 AND (unix_timestamp(DATE_SUB(NOW() ,INTERVAL 27 DAY)) > a.entry_time) AND a.entry_status=1)
+                         OR 
+                        ((unix_timestamp(DATE_SUB(FROM_UNIXTIME(a.resign_time, '%Y-%m-%d %H:%i:%S') ,INTERVAL 71 DAY)) <= a.entry_time AND a.resign_time>0) AND unix_timestamp(DATE_SUB(FROM_UNIXTIME(a.resign_time, '%Y-%m-%d %H:%i:%S') ,INTERVAL 27 DAY)) > a.entry_time AND a.entry_status=0))
+                        AND  b.welfare LIKE '%948%' AND b.return_money IS NOT NULL AND a.send_status=0 AND  a.entry_time<unix_timestamp(NOW()) GROUP BY a.uid ORDER BY a.entry_time DESC");
+            //send_statuts 0代表未生成佣金 1已生成佣金
+//            echo '<pre/>';
+//            var_dump($res);
+//            die();
+            if(empty($res)){
+                $this->success('没有数据要生成');
+            }
+            foreach ($res as $k=>$v){
+                if($v['unum']==1){ //时间段内只入职了一次，查到相应职位看条件是否符合
+                    if(strpos($v['return_money'],',') !== false) { //英文逗号
+                        $reway = explode(',',$v['return_money']);
+                    }else if(strpos($v['return_money'],'，') !== false){ //中文逗号
+                        $reway = explode('，',$v['return_money']);
+                    }else{
+                        $reway = explode(',',$v['return_money']);
+                    }
+                    if(!empty($reway[0])){ //第一个数组元素不为空可能是男士可能是女士
+                        $rewayinfo[0] = explode(' ',$reway[0]);
+                        if(strpos($reway[0],'男') !== false){ //男士有返现
+                            if($v['gender']==0){ //投递人是男士
+                                if($rewayinfo[0][1]=='月返'){
+                                    //入职日向后推一个月
+                                    $welday = strtotime("+1 months", $v[entry_time]);
+                                    $pretime =intval($v['resign_time'])>0?intval($v['resign_time']):time();//截止到离职日期或者当前日期
+                                    if((int)$welday<=$pretime){//返现日期是（离职）今日或者（离职）今日之前添加佣金记录
+                                        $deliverid[]=$v['id'];
+                                        $comloginfo[] = array (
+                                            'content' => '入职返现',
+                                            'rel_name' => $v['rel_name'],
+                                            'uid' => $v['uid'],
+                                            'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                            'company_name' => $v['company_name'],//公司名称
+                                            'job_time' => date('Y-m-d',$v['entry_time']),//入职时间
+                                            'resign_time' => $v['resign_time']>0?date('Y-m-d',$v['resign_time']):'',//离职时间
+                                            'id_number' => $v['id_number'],//身份证号
+                                            'create_time' => time (),//
+                                            'type' => '3',//属于系统生成的数据
+                                            'root'=>$_SESSION['username'],
+                                            'status'=>0 //未审核
+                                        );
+                                       // var_dump($arr);
+                                    }
+                                }else{
+                                    $str=$rewayinfo[0][1];
+                                    if(preg_match('/\d+/',$str,$arr)) {
+                                        $welday = strtotime('+'.$arr[0].' days',$v['entry_time']);
+                                        $pretime =$v['resign_time']>0?$v['resign_time']:time();
+                                        if((int)$welday<=$pretime){ //返现日期是今日或者今日之前添加佣金记录
+                                            $deliverid[]=$v['id'];
+                                            $comloginfo[] = array (
+                                                'content' => '入职返现',
+                                                'rel_name' => $v['rel_name'],
+                                                'uid' => $v['uid'],
+                                                'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                                'company_name' => $v['company_name'],//公司名称
+                                                'job_time' => date('Y-m-d',$v['entry_time']),//入职时间
+                                                'resign_time' => $v['resign_time']>0?date('Y-m-d',$v['resign_time']):'',//离职时间
+                                                'id_number' => $v['id_number'],//身份证号
+                                                'create_time' => time (),//
+                                                'type' => '3',//属于系统生成的数据
+                                                'root'=>$_SESSION['username'],
+                                                'status'=>0 //未审核
+
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }else if(strpos($reway[0],'女') !== false){ //女士有返现
+                            if($v['gender']==1){ //投递人是女士
+                                if($rewayinfo[0][1]=='月返'){
+                                    //入职日向后推一个月
+                                    $welday = strtotime("+1 months", $v[entry_time]);
+                                    $pretime =intval($v['resign_time'])>0?intval($v['resign_time']):time();//截止到离职日期或者当前日期
+                                    if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                        $deliverid[]=$v['id'];
+                                        $comloginfo[] = array (
+                                            'content' => '入职返现',
+                                            'rel_name' => $v['rel_name'],
+                                            'uid' => $v['uid'],
+                                            'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                            'company_name' => $v['company_name'],//公司名称
+                                            'job_time' => date('Y-m-d',$v['entry_time']),//入职时间
+                                            'resign_time' => $v['resign_time']>0?date('Y-m-d',$v['resign_time']):'',//离职时间
+                                            'id_number' => $v['id_number'],//身份证号
+                                            'create_time' => time (),//
+                                            'type' => '3',//属于系统生成的数据
+                                            'root'=>$_SESSION['username'],
+                                            'status'=>0 //未审核
+                                        );
+                                    }
+                                }else{
+                                    $str=$rewayinfo[0][1];
+                                    if(preg_match('/\d+/',$str,$arr)) {
+                                        $welday = strtotime('+'.$arr[0].' days',$v['entry_time']);
+                                        $pretime =intval($v['resign_time'])>0?intval($v['resign_time']):time();//截止到离职日期或者当前日期
+                                        if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                            $deliverid[]=$v['id'];
+                                            $comloginfo[] = array (
+                                                'content' => '入职返现',
+                                                'rel_name' => $v['rel_name'],
+                                                'uid' => $v['uid'],
+                                                'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                                'company_name' => $v['company_name'],//公司名称
+                                                'job_time' => date('Y-m-d',$v['entry_time']),//入职时间
+                                                'resign_time' => $v['resign_time']>0?date('Y-m-d',$v['resign_time']):'',//离职时间
+                                                'id_number' => $v['id_number'],//身份证号
+                                                'create_time' => time (),//
+                                                'type' => '3',//属于系统生成的数据
+                                                'root'=>$_SESSION['username'],
+                                                'status'=>0 //未审核
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        unset($arr);
+                        unset($welday);
+                        unset($rewayinfo);
+                        unset($welday);
+                        unset($pretime);
+                    }
+                    if(!empty($reway[1])){ //女士有返现
+                        $rewayinfo[1] = explode(' ',$reway[1]);
+                        if($v['gender']==1){ //投递人是女士
+                            if($rewayinfo[1][1]=='月返'){
+                                //入职日向后推一个月
+                                $welday = strtotime("+1 months", $v[entry_time]);
+                                $pretime =intval($v['resign_time'])>0?intval($v['resign_time']):time();//截止到离职日期或者当前日期
+                                if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                    //$rewayinfo[1][2] 返现佣金 可能不是数字 类似市场价一类的
+                                    $deliverid[]=$v['id'];
+                                    $comloginfo[] = array (
+                                        'content' => '入职返现',
+                                        'rel_name' => $v['rel_name'],
+                                        'uid' => $v['uid'],
+                                        'commission' => '+' .$rewayinfo[1][2],//入职返现
+                                        'company_name' => $v['company_name'],//公司名称
+                                        'job_time' => date('Y-m-d',$v['entry_time']),//入职时间
+                                        'resign_time' => $v['resign_time']>0?date('Y-m-d',$v['resign_time']):'',//离职时间
+                                        'id_number' => $v['id_number'],//身份证号
+                                        'create_time' => time (),//
+                                        'type' => '3',//属于系统生成的数据
+                                        'root'=>$_SESSION['username'],
+                                        'status'=>0 //未审核
+                                    );
+                                }
+                            }else{
+                                $str=$rewayinfo[0][1];
+                                if(preg_match('/\d+/',$str,$arr)) {
+                                    $welday = strtotime('+'.$arr[0].' days',$v['entry_time']);
+                                    $pretime =intval($v['resign_time'])>0?intval($v['resign_time']):time();//截止到离职日期或者当前日期
+                                    if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                        $deliverid[]=$v['id'];
+                                        $comloginfo[] = array (
+                                            'content' => '入职返现',
+                                            'rel_name' => $v['rel_name'],
+                                            'uid' => $v['uid'],
+                                            'commission' => '+' .$rewayinfo[1][2],//入职返现
+                                            'company_name' => $v['company_name'],//公司名称
+                                            'job_time' => date('Y-m-d',$v['entry_time']),//入职时间
+                                            'resign_time' => $v['resign_time']>0?date('Y-m-d',$v['resign_time']):'',//离职时间
+                                            'id_number' => $v['id_number'],//身份证号
+                                            'create_time' => time (),//
+                                            'type' => '3',//属于系统生成的数据
+                                            'root'=>$_SESSION['username'],
+                                            'status'=>0 //未审核
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                        unset($arr);
+                        unset($welday);
+                        unset($rewayinfo);
+                        unset($welday);
+                        unset($pretime);
+                    }
+
+                }else{//时间段内入职多次
+                    $res2 = $db->query("SELECT a.id,a.uid,a.username,a.rel_name,a.recruit_id,a.company_name,a.company_id,a.entry_time,a.gender,b.recruit_name,b.welfare,b.return_money,u.id_number,a.resign_time
+                                FROM hp_deliver AS a INNER JOIN hp_recruit AS b ON a.recruit_id=b.recruit_id INNER JOIN hp_user_info as u ON a.uid=u.uid
+                        WHERE ( (unix_timestamp(DATE_SUB(NOW() ,INTERVAL 71 DAY)) <= a.entry_time AND a.resign_time=0 AND (unix_timestamp(DATE_SUB(NOW() ,INTERVAL 27 DAY)) > a.entry_time) AND a.entry_status=1)
+                         OR 
+                        ((unix_timestamp(DATE_SUB(FROM_UNIXTIME(a.resign_time, '%Y-%m-%d %H:%i:%S') ,INTERVAL 71 DAY)) <= a.entry_time AND a.resign_time>0) AND unix_timestamp(DATE_SUB(FROM_UNIXTIME(a.resign_time, '%Y-%m-%d %H:%i:%S') ,INTERVAL 27 DAY)) > a.entry_time AND a.entry_status=0))
+                        AND  b.welfare LIKE '%948%' AND b.return_money IS NOT NULL AND a.send_status=0 AND a.uid=".$v['uid']." ORDER BY a.entry_time DESC");
+                    foreach ($res2 as $kk=>$vv){
+                        //一个用户的多条入职投递,一般不存在，用户不在职会有一个离职标识,离职时间与在职时间之间的差值是否满足返现条件
+                        //特殊情况 一个用户多次入职但是都没有离职标志默认和现在时刻相比
+                        if(strpos($vv['return_money'],',') !== false) { //英文逗号
+                            $reway = explode(',',$vv['return_money']);
+                        }else if(strpos($vv['return_money'],'，') !== false){ //中文逗号
+                            $reway = explode('，',$vv['return_money']);
+                        }else{
+                            $reway = explode(',',$vv['return_money']);
+                        }
+                        $rewayinfo[0] = explode(' ',$reway[0]);
+                        //第一个数组元素不为空可能是男士可能是女士
+                        if(!empty($reway[0])){ //第一个数组不为空可能是男士可能是女士
+                            $rewayinfo[0] = explode(' ',$reway[0]);
+                            if(strpos($reway[0],'男') !== false){ //男士有返现
+
+                                //var_dump($rewayinfo);
+                                if($vv['gender']==0){ //投递人是男士
+                                    if($rewayinfo[0][1]=='月返'){
+                                        //入职日向后推一个月
+                                        $welday = strtotime("+1 months", $vv[entry_time]);
+                                        $pretime =intval($vv['resign_time'])>0?intval($vv['resign_time']):time();//截止到离职日期或者当前日期
+                                        if((int)$welday<=$pretime){//返现日期是（离职）今日或者（离职）今日之前添加佣金记录
+                                            $deliverid[]=$vv['id'];
+                                            $comloginfo[] = array (
+                                                'content' => '入职返现',
+                                                'rel_name' => $vv['rel_name'],
+                                                'uid' => $v['uid'],
+                                                'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                                'company_name' => $vv['company_name'],//公司名称
+                                                'job_time' => date('Y-m-d',$vv['entry_time']),//入职时间
+                                                'resign_time' => $vv['resign_time']>0?date('Y-m-d',$vv['resign_time']):'',//离职时间
+                                                'id_number' => $vv['id_number'],//身份证号
+                                                'create_time' => time (),//
+                                                'type' => '3',//属于系统生成的数据
+                                                'root'=>$_SESSION['username'],
+                                                'status'=>0 //未审核
+
+                                            );
+                                            // var_dump($arr);
+                                        }
+                                    }else{
+                                        $str=$rewayinfo[0][1];
+                                        if(preg_match('/\d+/',$str,$arr)) {
+                                            $welday = strtotime('+'.$arr[0].' days',$vv['entry_time']);
+                                            $pretime =$vv['resign_time']>0?$vv['resign_time']:time();
+                                            if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                                $deliverid[]=$vv['id'];
+                                                $comloginfo[] = array (
+                                                    'content' => '入职返现',
+                                                    'rel_name' => $vv['rel_name'],
+                                                    'uid' => $v['uid'],
+                                                    'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                                    'company_name' => $vv['company_name'],//公司名称
+                                                    'job_time' => date('Y-m-d',$vv['entry_time']),//入职时间
+                                                    'resign_time' => $vv['resign_time']>0?date('Y-m-d',$vv['resign_time']):'',//离职时间
+                                                    'id_number' => $vv['id_number'],//身份证号
+                                                    'create_time' => time (),//
+                                                    'type' => '3',//属于系统生成的数据
+                                                    'root'=>$_SESSION['username'],
+                                                    'status'=>0 //未审核
+
+                                                );
+                                            }
+                                        }
+                                    }
+                                }
+                            }else if(strpos($reway[0],'女') !== false){ //女士有返现
+                                if($vv['gender']==1){ //投递人是女士
+                                    if($rewayinfo[0][1]=='月返'){
+                                        //入职日向后推一个月
+                                        $welday = strtotime("+1 months", $vv[entry_time]);
+                                        $pretime =intval($vv['resign_time'])>0?intval($vv['resign_time']):time();//截止到离职日期或者当前日期
+                                        if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                            $deliverid[]=$vv['id'];
+                                            $comloginfo[] = array (
+                                                'content' => '入职返现',
+                                                'rel_name' => $vv['rel_name'],
+                                                'uid' => $v['uid'],
+                                                'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                                'company_name' => $vv['company_name'],//公司名称
+                                                'job_time' => date('Y-m-d',$vv['entry_time']),//入职时间
+                                                'resign_time' => $vv['resign_time']>0?date('Y-m-d',$vv['resign_time']):'',//离职时间
+                                                'id_number' => $vv['id_number'],//身份证号
+                                                'create_time' => time (),//
+                                                'type' => '3',//属于系统生成的数据
+                                                'root'=>$_SESSION['username'],
+                                                'status'=>0 //未审核
+                                            );
+                                        }
+                                    }else{
+                                        $str=$rewayinfo[0][1];
+                                        if(preg_match('/\d+/',$str,$arr)) {
+                                            $welday = strtotime('+'.$arr[0].' days',$vv['entry_time']);
+                                            $pretime =intval($vv['resign_time'])>0?intval($vv['resign_time']):time();//截止到离职日期或者当前日期
+                                            if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                                $deliverid[]=$vv['id'];
+                                                $comloginfo[] = array (
+                                                    'content' => '入职返现',
+                                                    'rel_name' => $vv['rel_name'],
+                                                    'uid' => $v['uid'],
+                                                    'commission' => '+' .$rewayinfo[0][2],//入职返现
+                                                    'company_name' => $vv['company_name'],//公司名称
+                                                    'job_time' => date('Y-m-d',$vv['entry_time']),//入职时间
+                                                    'resign_time' => $vv['resign_time']>0?date('Y-m-d',$vv['resign_time']):'',//离职时间
+                                                    'id_number' => $vv['id_number'],//身份证号
+                                                    'create_time' => time (),//
+                                                    'type' => '3',//属于系统生成的数据
+                                                    'root'=>$_SESSION['username'],
+                                                    'status'=>0 //未审核
+                                                );
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            unset($arr);
+                            unset($welday);
+                            unset($rewayinfo);
+                            unset($welday);
+                            unset($pretime);
+                        }
+
+                        if(!empty($reway[1])){ //女士有返现
+                            $rewayinfo[1] = explode(' ',$reway[1]);
+                            if($vv['gender']==1){ //投递人是女士
+                                if($rewayinfo[1][1]=='月返'){
+                                    //入职日向后推一个月
+                                    $welday = strtotime("+1 months", $vv[entry_time]);
+                                    $pretime =intval($vv['resign_time'])>0?intval($vv['resign_time']):time();//截止到离职日期或者当前日期
+                                    if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                        //$rewayinfo[1][2] 返现佣金 可能不是数字 类似市场价一类的
+                                        $deliverid[]=$vv['id'];
+                                        $comloginfo[] = array (
+                                            'content' => '入职返现',
+                                            'rel_name' => $vv['rel_name'],
+                                            'uid' => $v['uid'],
+                                            'commission' => '+' .$rewayinfo[1][2],//入职返现
+                                            'company_name' => $vv['company_name'],//公司名称
+                                            'job_time' => date('Y-m-d',$vv['entry_time']),//入职时间
+                                            'resign_time' => $vv['resign_time']>0?date('Y-m-d',$vv['resign_time']):'',//离职时间
+                                            'id_number' => $vv['id_number'],//身份证号
+                                            'create_time' => time (),//
+                                            'type' => '3',//属于系统生成的数据
+                                            'root'=>$_SESSION['username'],
+                                            'status'=>0 //未审核
+                                        );
+                                    }
+                                }else{
+                                    $str=$rewayinfo[0][1];
+                                    if(preg_match('/\d+/',$str,$arr)) {
+                                        $welday = strtotime('+'.$arr[0].' days',$vv['entry_time']);
+                                        $pretime =intval($vv['resign_time'])>0?intval($vv['resign_time']):time();//截止到离职日期或者当前日期
+                                        if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                            $deliverid[]=$vv['id'];
+                                            $comloginfo[] = array (
+                                                'content' => '入职返现',
+                                                'rel_name' => $vv['rel_name'],
+                                                'uid' => $v['uid'],
+                                                'commission' => '+' .$rewayinfo[1][2],//入职返现
+                                                'company_name' => $vv['company_name'],//公司名称
+                                                'job_time' => date('Y-m-d',$vv['entry_time']),//入职时间
+                                                'resign_time' => $vv['resign_time']>0?date('Y-m-d',$vv['resign_time']):'',//离职时间
+                                                'id_number' => $vv['id_number'],//身份证号
+                                                'create_time' => time (),//
+                                                'type' => '3',//属于系统生成的数据
+                                                'root'=>$_SESSION['username'],
+                                                'status'=>0 //未审核
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                            unset($arr);
+                            unset($welday);
+                            unset($rewayinfo);
+                            unset($welday);
+                            unset($pretime);
+                        }
+
+                    }
+                }
+            }
+//            echo '<pre/>';
+//            var_dump($comloginfo);
+//            die();
+            $result1 = M('commission_into')->insert($comloginfo);
+            if(count($deliverid)>0){//更改投递表中佣金生成的状态为已生成
+                $deidstr = implode(',',$deliverid);
+                $result = M('deliver')->exe("update hp_deliver set send_status=1 where id in(".$deidstr.")");
+            }
+            if($result1 && $result){
+                $this->success('操作成功');
+            }
+        }
         $cond = array();
         if(isset($_GET['id_number'])){
             $_GET['username'] = urldecode($_GET['id_number']);
@@ -1788,6 +2186,56 @@ class userControl extends myControl {
     }
 
     /**
+     * 生成的数据入职返现审核
+     *
+     */
+    public function entryVerify(){
+        $arr=array();
+        $tab = M('user_message');
+        $commission = M('user')->where(array('uid'=>$_GET['uid']))->find();
+        $client_id = $commission['client_id'];
+        $info = M('commission_into')->where(array('id'=>$_GET['id']))->find();
+        $from_user = M('user')->where('uid = ' . $commission['from_id'])->find();//邀请人信息
+
+        if($_GET['name']=='3' && $info['type'] == 3 && (int)$_GET['mon']>0 && $commission['from_id']>0){ //审核通过 入职返现状态改变 用户表佣金数值变化 如果是第一次得到入职返现邀请人得到10%入职返现
+            //查询是否给经纪人返过入职返现
+
+            $ifcunzai =  M('user')->query("select * from hp_commission_log as a inner join hp_user as b on a.from_id=b.uid where a.uid=b.from_id and a.type=2 and b.uid=".$_GET['uid']);
+
+            if(empty($ifcunzai)){ //如果不存在给经纪人入职返现的记录
+                $data = array(
+                    'uid'=>$commission['from_id'],
+                    'content'=>'入职返现',
+                    'commission'=>'+'.intval($_GET['mon'])*0.1,
+                    'username'=>$from_user['username'],
+                    'create_time'=>time(),
+                    'from_id'=>$_GET['uid'],
+                    'type'=>'2'
+                );
+                M('commission_log')->insert($data);
+            }
+            //用户佣金金额变化
+            $usercom['commission']=$commission['commission']+intval($_GET['mon']);
+            M('user')->where(array('uid'=>$_GET['uid']))->update($usercom);
+
+            //更改佣金审核状态
+            $arr['status'] = 1;
+            $arr['reviewtime'] = time();
+            $arr['reviewer'] = $_SESSION['username'];
+            M('commission_into')->where(array('id'=>$_GET['id']))->update($arr);
+
+            $this->success('操作成功');
+        }
+        if($_GET['name']== 2 ){//审核不通过
+            $arr['status'] = 2;
+            $arr['reviewtime'] = time();
+            $arr['reviewer'] = $_SESSION['username'];
+            M('commission_into')->where(array('id'=>$_GET['id']))->update($arr);
+            $this->success('操作成功');
+        }
+    }
+
+    /**
      * @Title: updateWithdrawal
      * @Description: todo(提现审核)
      * @author liuzhipeng
@@ -1990,6 +2438,27 @@ class userControl extends myControl {
 
     }
 
+/*
+ * @param year 年度,quarter 季度
+ * 第一季度 1-3 第二季度4-6 第三季度7-9 第四季度 10-12
+ */
+    public function quarterCreate(){
+        if(intval($_POST['year'])>0 && intval($_POST['quarter'])){
+            $year = intval($_POST['year']);//年度
+            $quarter = intval($_POST['quarter']);//季度
+
+            if($quarter==1){
+                $start =  strtotime(date($year.'-m-01',mktime(0,0,0,($quarter - 1) *3 +1,1,date($year))));//季度开始时间
+                $end =   strtotime(date($year.'-m-t 23:59:59',mktime(0,0,0,$quarter * 3,1,date($year))));//季度结束时间
+            }
+          //查询季度时间内所有已经通过审核的
+            //查询所有
+           die();
+        }else{
+            Json_success('数据格式不对');
+        }
+        Json_success('操作成功',$_POST);
+    }
     /**
      * @Title: updateAuditCheck
      * @Description: todo(待审核（全选）)
@@ -2034,12 +2503,46 @@ class userControl extends myControl {
         }
         foreach($_POST['id'] as $key=>$val){
             $update = $db->in(array('uid'=>$val))->update($data);
+            $this->yaointoComlog($val,3);
         }
 
         if($update){
             Json_success('操作成功');
         }else{
             Json_error('操作失败');
+        }
+    }
+    /*
+    * @param $uid $type
+    *
+    */
+    public function yaointoComlog($uid,$type){
+        $db = M('user_info');
+        //获取用户邀请人id,角色id,title
+        $sql = "select a.uid,a.username, a.normalmanid,b.rid,c.rname,c.title from hp_user as a left join hp_user_role as b on a.normalmanid=b.uid left join hp_role as c on b.rid=c.rid
+                where a.uid=" . $uid . " and c.state=1 and c.title='求职者'";
+        $db5 = M('commission_log');
+        $info = $db->query($sql);
+        $uname =  $db->query("SELECT username FROM  hp_user where uid=".intval($info[0]['normalmanid']));
+        if (!empty($info)) {//邀请人角色是有效求职者
+            $res = M('resume')->where(array('uid' => $uid,'Verify '=>1))->find();
+            if (!empty($res) && $type == '3') {//认证通过且已经创建简历已通过
+                //返邀请人佣金后台设置
+                $mess = [];
+                $mess['uid'] = intval($info[0]['normalmanid']);//邀请人
+                $mess['content'] = '邀请返现';
+                $mess['username'] =$uname[0]['username'];//邀请人姓名，可用于手机号
+                $mess['create_time'] = time();
+                $mess['type'] = 3;
+                $mess['from_id'] =  $uid;//被邀请人
+                $mess['verify'] = 0;//未审核
+                $res2 = $db5->insert($mess);
+                if($res2){
+                    return $res2;
+                }else{
+                    return 0;
+                }
+            }
         }
     }
 
