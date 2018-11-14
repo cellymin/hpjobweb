@@ -795,6 +795,7 @@ class userControl extends myControl {
             $data['verify']=3;
         }
         if($db->in(array('uid'=>$_GET['uid']))->update($data)){
+            $this->yaointoComlog($_GET['uid'],3);
             $this->success('操作成功');
         }else{
             $this->error('操作失败');
@@ -2526,11 +2527,13 @@ class userControl extends myControl {
         $uname =  $db->query("SELECT username FROM  hp_user where uid=".intval($info[0]['normalmanid']));
         if (!empty($info)) {//邀请人角色是有效求职者
             $res = M('resume')->where(array('uid' => $uid,'Verify '=>1))->find();
+            $invite_commission = getPointRule('inviteCommission');
             if (!empty($res) && $type == '3') {//认证通过且已经创建简历已通过
                 //返邀请人佣金后台设置
                 $mess = [];
                 $mess['uid'] = intval($info[0]['normalmanid']);//邀请人
                 $mess['content'] = '邀请返现';
+                $mess['commission'] = '+'.$invite_commission;
                 $mess['username'] =$uname[0]['username'];//邀请人姓名，可用于手机号
                 $mess['create_time'] = time();
                 $mess['type'] = 3;

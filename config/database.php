@@ -11,8 +11,8 @@ return array (
 
 //    'DB_HOST' => 'localhost',
 //    'DB_USER' => 'root',
-//    'DB_PASSWORD' => 'hpjob2015',
-//    'DB_DATABASE' => 'hpjobdb',
+//    'DB_PASSWORD' => 'root',
+//    'DB_DATABASE' => 'hpjob',
 //    'DB_PORT' => '3306',
 //    'DB_PREFIX' => 'hp_',
 //    'DB_DRIVER' => 'mysqli',
