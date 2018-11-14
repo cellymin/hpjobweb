@@ -2370,94 +2370,16 @@ class auth {
      * @param $data  注册的信息 用户名密码神马之类的。
      * @return  bool  返回类型
      */
-    function register($data) {  
+    function register($data) {
         $result = FALSE;
         $new_user = $data;
-       if($data['is_yewu'] == 1){
-            //扫描业务员二维码的场景
-            if($data['salesmanid']){
-                $user = M('user')->where(array('uid'=>$data['salesmanid']))->find();
-                $new_user['branchname'] = $user['branchname'];
-                $new_user['salesmanname'] = $user['salesmanname'];
-                $new_user['salesmanphoneno'] = $user['salesmanphoneno'];
-                $new_user['salesmanid'] = $data['salesmanid'];
+        $new_user['password'] = md5_d($data['password']);
+        $new_user['is_bind'] = $data['is_bind'];
+        $new_user['last_ip'] = ip_get_client();
+        $new_user['rid'] = 8;//创建为求职者
 
-                $new_user['password'] = md5_d($data['password']);
-                $new_user['is_bind'] = $data['is_bind'];
-                $new_user['last_ip'] = ip_get_client();
-                $new_user['rid'] = 8;//创建为求职者
-                $new_user['unionid'] = $data['unionid'];
-                $new_user['is_yewu'] = 1; 
-                $new_user['type'] = '业务员'; 
-            }
-
-
-             //扫描门店场景
-            if($data['branch_id']){
-                //echo '111';die;
-                $branch = M('branch')->where(array('id'=>$data['branch_id']))->find();
-                //var_dump($branch);die;
-                $new_user['branchname'] = $branch['name'];
-
-                $new_user['password'] = md5_d($data['password']);
-                $new_user['is_bind'] = $data['is_bind'];
-                $new_user['last_ip'] = ip_get_client();
-                $new_user['rid'] = 8;//创建为求职者
-                $new_user['unionid'] = $data['unionid'];
-                $new_user['is_yewu'] = 1; 
-                $new_user['type'] = '门店'; 
-            }
-
-
-
-             //扫描普通用户场景
-            if($data['normalmanid']){
-                $new_user['normalmanid'] = $data['normalmanid'];
-                $new_user['password'] = md5_d($data['password']);
-                $new_user['is_bind'] = $data['is_bind'];
-                $new_user['last_ip'] = ip_get_client();
-                $new_user['rid'] = 8;//创建为求职者
-                $new_user['unionid'] = $data['unionid'];
-                $new_user['is_yewu'] = 1; 
-                $new_user['type'] = '普通用户'; 
-            }
-
-            if(empty($data['salesmanid']) && empty($data['branch_id'])  && empty($data['normalmanid'])){
-                $new_user['password'] = md5_d($data['password']);
-               
-                $new_user['is_bind'] = $data['is_bind'];
-                $new_user['last_ip'] = ip_get_client();
-                $new_user['rid'] = 8;//创建为求职者
-                $new_user['unionid'] = $data['unionid'];
-                $new_user['is_yewu'] = 1; 
-                $new_user['type'] = 'app'; 
-            }
-
-       }else{
-            if($data['rid'] == 7){
-                $new_user['password'] = md5_d($data['password']);
-                $new_user['hx_password'] = $data['password'];
-                $new_user['is_bind'] = $data['is_bind'];
-                $new_user['last_ip'] = ip_get_client();
-                $new_user['rid'] = 7;//创建为求职者
-                $new_user['unionid'] = $data['unionid'];
-                $new_user['type'] = $data['type']; 
-                $new_user['branchname'] = $data['branchname']; 
-                $new_user['salesmanname'] = $data['salesmanname']; 
-                $new_user['salesmanphoneno'] = $data['salesmanphoneno'];  
-            }else{
-                $new_user['password'] = md5_d($data['password']);
-                $new_user['is_bind'] = $data['is_bind'];
-                $new_user['last_ip'] = ip_get_client();
-                $new_user['rid'] = $data['rid'];
-                $new_user['unionid'] = $data['unionid'];
-                $new_user['type'] = $data['type']; 
-                
-            }
-                
-        }
-
-        
+        $new_user['unionid'] = $data['unionid'];
+        $new_user['type'] = $data['type'];
 
         // 发送电子邮件来激活用户
         if (C('AUTH_EMAIL_ACTIVATE')) {
@@ -2974,7 +2896,7 @@ class authModel extends Model {
         $this->login_attempts->insert($data);
     }
 
-    function check_attempts($ip) {   
+    function check_attempts($ip) {
         $resule = $this->login_attempts->where(array('ip_address' => $ip))->findall();
         return $this->login_attempts->get_affected_rows();
     }
@@ -2989,82 +2911,15 @@ class authModel extends Model {
     }
 
     function create_user($data) {
-       
-        if($data['is_yewu'] == 1){
-            $data['branchname'] = $data['branchname'];
-            $data['created'] = time();
-            $data['last_ip']=ip_get_client();
-            $id = M('user')->add($data);
-             if ($id) {
-                $this->user_role->insert(array('uid' => $id, 'rid' =>$data['rid']));
-                return $id;
-            } 
-        }else{
-            if($data['rid'] == 7){
-                //include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
-                $object = new QRcode();  
-                $data['created'] = time();
-                $data['last_ip']=ip_get_client();
-                $id = M('user')->add($data);
-                $huanxin = $this->openRegister($data['username'],$data['hx_password'],$data['username']);
-                //生成二维码
-                $url='http://www.hap-job.com/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&salesmanid='.$id;
-                $level=3;  
-                $size=4;  
-                $path = "./uploads/person_qrcode/";//创建路径
-                $fileName = $path.$id.'.png';  
-                $errorCorrectionLevel =intval($level);//容错级别  
-                $matrixPointSize = intval($size);//生成图片大小  
-                $object->png($url, $fileName, $errorCorrectionLevel, $matrixPointSize, 2); 
-
-                $list =M('user')->order("uid desc")->limit(1)->find();
-                $save['qrcode'] = $fileName;
-                $result = M('user')->where(array('uid'=>$list['uid']))->update($save);
-                M('user_info')->insert(array('uid' => $id, 'name' =>$data['username']));
-
-                if ($id) {
-                    $this->user_role->insert(array('uid' => $id, 'rid' =>$data['rid']));
-                    return $id;
-                } 
-            }else{
-                $data['created'] = time();
-                $data['last_ip']=ip_get_client();
-                $id = M('user')->add($data);
-                $huanxin = $this->openRegister($data['username'],$data['hx_password'],$data['username']);
-                 M('user_info')->insert(array('uid' => $id, 'name' =>$data['username']));
-                if ($id) {
-                    $this->user_role->insert(array('uid' => $id, 'rid' =>$data['rid']));
-                    return $id;
-                } 
-            }
-            
+        $data['created'] = time();
+//        $data['last_login']=time();
+        $data['last_ip']=ip_get_client();
+        $id = $this->user->insert($data);
+        if ($id) {
+            $this->user_role->insert(array('uid' => $id, 'rid' =>8));
+            return $id;
         }
-        
         return FALSE;
-    }
-
-
-     function openRegister($username,$password,$nickname) {
-        $url = "https://a1.easemob.com/ttouch/kuaile" . "/token";
-        $data = array(
-            'grant_type' => 'client_credentials',
-            'client_id' => 'YXA6tfPWgFtsEeWzNxtHA-A9OA',
-            'client_secret' => 'YXA6hhR-xo8PGuE3BAqMfTQlfNAkYLs'
-        );
-        $rs = json_decode(curl($url, $data), true);
-        $token = $rs['access_token']; 
-        $url="https://a1.easemob.com/ttouch/kuaile".'/users';
-        $username_str = substr($username,0,7);
-        $arr=array(
-            'username'=>$username,
-            'password'=>$password,
-            'nickname'=> empty($nickname) ? '开心工作'.rand(10000,99999) : $nickname,
-        );
-        $header = array(
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $token
-        );
-        return json_decode(curl($url, $arr, $header, "POST"),true);
     }
 
     /**

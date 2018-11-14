@@ -236,7 +236,26 @@ class profileControl extends Control {
                      if(!queryExistMissionLog($uid,'11')){
                          addMissionLog($uid,11,$uid);
                      }
-
+                     $db=M('user_info');
+                     $sql = "select a.uid,a.username, a.normalmanid,b.rid,c.rname,c.title,d.verify from hp_user as a left join hp_user_role as b on a.normalmanid=b.uid left join hp_role as c on b.rid=c.rid left join 
+                     hp_user_info as d on a.uid=d.uid where a.uid=" .$_POST['uid'] . " and c.state=1 and c.title='求职者'";
+                     $info = $db->query($sql);
+                     //查询该用户的邀请人的邀请佣金记录是否存在
+                     $if_exist = M('commission_log')->where(array('uid'=>intval($info[0]['normalmanid']),'from_id'=>$_POST['uid']))->count();
+                     //$if_exist大于0不再返现
+                     $uname =  $db->query("SELECT username FROM  hp_user where uid=".intval($info[0]['normalmanid']));//邀请人用户名，手机号
+                     $num = M('resume')->where(array('uid'=>$_POST['uid'],'verify'=>1))->count();//现存有效简历数量,简历数量大于0不再计数
+                     if($if_exist==0 && $num==0 && (int)$info[0]['verify']) {//没有创建简历，没有返现邀请人过邀请佣金,已经认证通过
+                         $mess = [];
+                         $mess['uid'] = intval($info[0]['normalmanid']);//邀请人
+                         $mess['content'] = '邀请返现';
+                         $mess['username'] = $uname[0]['username'];//邀请人姓名，可用于手机号
+                         $mess['create_time'] = time();
+                         $mess['type'] = 3;
+                         $mess['from_id'] = $_GET['uid'];//被邀请人
+                         $mess['verify'] = 0;//未审核
+                         $res2 = M('commission_log')->insert($mess);
+                     }
                      Json_success('创建成功', $data);
 
                  } else {
