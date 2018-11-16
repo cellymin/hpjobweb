@@ -128,6 +128,24 @@ class userModel extends Model {
         }
         return $users;
     }
+    function quarterList($cond=array()) {
+        $db = M('commission_log');
+//            $db=V('commission_log');
+//            $db->view=array(
+//                'user_info'=>array(
+//                    'type'=>'left',
+//                    'on'=>'commission_log.uid =user_info.uid',
+//                )
+//            );
+            $nums=$db->where($cond)->count();
+            $page=new page($nums,20);
+            $commission=array();
+            $commission['user']=$db->where($cond)->order('commission_log.create_time desc')->findall($page->limit());
+            $commission['page']=$page->show();
+            $commission['num']=$nums;
+
+        return $commission;
+    }
 
     /**
      * 判断用户是否存在

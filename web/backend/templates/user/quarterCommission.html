@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html lang="en-US" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    {css file="bootstrap" /}
+    {css file="jqueryUI.bootstrap" /}
+    {css file="__TPL__/css/public.css" /}
+    {js file="jquery" /}
+    {js file="__TPL__/js/public.js" /}
+    {js file="jqueryUI" /}
+    {js file="jquery.validate" /}
+    {js file="datepicker" /}
+    {js file="__ROOT__/public/js/jqueryValidate/jquery.metadata.js" /}
+</head>
+<body>
+        <div id="userList">
+            <form action="__METH__" method="get" id="search-form">
+                <table class="table well" style="margin-bottom:-18px;">
+                    <tr><td style="padding-right:4px;!important;" class="chyear">
+                        <select name="year" style="width:100px;!important;" class="year" {if value="$base.get.year|isset"}select="{$base.get.year}"{else}select="{$loyear}"{/if}>
+                            <option>请选择年份</option>
+                            <?php
+                         for($i=2010;$i<=2020;$i++){
+                            echo '<option value="'.$i.'">'.$i.'</option>';
+                            }
+                            ?>
+                        </select>
+                    </td>
+                        <td style="padding:8px 4px;width:100px;!important;"  class="chquarter">
+                            <select style="width:100px;!important;" class="quarter" name="quarter" {if value="$base.get.quarter|isset"}select="{$base.get.quarter}"{else}select="{$season}"{/if} >
+                                <option>请选择季度</option>
+                                <option value="1">第一季度</option>
+                                <option value="2">第二季度</option>
+                                <option value="3">第三季度</option>
+                                <option value="4">第四季度</option>
+                            </select>
+                        </td>
+
+
+                        <td >季度可分配总额：￥<span style="color: red" class="countcom">{$qtotal}</span></td>
+                        <td >季度可分配结余：￥<span style="color: red" class="remaincom">{$remainSum}</span></td>
+                    </tr>
+                    <tr>
+                        <td><input placeholder="请输入用户名" type="text" name="username" class="input-medium" value="{if value="$base.get.username|isset"}{$base.get.username|urldecode}{/if}"></td>
+
+                        <td> <select style="width:100px;!important;" name="verify" {if value="$base.get.verify|isset"}select="{$base.get.verify}"{/if}>
+                            <option value="">请选择状态</option>
+                            <option value="0">未审核</option>
+                            <option value="1">审核通过</option>
+                            <option value="2">审核未通过</option>
+                            </select></td>
+                        <td colspan="2"><button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>
+                        <a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a></td>
+                        <td><button class="btn btn-mini jidufan" style="width:100px;height: 27px;!important;">生成季度返现</button></td>
+                    </tr>
+                    <!--<tr>-->
+                        <!--<th></th>-->
+                        <!--<th>用户名</th>-->
+                        <!--<th>提现金额</th>-->
+                        <!--<th>开始时间</th>-->
+                        <!--<th>结束时间</th>-->
+                        <!--<th>类别</th>-->
+                        <!--<th></th>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td></td>-->
+                        <!--<td><input type="text" name="username" class="input-medium" value="{if value="$base.get.username|isset"}{$base.get.username|urldecode}{/if}"></td>-->
+                        <!--<td><input type="text" name="commission" class="input-medium" value="{if value="$base.get.commission|isset"}{$base.get.commission|urldecode}{/if}"></td>-->
+                        <!--<td><input type="text" name="start_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></td>-->
+                        <!--<td><input type="text" name="end_time" class="input-medium" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',autoPickDate:true})"></td>-->
+                        <!--<td>-->
+                        <!--<select name="type" class="input-medium" {if value="$base.get.type|isset"}select="{$base.get.type}"{/if}>-->
+                        <!--<option value="">请选择</option>-->
+                        <!--<option value="1">提现记录</option>-->
+                        <!--<option value="2">入职返现</option>-->
+                        <!--<option value="3">邀请返现</option>-->
+                        <!--</select>-->
+                        <!--</td>-->
+                        <!--<td colspan="2">-->
+                            <!--<button type="submit" class="btn btn-success"><i class="icon-search icon-white"></i>&nbsp;&nbsp;查询</button>-->
+                            <!--<a id="reset" class="btn btn-info"><i class="icon-refresh icon-white"></i>&nbsp;&nbsp;重置</a>-->
+                        <!--</td>-->
+
+
+                    <!--</tr>-->
+                    <script type="text/javascript">
+
+                    $('#reset').click(function(){
+                    $('#search-form :input').val('');
+                    $('#search-form').submit();
+                    });
+                    </script>
+                </table>
+            </form>
+            <table id="user-list" class="table">
+            	<tr>
+                    <th><input type="checkbox" class="select-all input-checkbox"></th>
+                    <th>用户id</th>
+                    <th>手机号</th>
+                    <th>类别</th>
+                    <th>所得季度佣金</th>
+                    <th>奖励金额</th>
+                    <th>分配比例</th>
+                    <!--<th>工作时间</th>-->
+                    <th>创建时间</th>
+                    <th>审核</th>
+                    <!--th>操作</th-->
+                    <th>审核时间</th>
+                    <th>操作人</th>
+            	</tr>
+                {foreach from="$commission" value="$commission"}
+         	<tr>
+                <td>{if value="$commission.cutcommission">0}{else}<input type="checkbox" class="input-checkbox" name="uid" value="{$commission.id}" > {/if} </td>
+                <td>{$commission.uid}</td>
+                <td>{$commission.username}</td>
+                <td>{$commission.content}</td>
+                <td>{$commission.commission}</td>
+                <td>{if value="$commission.cutcommission">0}{$commission.cutcommission}{else}<input type="text" name="0" style="width: 100px;!important;" class="cutcomm" onchange="changeCommission(this)" value="{$commission.cutcommission}"  /> {/if}</td>
+                <td>{if value="$commission.quarterrate">0}{$commission.quarterrate}{else}<input type="text" name="0%" style="width: 100px;!important;" class="cutrate" onchange="changeCommission(this)" value="{$commission.quarterrate}%" />{/if}</td>
+                <!--<td>{$commission.job_time}</td>-->
+                <td>{if value="$commission.create_time>0"}{$commission.create_time|date:'Y-m-d H:i:s',@@}{/if}</td>
+                {if value="$commission.cutcommission>0"}
+                <td>
+                    {if value="$commission.verify==0"}
+                    <a href="__CONTROL__/shareVerify?name=3&uid={$commission.uid}&id={$commission.id}">审核通过</a>
+                    <a href="__CONTROL__/shareVerify?name=2&uid={$commission.uid}&id={$commission.id}"><font color=" ">审核不通过</font></a>
+                    {elseif value="$commission.verify==1"}
+                    <span><font color="green">审核已通过</font></span>
+                    {elseif value="$commission.verify==2"}
+                    <span><font color="red">审核未通过</font></span>
+                    {/if}
+                </td>
+                {else}
+                <td>无</td>
+                {/if}
+                <!--td>
+                    查看明细
+                </td-->
+                <td>{if value="$commission.root_time == 0"}
+                    <span>暂无</span>
+                    {else}
+                    {$commission.root_time|date:'Y-m-d H:i:s',@@}</td>
+                    {/if}
+                <td>
+                    {$commission.root}
+                </td>
+            	</tr>
+            	{/foreach}
+
+            	<tr class="well">
+                    <td><input type="checkbox" class="select-all input-checkbox"></td>
+                    <td class="opt" colspan="2">
+
+                        <a class="btn btn-mini btn-success" action="unban" name=><i class="icon-ok icon-white"></i> 保存</a>
+                    </td>
+            		<td colspan="10">
+            			{$page}
+            		</td>
+            	</tr>
+
+            </table>
+
+        </div>
+        <div id="dialog" style="z-idnex:999"></div>
+        <script type="text/javascript">
+            $("select[select]").each(function(e,obj){
+                $(this).val($(this).attr('select'));
+            })
+        $('.config-role').click(function(){
+            $('#config-role .user').text($(this).attr('username'));
+            $('#config-uid').val($(this).attr('uid'));
+            var rid=$(this).attr('rid').split('#');
+            $('#config-role :checkbox').each(function(){
+                if(jQuery.inArray($(this).val(),rid)>=0){
+                    $(this).attr('checked',true);
+                }else{
+                    $(this).attr('checked',false);
+                }
+            });
+            //导入入职返现记录
+            $("#insertCommission").click(function(){
+                $("#insertCommission").dialog({
+                    //modal:true,
+                    title:'导入职位',
+                    resizable: true,
+                    width:450
+
+                });
+                $("#upload #title").val('').focus();
+                return false;
+            });
+            $('#config-role').dialog({
+                "width":"400",
+                "modal":true,
+                "buttons":{
+                    "修改":function(){
+                        if($('#config-role :checked').length==0){
+                            alert('必须为用户设置一个角色');
+                            return false;
+                        }
+                        $('#config-role form').submit();
+                    }
+                }
+            });
+            return false;
+        });
+            function select_all (id,class_name,name) {
+                id = id || undefined ? id : 'select-area';
+                class_name = class_name || undefined ? class_name: 'select-all';
+                name = name || undefined ? name : 'name';
+                $('.'+class_name).click(function(){
+                    if($(this).attr('checked')){
+                        console.log($(this).attr('disabled'))
+;                        $('.'+class_name).attr('checked',true);
+                        $('#'+id+' :checkbox['+name+']').attr('checked',true);
+                    }else{
+                        $('.'+class_name).attr('checked',false);
+                        $('#'+id+' :checkbox['+name+']').attr('checked',false);
+                    }
+                });
+            }
+        select_all('user-list');//全选
+        //全选审核
+        function saveCommission(arg){
+
+            $.post('__CONTROL__/saveCommission',{id:arg.id,year:arg.year,quarter:arg.quarter},function(data){
+                if(data.status==1){
+                        location.reload();
+                }else{
+                    alert('操作失败');
+                }
+            },'json');
+        }
+
+        $('.opt a').click(function(){
+            var _id_arr=[],
+                _sum_arr =[],
+                    _confirm_msg='保存',
+                    _action=$(this).attr('action'),
+                    _fun="saveCommission",//处理函数
+                    _quarter="",
+                    year,
+                    quarter,//季度
+                    countcom,//季度总和
+                    remaincom,//可分配金额
+                    moneysum =0,//分配的金额总和
+                    _checked=$('.table :checkbox[name]:checked');
+            _checked.each(function(){
+                _id_arr.push($(this).val());
+                moneysum = parseFloat($(this).parent().parent().find('.cutcomm').val())+moneysum;
+                if(parseFloat($(this).parent().parent().find('.cutcomm').val())>0){
+                    _sum_arr.push($(this).val()+'_'+parseFloat($(this).parent().parent().find('.cutcomm').val())+'_'+parseFloat($(this).parent().parent().find('.cutrate').val()));
+                }
+            });
+            if(_checked.length==0){
+                alert("请选择你需要操作的数据!");
+                return false;
+            }
+            year = parseInt($('.year').val());
+            quarter = parseInt($('.quarter').val());
+            if(!(year>0 && quarter>0)){
+                alert("请选择年度和季度!");
+                return false;
+            }
+            // alert(_sum_arr.length);
+            // return false;
+            if(_sum_arr.length==0){
+                alert('请至少分配一个金额！');
+                return false;
+            }
+            countcom = parseFloat($('.countcom').text());//季度总和
+            remaincom = parseFloat($('.remaincom').text());//可分配金额
+            if(moneysum>remaincom){
+                var chazhi = (moneysum-remaincom).toFixed(3);
+                alert('分配的金额超出￥'+(chazhi));
+                return false;
+            }
+            console.log(_sum_arr);
+            if(confirm("确定此操作？")){
+                eval(_fun+"({id:_sum_arr,year:year,quarter:quarter})");
+            }
+            return false;
+        });
+        function quarterCreate(arg){
+            $.post('__CONTROL__/quarterCreate',{year:arg.year,quarter:arg.quarter},function(data){
+                if(data.status==1){
+                    alert(data.msg);
+                    location.reload();
+                   // });
+                }else{
+                    alert(data.msg);
+                }
+            },'json');
+        }
+        $('.jidufan').click(function(){
+            var _id_arr=[],
+                _confirm_msg='审核',
+                _fun="quarterCreate",//处理函数
+                _name="";
+            var year =  $('.chyear  option:selected').val();
+            var quarter = $('.chquarter  option:selected').val();
+            if(year==0){
+                alert("请选择年度!");
+                return false;
+            }
+            if(quarter==0){
+                alert("请选择季度!");
+                return false;
+            }
+            var timestamp = Date.parse(new Date());//当前时间戳
+            //获取季度最终时间
+            if(quarter==1){//第一季度 1-3
+                var date = new Date(year+'-03-31 23:59:59');
+                var endTime = Date.parse(date);//季度结束时间戳
+                if(endTime>timestamp){
+                    alert("请在该季度结束后点击!");
+                    return false;
+                }
+            }else if(quarter==2){//第二季度 4-6
+                var date = new Date(year+'-06-30 23:59:59');
+                var endTime = Date.parse(date);//季度结束时间戳
+                if(endTime>timestamp){
+                    alert("请在该季度结束后点击!");
+                    return false;
+                }
+            }else if(quarter==3){//第三季度 7-9
+                var date = new Date(year+'-09-30 23:59:59');
+                var endTime = Date.parse(date);//季度结束时间戳
+                if(endTime>timestamp){
+                    alert("请在该季度结束后点击!");
+                    return false;
+                }
+            }else if(quarter==4){//第四季度 10-12
+                var date = new Date(year+'-12-31 23:59:59');
+                var endTime = Date.parse(date);//季度结束时间戳
+                if(endTime>timestamp){
+                    alert("请在该季度结束后点击!");
+                    return false;
+                }
+            }
+            if(confirm("确定此操作？")){
+                eval(_fun+"({year:year,quarter:quarter})");
+            }
+            return false;
+        });
+        function changeCommission(e) {
+            var cname = $(e).attr('class');
+            var countcom = parseFloat($('.countcom').text());
+            if(cname=='cutcomm'){//分配奖励金额
+               var cutcom = parseFloat($(e).val()) ;
+               var cutrate = (cutcom/countcom*100).toFixed(2);
+               $(e).parent().parent().find('.cutrate').val(cutrate+'%');
+            }else if(cname=='cutrate'){//分配奖励比例
+               var cutrate = parseFloat($(e).val());
+               var cutcom = countcom*cutrate/100;
+               $(e).parent().parent().find('.cutcomm').val(cutcom);
+            }
+        }
+        </script>
+    </body>
+</html>

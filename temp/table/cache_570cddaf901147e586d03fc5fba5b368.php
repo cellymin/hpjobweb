@@ -496,6 +496,24 @@ $cache_570cddaf901147e586d03fc5fba5b368 = Array
 		'key'=>'',
 		'default'=>'',
 		'extra'=>''
+		),
+	55=>Array
+		(
+		'field'=>'entry_status',
+		'type'=>'int(10)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
+		),
+	56=>Array
+		(
+		'field'=>'entry_time',
+		'type'=>'int(10)',
+		'null'=>'YES',
+		'key'=>'',
+		'default'=>'0',
+		'extra'=>''
 		)
 	);
 ?>

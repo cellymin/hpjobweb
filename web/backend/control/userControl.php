@@ -1263,8 +1263,12 @@ class userControl extends myControl {
                     }else{
                         $reway = explode(',',$v['return_money']);
                     }
+
                     if(!empty($reway[0])){ //第一个数组元素不为空可能是男士可能是女士
                         $rewayinfo[0] = explode(' ',$reway[0]);
+                        if(count($rewayinfo[0])==1){
+                            $this->success('职位返现格式不正确');
+                        }
                         if(strpos($reway[0],'男') !== false){ //男士有返现
                             if($v['gender']==0){ //投递人是男士
                                 if($rewayinfo[0][1]=='月返'){
@@ -1620,6 +1624,9 @@ class userControl extends myControl {
 //            echo '<pre/>';
 //            var_dump($comloginfo);
 //            die();
+            if(count($comloginfo)==0){
+                $this->success('没有数据生成');
+            }
             $result1 = M('commission_into')->insert($comloginfo);
             if(count($deliverid)>0){//更改投递表中佣金生成的状态为已生成
                 $deidstr = implode(',',$deliverid);
@@ -2163,6 +2170,20 @@ class userControl extends myControl {
                     'content'=>'您于'.date('Y-m-d H:i:s',$info['create_time']).'参与的分享邀请佣金已经通过审核，5元佣金已经到账，如有疑问请联系客服4006920099！'
                 );
                 push(array($client_id),array('hidden'=>$hidden,'title'=>'title','content'=>'content'));
+            }else if($info['type'] == 4){
+                if(intval($info['cutcommission'])==0){
+                    $this->error('没有操作金额');
+                }
+                $entrycommission = $info['cutcommission'];
+                M('user')->exe("UPDATE hp_user SET commission=commission+".$entrycommission." WHERE uid =". $_GET['uid']);
+                $tab->insert(array('uid'=>$_GET['uid'],'content'=>'您于'.date('Y-m-d H:i:s',$info['create_time']).'季度佣金已经通过审核，5元佣金已经到账，如有疑问请联系客服4006920099！','title'=>'系统消息','created'=>time()));
+                $hidden = array(
+                    'type'=>1,
+                    'data_type'=>101,
+                    'title'=>'系统消息',
+                    'content'=>'您于'.date('Y-m-d H:i:s',$info['create_time']).'参与的分享邀请佣金已经通过审核，5元佣金已经到账，如有疑问请联系客服4006920099！'
+                );
+                push(array($client_id),array('hidden'=>$hidden,'title'=>'title','content'=>'content'));
             }
             $this->success('操作成功');
         }
@@ -2181,10 +2202,8 @@ class userControl extends myControl {
             push(array($client_id),array('hidden'=>$hidden,'title'=>'title','content'=>'content'));
             $this->success('操作成功');
         }
-
-
-
     }
+
 
     /**
      * 生成的数据入职返现审核
@@ -2196,25 +2215,25 @@ class userControl extends myControl {
         $commission = M('user')->where(array('uid'=>$_GET['uid']))->find();
         $client_id = $commission['client_id'];
         $info = M('commission_into')->where(array('id'=>$_GET['id']))->find();
-        $from_user = M('user')->where('uid = ' . $commission['from_id'])->find();//邀请人信息
+        $from_user = M('user')->where('uid = ' . $commission['normalmanid'])->find();//邀请人信息
 
-        if($_GET['name']=='3' && $info['type'] == 3 && (int)$_GET['mon']>0 && $commission['from_id']>0){ //审核通过 入职返现状态改变 用户表佣金数值变化 如果是第一次得到入职返现邀请人得到10%入职返现
+        if($_GET['name']=='3' && $info['type'] == 3 && (int)$_GET['mon']>0 ){ //审核通过 入职返现状态改变 用户表佣金数值变化 如果是第一次得到入职返现邀请人得到10%入职返现
             //查询是否给经纪人返过入职返现
-
-            $ifcunzai =  M('user')->query("select * from hp_commission_log as a inner join hp_user as b on a.from_id=b.uid where a.uid=b.from_id and a.type=2 and b.uid=".$_GET['uid']);
-
-            if(empty($ifcunzai)){ //如果不存在给经纪人入职返现的记录
-                $data = array(
-                    'uid'=>$commission['from_id'],
-                    'content'=>'入职返现',
-                    'commission'=>'+'.intval($_GET['mon'])*0.1,
-                    'username'=>$from_user['username'],
-                    'create_time'=>time(),
-                    'from_id'=>$_GET['uid'],
-                    'type'=>'2'
-                );
-                M('commission_log')->insert($data);
-            }
+           if( $commission['normalmanid']>0){
+               $ifcunzai =  M('user')->query("select * from hp_commission_log  where uid=".$commission['normalmanid']." and type=2 and from_id=".$_GET['uid']);
+               if(empty($ifcunzai)){ //如果不存在给经纪人入职返现的记录
+                   $data = array(
+                       'uid'=>$commission['normalmanid'],
+                       'content'=>'入职返现',
+                       'commission'=>'+'.intval($_GET['mon'])*0.1,
+                       'username'=>$from_user['username'],
+                       'create_time'=>time(),
+                       'from_id'=>$_GET['uid'],
+                       'type'=>'2'
+                   );
+                   M('commission_log')->insert($data);
+               }
+           }
             //用户佣金金额变化
             $usercom['commission']=$commission['commission']+intval($_GET['mon']);
             M('user')->where(array('uid'=>$_GET['uid']))->update($usercom);
@@ -2226,6 +2245,8 @@ class userControl extends myControl {
             M('commission_into')->where(array('id'=>$_GET['id']))->update($arr);
 
             $this->success('操作成功');
+        }else{
+            $this->success('操作失败');
         }
         if($_GET['name']== 2 ){//审核不通过
             $arr['status'] = 2;
@@ -2404,13 +2425,17 @@ class userControl extends myControl {
         if(empty($user)){
             Json_error('操作失败');
         }
-
         if($db->where('verify = 0 AND id IN('.implode(',',$_POST['id']).')')->update($arr)){
             foreach($user as $k=>$v){
-
                 if($v['type'] == 3 && $_POST['type'] == 1) {//判断是否是邀请好友
                     $share_commission = getPointRule('shareCommission');
                     M ('user')->inc ('commission', 'uid = ' . $v['uid'], $share_commission);
+                }else if($v['type'] == 2  && $_POST['type'] == 1){//入职返现
+                    $entrycommission = $v['commission'];
+                    M('user')->exe("UPDATE hp_user SET commission=commission".$entrycommission." WHERE uid =". $v['uid']);
+                }else if($v['type'] == 4  && $_POST['type'] == 1){//季度返现
+                    $quartercommission = $v['cutcommission'];
+                    M('user')->exe("UPDATE hp_user SET commission=commission".$quartercommission." WHERE uid =". $v['uid']);
                 }
                 if($_POST['type']==2){
                     $content = '您于'.date('Y-m-d',$v['create_time']).'参与的分享邀请佣金未通过审核，如有疑问请联系客服4006920099！';
@@ -2444,22 +2469,115 @@ class userControl extends myControl {
  * 第一季度 1-3 第二季度4-6 第三季度7-9 第四季度 10-12
  */
     public function quarterCreate(){
-        if(intval($_POST['year'])>0 && intval($_POST['quarter'])){
+        if(intval($_POST['year'])>0 && intval($_POST['quarter'])){ //年度和季度
             $year = intval($_POST['year']);//年度
             $quarter = intval($_POST['quarter']);//季度
-
-            if($quarter==1){
-                $start =  strtotime(date($year.'-m-01',mktime(0,0,0,($quarter - 1) *3 +1,1,date($year))));//季度开始时间
-                $end =   strtotime(date($year.'-m-t 23:59:59',mktime(0,0,0,$quarter * 3,1,date($year))));//季度结束时间
+            $start =  strtotime(date($year.'-m-01',mktime(0,0,0,($quarter - 1) *3 +1,1,date($year))));//季度开始时间
+            $end =   strtotime(date($year.'-m-t 23:59:59',mktime(0,0,0,$quarter * 3,1,date($year))));//季度结束时间
+          //查询季度时间内所有已经通过审核的返现佣金
+            //$commissionByUid =  M('commission_log')->query("select uid,SUM(commission) from hp_commission_log where type=2 and verify=1 and root_time>".$start." and root_time<".$end." group by uid");
+            //$commissionByUid =M('commission_log')->query("SELECT a.username,SUM(a.commission),a.uid,count(a.from_id) FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.from_id=b.uid left join hp_role as c on b.rid=c.rid
+//where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end."  and c.title='求职者' group by uid");
+            $commissionByUid =M('commission_log')->query("SELECT a.username,SUM(a.commission) as countcom,a.uid,count(a.from_id) FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.uid=b.uid left join hp_role as c on b.rid=c.rid 
+where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end." and c.title='求职者'  group by uid HAVING countcom>0" );
+            $commissionByUid1 =M('commission_log')->query("SELECT a.id,a.uid FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.uid=b.uid left join hp_role as c on b.rid=c.rid 
+where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end." and c.title=' 求职者'");//该季度佣金来源及所对应的佣金id
+            foreach ($commissionByUid1 as $k=>$v){
+                $aa[$v['uid']][]=$v['id'];//uid对应的来源佣金可用来查明细
             }
-          //查询季度时间内所有已经通过审核的
-            //查询所有
-           die();
+            if(count($commissionByUid)==0){
+                Json_error('当前季度没有数据');
+            }
+           foreach ($commissionByUid as $k=>$v){
+               $mess[]=array(
+                   'uid'=>$v['uid'],//经纪人id
+                   'content'=>$year.'第'.$quarter.'季度入职返现佣金',//记录日志
+                   'username'=>$v['username'], //经纪人手机号
+                   'commission'=>$v['countcom'],//经纪人该季度所得佣金总额
+                   'cutcommission'=>0,//经纪人该季度分配的佣金
+                   'quarterrate'=>0, //经纪人该季度佣金池占比
+                   'type'=>4,//季度佣金
+                   'quarter'=>$year.'_'.$quarter ,//季度标识 2015_1
+                   'create_time'=>time(),//创建时间
+                   'verify'=>0,//审核状态
+                   'source'=>implode(',',$aa[$v['uid']]),//来源佣金id
+               );
+           }
+           M('commission_log')->insert($mess);//插入季度返现佣金
         }else{
-            Json_success('数据格式不对');
+            Json_success('数据不完整');
         }
         Json_success('操作成功',$_POST);
     }
+
+    /**
+     *
+     * 季度佣金管理
+     */
+    public function quarterCommission(){
+        $season = ceil((date('n'))/3);//本季度
+        $loyear = date('Y');
+        if(isset($_GET['year']) && isset($_GET['quarter'])){
+            $cond['quarter'] = $_GET['year'].'_'.$_GET['quarter'];
+        }else{
+            $cond['quarter'] = $loyear.'_'.$season;
+        }
+        if(isset($_GET['username'])){
+            $cond['username'] = $_GET['username'];
+        }
+        if(isset($_GET['verify'])){
+            $cond['verify'] = $_GET['verify'];
+        }
+        $cond['type'] = 4;
+        $users = $this->user->quarterList($cond);
+        //季度佣金可分配总额
+        $quarterSum = M('commission_log')->query("SELECT IFNULL(SUM(COMMISSION),0) as qtotal FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
+        //季度佣金分配掉的金额 ，占比 因为很多经纪人的初始分配奖励为0 不能直接计算神域可分配金额
+        $quarterSumUse = M('commission_log')->query("SELECT IFNULL(SUM(cutcommission),0) as suncom,IFNULL(SUM(quarterrate),0) as sunrate FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
+        $remainSum = floatval($quarterSum[0]['qtotal'])*0.1-floatval($quarterSumUse[0]['suncom']);//剩余可分配
+        $remainRate = 1-floatval($quarterSumUse[0]['sunrate']);//剩余占比
+
+        $count = $users['num'];
+        $this->assign('loyear', $loyear);
+        $this->assign('season', $season);
+        $this->assign('qtotal', $quarterSum[0]['qtotal']*0.1);
+        $this->assign('remainSum', $remainSum);
+        $this->assign('remainRate', $remainRate);
+        $this->assign('commission', $users['user']);
+        $this->assign('page', $users['page']);
+        $this->assign('counts', $count);
+        $this->display();
+    }
+
+    /**
+     * 保存分配佣金池的金额，比例
+     */
+    function saveCommission(){
+        $arr = array();
+        if(!empty($_POST['year']) && !empty($_POST['quarter'])){
+            $quarter = intval($_POST['year']).'_'.intval($_POST['quarter']);//季度
+        }
+        //季度佣金可分配总额
+        $quarterSum = M('commission_log')->query("SELECT IFNULL(SUM(COMMISSION),0) as qtotal FROM hp_commission_log WHERE quarter='".$quarter."' AND type=4");
+        //季度佣金分配掉的金额 ，占比 因为很多经纪人的初始分配奖励为0 不能直接计算神域可分配金额
+        $quarterSumUse = M('commission_log')->query("SELECT IFNULL(SUM(cutcommission),0) as suncom,IFNULL(SUM(quarterrate),0) as sunrate FROM hp_commission_log WHERE quarter='".$quarter."' AND type=4");
+        $remainSum = floatval($quarterSum[0]['qtotal'])*0.1-floatval($quarterSumUse[0]['suncom']);//剩余可分配
+       if($_POST['id']){
+           foreach ($_POST['id'] as $k=>$v) {
+               $info = array();
+               $info = explode('_',$v);
+               $mess['cutcommission']=$info[1];
+               $mess['quarterrate']=$info[2];
+               $update = M('commission_log')->where(array('id'=>$info[0]))->update($mess);
+           }
+           if($update){
+               Json_success('操作成功',$update);
+           }else{
+               Json_success('操作失败');
+           }
+       }
+    }
+
     /**
      * @Title: updateAuditCheck
      * @Description: todo(待审核（全选）)
