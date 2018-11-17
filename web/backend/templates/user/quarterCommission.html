@@ -83,13 +83,13 @@
             	</tr>
                 {foreach from="$commission" value="$commission"}
          	<tr>
-                <td>{if value="$commission.cutcommission">0}{else}<input type="checkbox" class="input-checkbox" name="uid" value="{$commission.id}" > {/if} </td>
+                <td>{if value="$commission.commission">0}{else}<input type="checkbox" class="input-checkbox" name="uid" value="{$commission.id}" > {/if} </td>
                 <td>{$commission.uid}</td>
                 <td>{$commission.username}</td>
                 <td>{$commission.content}</td>
-                <td>{$commission.commission}</td>
-                <td>{if value="$commission.cutcommission">0}{$commission.cutcommission}{else}<input type="text" name="0" style="width: 100px;!important;" class="cutcomm" onchange="changeCommission(this)" value="{$commission.cutcommission}"  /> {/if}</td>
-                <td>{if value="$commission.quarterrate">0}{$commission.quarterrate}%{else}<input type="text" name="0%" style="width: 100px;!important;" class="cutrate" onchange="changeCommission(this)" value="{$commission.quarterrate}%" />{/if}</td>
+                <td>{$commission.cutcommission}</td>
+                <td>{if value="$commission.commission">0}{$commission.commission}{else}<input type="text" name="0" style="width: 100px;!important;" class="cutcomm" onchange="changeCommission(this)" value="{$commission.commission}"  /> {/if}</td>
+                <td>{if value="$commission.quarterrate">0}{$commission.quarterrate}{else}<input type="text" name="0%" style="width: 100px;!important;" class="cutrate" onchange="changeCommission(this)" value="{$commission.quarterrate}" />{/if}%</td>
                 <!--<td>{$commission.job_time}</td>-->
                 <td>{if value="$commission.create_time>0"}{$commission.create_time|date:'Y-m-d H:i:s',@@}{/if}</td>
                 {if value="$commission.cutcommission>0"}
@@ -326,7 +326,7 @@
             if(cname=='cutcomm'){//分配奖励金额
                var cutcom = parseFloat($(e).val()) ;
                var cutrate = (cutcom/countcom*100).toFixed(2);
-               $(e).parent().parent().find('.cutrate').val(cutrate+'%');
+               $(e).parent().parent().find('.cutrate').val(cutrate);
             }else if(cname=='cutrate'){//分配奖励比例
                var cutrate = parseFloat($(e).val());
                var cutcom = countcom*cutrate/100;

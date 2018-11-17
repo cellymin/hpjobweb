@@ -2177,7 +2177,7 @@ class userControl extends myControl {
                 if(intval($info['cutcommission'])==0){
                     $this->error('没有操作金额');
                 }
-                $entrycommission = $info['cutcommission'];
+                $entrycommission = $info['commission'];
                 M('user')->exe("UPDATE hp_user SET commission=commission+".$entrycommission." WHERE uid =". $_GET['uid']);
                 $tab->insert(array('uid'=>$_GET['uid'],'content'=>'您于'.date('Y-m-d H:i:s',$info['create_time']).'季度佣金已经通过审核，5元佣金已经到账，如有疑问请联系客服4006920099！','title'=>'系统消息','created'=>time()));
                 $hidden = array(
@@ -2495,6 +2495,11 @@ class userControl extends myControl {
             //$commissionByUid =  M('commission_log')->query("select uid,SUM(commission) from hp_commission_log where type=2 and verify=1 and root_time>".$start." and root_time<".$end." group by uid");
             //$commissionByUid =M('commission_log')->query("SELECT a.username,SUM(a.commission),a.uid,count(a.from_id) FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.from_id=b.uid left join hp_role as c on b.rid=c.rid
 //where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end."  and c.title='求职者' group by uid");
+            $aa = $year.'_'.$quarter;
+            $ifcunzaiqar = M('commission_log')->where(array('quarter'=>$aa))->count();
+            if($ifcunzaiqar>0){
+                Json_error('当前季度已生成数据');
+            }
             $commissionByUid =M('commission_log')->query("SELECT a.username,SUM(a.commission) as countcom,a.uid,count(a.from_id) FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.uid=b.uid left join hp_role as c on b.rid=c.rid 
 where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end." and c.title='求职者' and a.from_id>0  group by uid HAVING countcom>0" );
             $commissionByUid1 =M('commission_log')->query("SELECT a.id,a.uid FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.uid=b.uid left join hp_role as c on b.rid=c.rid 
@@ -2510,8 +2515,8 @@ where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end.
                    'uid'=>$v['uid'],//经纪人id
                    'content'=>$year.'第'.$quarter.'季度入职返现佣金',//记录日志
                    'username'=>$v['username'], //经纪人手机号
-                   'commission'=>$v['countcom'],//经纪人该季度所得佣金总额
-                   'cutcommission'=>0,//经纪人该季度分配的佣金
+                   'cutcommission'=>$v['countcom'],//经纪人该季度所得佣金总额
+                   'commission'=>0,//经纪人该季度分配的佣金
                    'quarterrate'=>0, //经纪人该季度佣金池占比
                    'type'=>4,//季度佣金
                    'quarter'=>$year.'_'.$quarter ,//季度标识 2015_1
@@ -2548,9 +2553,10 @@ where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end.
         $cond['type'] = 4;
         $users = $this->user->quarterList($cond);
         //季度佣金可分配总额
-        $quarterSum = M('commission_log')->query("SELECT IFNULL(SUM(COMMISSION),0) as qtotal FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
+        $quarterSum = M('commission_log')->query("SELECT IFNULL(SUM(cutcommission),0) as qtotal FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
         //季度佣金分配掉的金额 ，占比 因为很多经纪人的初始分配奖励为0 不能直接计算神域可分配金额
-        $quarterSumUse = M('commission_log')->query("SELECT IFNULL(SUM(cutcommission),0) as suncom,IFNULL(SUM(quarterrate),0) as sunrate FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
+        $quarterSumUse = M('commission_log')->query("SELECT IFNULL(SUM(commission),0) as suncom,IFNULL(SUM(quarterrate),0) as sunrate FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
+
         $remainSum = round(floatval($quarterSum[0]['qtotal'])*0.1-floatval($quarterSumUse[0]['suncom']),3);//剩余可分配
         $remainRate = 1-floatval($quarterSumUse[0]['sunrate']);//剩余占比
 
@@ -2575,15 +2581,15 @@ where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end.
             $quarter = intval($_POST['year']).'_'.intval($_POST['quarter']);//季度
         }
         //季度佣金可分配总额
-        $quarterSum = M('commission_log')->query("SELECT IFNULL(SUM(COMMISSION),0) as qtotal FROM hp_commission_log WHERE quarter='".$quarter."' AND type=4");
+        $quarterSum = M('commission_log')->query("SELECT IFNULL(SUM(cutcommission),0) as qtotal FROM hp_commission_log WHERE quarter='".$quarter."' AND type=4");
         //季度佣金分配掉的金额 ，占比 因为很多经纪人的初始分配奖励为0 不能直接计算神域可分配金额
-        $quarterSumUse = M('commission_log')->query("SELECT IFNULL(SUM(cutcommission),0) as suncom,IFNULL(SUM(quarterrate),0) as sunrate FROM hp_commission_log WHERE quarter='".$quarter."' AND type=4");
+        $quarterSumUse = M('commission_log')->query("SELECT IFNULL(SUM(commission),0) as suncom,IFNULL(SUM(quarterrate),0) as sunrate FROM hp_commission_log WHERE quarter='".$quarter."' AND type=4");
         $remainSum = floatval($quarterSum[0]['qtotal'])*0.1-floatval($quarterSumUse[0]['suncom']);//剩余可分配
        if($_POST['id']){
            foreach ($_POST['id'] as $k=>$v) {
                $info = array();
                $info = explode('_',$v);
-               $mess['cutcommission']=$info[1];
+               $mess['commission']=$info[1];
                $mess['quarterrate']=$info[2];
                $update = M('commission_log')->where(array('id'=>$info[0]))->update($mess);
            }

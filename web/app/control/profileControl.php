@@ -63,7 +63,6 @@ class profileControl extends Control {
              $ba = M('resume_basic');
              $uid = $_POST['uid'];
              $default = $re->where('uid = '.$uid)->find();
-
              if(isset($_POST['code'])){
 
                  $code = validateSmsCode($_POST['telephone'],$_POST['code']);
@@ -246,7 +245,7 @@ class profileControl extends Control {
                      $uname =  $db->query("SELECT username FROM  hp_user where uid=".intval($info[0]['normalmanid']));//邀请人用户名，手机号
                      $num = M('resume')->where(array('uid'=>$_POST['uid'],'verify'=>1))->count();//现存有效简历数量,简历数量大于0不再计数
                      $invite_commission = getPointRule('inviteCommission');
-                     if($if_exist==0 && $num==0 && intval($info[0]['verify'])==3) { //没有创建简历，没有返现邀请人过邀请佣金,已经认证通过
+                     if($if_exist==0 && $num==1 && intval($info[0]['verify'])==3) { //没有创建简历，没有返现邀请人过邀请佣金,已经认证通过
                          $mess = [];
                          $mess['uid'] = intval($info[0]['normalmanid']);//邀请人
                          $mess['content'] = '邀请返现';
@@ -254,7 +253,7 @@ class profileControl extends Control {
                          $mess['username'] = $uname[0]['username'];//邀请人姓名，可用于手机号
                          $mess['create_time'] = time();
                          $mess['type'] = 3;
-                         $mess['from_id'] = $_GET['uid'];//被邀请人
+                         $mess['from_id'] = $_POST['uid'];//被邀请人
                          $mess['verify'] = 0;//未审核
                          $res2 = M('commission_log')->insert($mess);
                      }
