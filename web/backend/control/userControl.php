@@ -1266,7 +1266,6 @@ class userControl extends myControl {
                     }else{
                         $reway = explode(',',$v['return_money']);
                     }
-
                     if(!empty($reway[0])){ //第一个数组元素不为空可能是男士可能是女士
                         $rewayinfo[0] = explode(' ',$reway[0]);
                         if(count($rewayinfo[0])==1){
@@ -1323,6 +1322,7 @@ class userControl extends myControl {
                                 }
                             }
                         }else if(strpos($reway[0],'女') !== false){ //女士有返现
+
                             if($v['gender']==1){ //投递人是女士
                                 if($rewayinfo[0][1]=='月返'){
                                     //入职日向后推一个月
@@ -1384,7 +1384,7 @@ class userControl extends myControl {
                                 //入职日向后推一个月
                                 $welday = strtotime("+1 months", $v[entry_time]);
                                 $pretime =intval($v['resign_time'])>0?intval($v['resign_time']):time();//截止到离职日期或者当前日期
-                                if((int)$welday<=$pretime){//返现日期是今日或者今日之前添加佣金记录
+                                if((int)$welday<=$pretime){ //返现日期是今日或者今日之前添加佣金记录
                                     //$rewayinfo[1][2] 返现佣金 可能不是数字 类似市场价一类的
                                     $deliverid[]=$v['id'];
                                     $comloginfo[] = array (
@@ -1403,7 +1403,7 @@ class userControl extends myControl {
                                     );
                                 }
                             }else{
-                                $str=$rewayinfo[0][1];
+                                $str=$rewayinfo[1][1];
                                 if(preg_match('/\d+/',$str,$arr)) {
                                     $welday = strtotime('+'.$arr[0].' days',$v['entry_time']);
                                     $pretime =intval($v['resign_time'])>0?intval($v['resign_time']):time();//截止到离职日期或者当前日期
@@ -1590,7 +1590,7 @@ class userControl extends myControl {
                                         );
                                     }
                                 }else{
-                                    $str=$rewayinfo[0][1];
+                                    $str=$rewayinfo[1][1];
                                     if(preg_match('/\d+/',$str,$arr)) {
                                         $welday = strtotime('+'.$arr[0].' days',$vv['entry_time']);
                                         $pretime =intval($vv['resign_time'])>0?intval($vv['resign_time']):time();//截止到离职日期或者当前日期
@@ -2496,9 +2496,9 @@ class userControl extends myControl {
             //$commissionByUid =M('commission_log')->query("SELECT a.username,SUM(a.commission),a.uid,count(a.from_id) FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.from_id=b.uid left join hp_role as c on b.rid=c.rid
 //where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end."  and c.title='求职者' group by uid");
             $commissionByUid =M('commission_log')->query("SELECT a.username,SUM(a.commission) as countcom,a.uid,count(a.from_id) FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.uid=b.uid left join hp_role as c on b.rid=c.rid 
-where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end." and c.title='求职者'  group by uid HAVING countcom>0" );
+where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end." and c.title='求职者' and a.from_id>0  group by uid HAVING countcom>0" );
             $commissionByUid1 =M('commission_log')->query("SELECT a.id,a.uid FROM `hp_commission_log`  as a left JOIN hp_user_role as b on a.uid=b.uid left join hp_role as c on b.rid=c.rid 
-where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end." and c.title=' 求职者'");//该季度佣金来源及所对应的佣金id
+where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end." and c.title=' 求职者' and a.from_id>0");//该季度佣金来源及所对应的佣金id
             foreach ($commissionByUid1 as $k=>$v){
                 $aa[$v['uid']][]=$v['id'];//uid对应的来源佣金可用来查明细
             }
