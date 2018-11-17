@@ -1594,7 +1594,7 @@ class authControl extends Control {
         if ($this->auth->is_logged_in()) {
             $db=M('commission_log');
             //如果没有入职返现记录
-                if($re=$db->where('uid = '.$_SESSION['uid'])->field('create_time,uid,job_time,company,content,commission')->order('create_time desc')->findall()){
+                if($re=$db->where(array('uid'=>$_SESSION['uid'],'verify'=>1))->field('create_time,uid,job_time,company,content,commission')->order('create_time desc')->findall()){
                     Json_success('获取成功',$re);
                 }else{
                     Json_error('没有数据');
