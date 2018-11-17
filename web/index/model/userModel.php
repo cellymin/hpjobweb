@@ -34,7 +34,7 @@ class userModel extends Model {
     /**
      * 添加用户
      * @param type $user_data POST数据
-     * @return boolean 
+     * @return boolean
      */
     function addUser($user_data = '', $table = 'user') {
         if ($user_data == '') {
@@ -106,9 +106,9 @@ class userModel extends Model {
             $users=array();
             $users['user']=$db->where($cond['user'],$cond['group'])->order('created desc')->findall($page->limit());
             $users['page']=$page->show();
-		    $users['num']=$nums;	
+            $users['num']=$nums;
         }else{
-             $db=V('user');
+            $db=V('user');
             $db->view=array(
                 'user_role'=>array(
                     'type'=>'left',
@@ -124,27 +124,9 @@ class userModel extends Model {
             $users=array();
             $users['user']=$db->where($cond['user'])->order('created desc')->findall($page->limit());
             $users['page']=$page->show();
-	      $users['num']=$nums;
+            $users['num']=$nums;
         }
         return $users;
-    }
-    function quarterList($cond=array()) {
-        $db = M('commission_log');
-//            $db=V('commission_log');
-//            $db->view=array(
-//                'user_info'=>array(
-//                    'type'=>'left',
-//                    'on'=>'commission_log.uid =user_info.uid',
-//                )
-//            );
-            $nums=$db->where($cond)->count();
-            $page=new page($nums,20);
-            $commission=array();
-            $commission['user']=$db->where($cond)->order('commission_log.create_time desc')->findall($page->limit());
-            $commission['page']=$page->show();
-            $commission['num']=$nums;
-
-        return $commission;
     }
 
     /**
