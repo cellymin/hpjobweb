@@ -1119,7 +1119,7 @@ class userControl extends myControl {
 //        echo '<pre/>';
 //        var_dump($cond);
 //        var_dump($commissions);
-        //die();
+//        die();
         foreach($commissions as $key=>$val){
             $uid = $val['uid'];//邀请人uid
             $resume = M('user_info')->where('uid = '.$uid)->find();
@@ -1254,6 +1254,9 @@ class userControl extends myControl {
             if(empty($res)){
                 $this->success('没有数据要生成');
             }
+//            echo '<pre/>';
+//            var_dump($res);
+//            die();
             foreach ($res as $k=>$v){
                 if($v['unum']==1){ //时间段内只入职了一次，查到相应职位看条件是否符合
                     if(strpos($v['return_money'],',') !== false) { //英文逗号
@@ -1267,7 +1270,7 @@ class userControl extends myControl {
                     if(!empty($reway[0])){ //第一个数组元素不为空可能是男士可能是女士
                         $rewayinfo[0] = explode(' ',$reway[0]);
                         if(count($rewayinfo[0])==1){
-                            $this->success('职位返现格式不正确');
+                          //  $this->success('职位返现格式不正确');
                         }
                         if(strpos($reway[0],'男') !== false){ //男士有返现
                             if($v['gender']==0){ //投递人是男士
@@ -2160,7 +2163,7 @@ class userControl extends myControl {
             $arr['root'] = $_SESSION['username'];
             M('commission_log')->where(array('id'=>$_GET['id']))->update($arr);
             if($info['type'] == 3){
-                $share_commission = getPointRule('shareCommission');
+                $share_commission = getPointRule('inviteCommission');
                 M('user')->inc('commission','uid = '.$_GET['uid'],$share_commission);
                 $tab->insert(array('uid'=>$_GET['uid'],'content'=>'您于'.date('Y-m-d H:i:s',$info['create_time']).'参与的分享邀请佣金已经通过审核，5元佣金已经到账，如有疑问请联系客服4006920099！','title'=>'系统消息','created'=>time()));
                 $hidden = array(
@@ -2215,8 +2218,9 @@ class userControl extends myControl {
         $commission = M('user')->where(array('uid'=>$_GET['uid']))->find();
         $client_id = $commission['client_id'];
         $info = M('commission_into')->where(array('id'=>$_GET['id']))->find();
-        $from_user = M('user')->where('uid = ' . $commission['normalmanid'])->find();//邀请人信息
-
+        if($commission['normalmanid']>0){
+            $from_user = M('user')->where('uid = ' . $commission['normalmanid'])->find();//邀请人信息
+        }
         if($_GET['name']=='3' && $info['type'] == 3 && (int)$_GET['mon']>0 ){ //审核通过 入职返现状态改变 用户表佣金数值变化 如果是第一次得到入职返现邀请人得到10%入职返现
             //查询是否给经纪人返过入职返现
            if( $commission['normalmanid']>0){
@@ -2237,6 +2241,19 @@ class userControl extends myControl {
             //用户佣金金额变化
             $usercom['commission']=$commission['commission']+intval($_GET['mon']);
             M('user')->where(array('uid'=>$_GET['uid']))->update($usercom);
+
+            // 添加佣金记录
+            $userdata = array(
+                'uid'=>$_GET['uid'],
+                'content'=>'入职返现',
+                'commission'=>'+'.intval($_GET['mon']),
+                'username'=>$commission['username'],
+                'create_time'=>time(),
+                'from_id'=>0,
+                'type'=>'2',
+                'verify'=>'1'
+            );
+            M('commission_log')->insert($userdata);
 
             //更改佣金审核状态
             $arr['status'] = 1;
@@ -2534,7 +2551,7 @@ where a.type=2 and a.verify=1 and a.root_time>".$start." and a.root_time<".$end.
         $quarterSum = M('commission_log')->query("SELECT IFNULL(SUM(COMMISSION),0) as qtotal FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
         //季度佣金分配掉的金额 ，占比 因为很多经纪人的初始分配奖励为0 不能直接计算神域可分配金额
         $quarterSumUse = M('commission_log')->query("SELECT IFNULL(SUM(cutcommission),0) as suncom,IFNULL(SUM(quarterrate),0) as sunrate FROM hp_commission_log WHERE quarter='".$cond['quarter']."' AND type=4");
-        $remainSum = floatval($quarterSum[0]['qtotal'])*0.1-floatval($quarterSumUse[0]['suncom']);//剩余可分配
+        $remainSum = round(floatval($quarterSum[0]['qtotal'])*0.1-floatval($quarterSumUse[0]['suncom']),3);//剩余可分配
         $remainRate = 1-floatval($quarterSumUse[0]['sunrate']);//剩余占比
 
         $count = $users['num'];

@@ -132,7 +132,11 @@
                 </td>
 
                 {elseif value="$commission.verify==0"}
-                未审核
+                <td>未审核</td>
+                {elseif value="$commission.verify==1"}
+                <td>已审核通过</td>
+                {elseif value="$commission.verify==2"}
+                <td>已审核不通过</td>
                 {else}
                 <td>无</td>
                 {/if}
