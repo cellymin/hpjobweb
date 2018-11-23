@@ -48,62 +48,62 @@ class authControl extends Control {
      * @return  void  返回类型
      */
     function login(){
-            //验证字段
-            $tab = M('user');
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-            $user_temp = M('user')->where("username = '$username'")->find();
-            if(empty($user_temp)){
-                Json_error('用户不存在');
+        //验证字段
+        $tab = M('user');
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $user_temp = M('user')->where("username = '$username'")->find();
+        if(empty($user_temp)){
+            Json_error('用户不存在');
+        }
+        if ($this->auth->auth_user_login($username,$password)) {
+            if (!empty($_POST['client_id'])) {//存入设备id
+                $tab->where('uid = ' . $_SESSION['uid'])->update(['client_id' => $_POST['client_id'],'lng'=>$_POST['lng'],'lat'=>$_POST['lat']]);
             }
-            if ($this->auth->auth_user_login($username,$password)) {
-                if (!empty($_POST['client_id'])) {//存入设备id
-                    $tab->where('uid = ' . $_SESSION['uid'])->update(['client_id' => $_POST['client_id'],'lng'=>$_POST['lng'],'lat'=>$_POST['lat']]);
-                }
-                $user = $tab->where('uid=' . $_SESSION['uid'])->find();
-                if(empty($user_temp['last_login']) && !empty($user['from_id'])){ //是否是被邀请人
+            $user = $tab->where('uid=' . $_SESSION['uid'])->find();
+            if(empty($user_temp['last_login']) && !empty($user['from_id'])){ //是否是被邀请人
 
-                    $from_user = M('user')->where('uid = ' . $user['from_id'])->find();
-                    $share_commission = getPointRule('shareCommission');
-                    $data = array(
-                        'uid'=>$user['from_id'],
-                        'content'=>'邀请返现',
-                        'commission'=>'+'.$share_commission,
-                        'username'=>$from_user['username'],
-                        'create_time'=>time(),
-                        'from_id'=>$_SESSION['uid'],
-                        'type'=>'3'
-                    );
-                    M('commission_log')->insert($data);
+                $from_user = M('user')->where('uid = ' . $user['from_id'])->find();
+                $share_commission = getPointRule('shareCommission');
+                $data = array(
+                    'uid'=>$user['from_id'],
+                    'content'=>'邀请返现',
+                    'commission'=>'+'.$share_commission,
+                    'username'=>$from_user['username'],
+                    'create_time'=>time(),
+                    'from_id'=>$_SESSION['uid'],
+                    'type'=>'3'
+                );
+                M('commission_log')->insert($data);
 
-                    $point = getPointRule('bInvite');//获得应扣取积分
+                $point = getPointRule('bInvite');//获得应扣取积分
 
-                    deductPoint($point,$_SESSION['uid']);//增加积分
+                deductPoint($point,$_SESSION['uid']);//增加积分
 
-                    $con = '被邀请得积分';
+                $con = '被邀请得积分';
 
-                    $data = array(
-                        'uid' => $_SESSION['uid'],
-                        'content' => $con,
-                        'point' => '+' . $point,
-                        'created' => time(),
-                        'ip' => ip_get_client(),//操作ip
-                        'username' => $username,
-                        'time' => time(),
-                        'type' => 0
-                    );
-                    M('opt_log')->insert($data);
-                }
-
-                $user['sessionid'] = $_SESSION['sessionid'];
-
-                $_SESSION['rid'] = $_SESSION['role']['rid'];
-                $user['rid']=$_SESSION['rid'][0];
-                M('user')->where('uid = '.$_SESSION['uid'])->update(array('is_online'=>1,'last_login'=>time()));//登陆更改在线状态
-                    Json_success('登录成功',$user);
-            } else {
-                Json_error('登录失败'.$this->auth->error);
+                $data = array(
+                    'uid' => $_SESSION['uid'],
+                    'content' => $con,
+                    'point' => '+' . $point,
+                    'created' => time(),
+                    'ip' => ip_get_client(),//操作ip
+                    'username' => $username,
+                    'time' => time(),
+                    'type' => 0
+                );
+                M('opt_log')->insert($data);
             }
+
+            $user['sessionid'] = $_SESSION['sessionid'];
+
+            $_SESSION['rid'] = $_SESSION['role']['rid'];
+            $user['rid']=$_SESSION['rid'][0];
+            M('user')->where('uid = '.$_SESSION['uid'])->update(array('is_online'=>1,'last_login'=>time()));//登陆更改在线状态
+            Json_success('登录成功',$user);
+        } else {
+            Json_error('登录失败'.$this->auth->error);
+        }
     }
 
     /**
@@ -263,7 +263,7 @@ class authControl extends Control {
 
     /**
      * Ajax查找用户是否存在
-     * @param type $username 
+     * @param type $username
      */
     function userExist() {
         $username = $_POST['name'];
@@ -370,7 +370,7 @@ class authControl extends Control {
         }
         setcookie(C('AUTH_AUTOLOGIN_COOKIE_NAME'), '', time() - 100000, '/'); //删除cookie
         $this->session_destroy();
-            Json_success('注销成功');
+        Json_success('注销成功');
 
     }
 
@@ -521,41 +521,33 @@ class authControl extends Control {
      * @author liuzhipeng
      * @return  void  返回类型
      */
-        public function password(){
+    public function password(){
 
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-                $username=$_POST['username'];
+            $username=$_POST['username'];
 
-                $data['newpassword'] = $_POST['pwd'];
+            $data['newpassword'] = $_POST['pwd'];
 
-                $db=M('user');
+            $db=M('user');
 
-                $userinfo=$db->where(array('username'=>$username))->find();
+            $userinfo=$db->where(array('username'=>$username))->find();
 
-                if(empty($userinfo)){
-                    Json_error('用户不存在');
+            if(empty($userinfo)){
+                Json_error('用户不存在');
+            }
+            if($userinfo['password']!=md5_d($_POST['old_pwd'])){
+                Json_error('原始密码错误，修改用户密码失败。');
+            }
+
+            if(empty($userinfo['phone'])){
+
+                $huanxinResult = $this->modifyHuanXinPassword($username,$_POST['pwd']);
+
+                if(!empty($huanxinResult['error'])){
+                    Json_error('修改失败');
                 }
-                if($userinfo['password']!=md5_d($_POST['old_pwd'])){
-                    Json_error('原始密码错误，修改用户密码失败。');
-                }
-
-                if(empty($userinfo['phone'])){
-
-                    $huanxinResult = $this->modifyHuanXinPassword($username,$_POST['pwd']);
-
-                    if(!empty($huanxinResult['error'])){
-                        Json_error('修改失败');
-                    }
-                }else{//修改环信
-                    if(($db->where('uid='.$userinfo['uid'])->update(array('password'=>md5_d($_POST['pwd'])))>=0)){
-                        session_destroy();
-                        Json_success('密码修改成功，请重新登录。');
-                    }else{
-                        Json_success('修改失败le');
-                    }
-                }
-
+            }else{//修改环信
                 if(($db->where('uid='.$userinfo['uid'])->update(array('password'=>md5_d($_POST['pwd'])))>=0)){
                     session_destroy();
                     Json_success('密码修改成功，请重新登录。');
@@ -563,27 +555,35 @@ class authControl extends Control {
                     Json_success('修改失败le');
                 }
             }
-        }
 
-        private function modifyHuanXinPassword($username,$newpassword){
-
-            $url = $this->url . "/token";
-            $data = array(
-                'grant_type' => 'client_credentials',
-                'client_id' => $this->client_id,
-                'client_secret' => $this->client_secret
-            );
-            $rs = json_decode($this->curl($url, $data), true);
-            $token = $rs['access_token'];
-            $url = $this->url . "/users/".$username."/password";
-            $header = array(
-                'Authorization: Bearer ' . $token
-            );
-            $arr=array(
-                'newpassword'=>$newpassword,
-            );
-            return json_decode($this->curl($url, $arr, $header,"PUT"),true);
+            if(($db->where('uid='.$userinfo['uid'])->update(array('password'=>md5_d($_POST['pwd'])))>=0)){
+                session_destroy();
+                Json_success('密码修改成功，请重新登录。');
+            }else{
+                Json_success('修改失败le');
+            }
         }
+    }
+
+    private function modifyHuanXinPassword($username,$newpassword){
+
+        $url = $this->url . "/token";
+        $data = array(
+            'grant_type' => 'client_credentials',
+            'client_id' => $this->client_id,
+            'client_secret' => $this->client_secret
+        );
+        $rs = json_decode($this->curl($url, $data), true);
+        $token = $rs['access_token'];
+        $url = $this->url . "/users/".$username."/password";
+        $header = array(
+            'Authorization: Bearer ' . $token
+        );
+        $arr=array(
+            'newpassword'=>$newpassword,
+        );
+        return json_decode($this->curl($url, $arr, $header,"PUT"),true);
+    }
 
     /**
      * @Title: have_login
@@ -667,6 +667,7 @@ class authControl extends Control {
             }
 
             $data['type'] = empty($_POST['type'])?'app':$_POST['type'];
+            $data['is_yewu'] = 1;
 
             if($this->auth->register($data)) {
 
@@ -945,16 +946,16 @@ class authControl extends Control {
             }
         }
 
-            $uid=$_SESSION['uid'];
-            $point = M('user_point')->where('uid = '.$uid)->field('point')->find();
-            $re=$db->where('uid = '.$uid)->field('uid,gender,username,nickname,avatar,hometown,birthday,address,is_bind')->find();
-            $re['phone']=$_SESSION['username'];
-            $re['point']=$point['point'];
-            if(!empty($re)){
-                Json_success('获取成功',$re);
-            }else{
-                Json_error('空');
-            }
+        $uid=$_SESSION['uid'];
+        $point = M('user_point')->where('uid = '.$uid)->field('point')->find();
+        $re=$db->where('uid = '.$uid)->field('uid,gender,username,nickname,avatar,hometown,birthday,address,is_bind')->find();
+        $re['phone']=$_SESSION['username'];
+        $re['point']=$point['point'];
+        if(!empty($re)){
+            Json_success('获取成功',$re);
+        }else{
+            Json_error('空');
+        }
 
     }
 
@@ -1180,7 +1181,7 @@ class authControl extends Control {
             $re['point'] = $point['point'];
 
             if($re['verify']==0){
-               Json_success('未认证',$re);
+                Json_success('未认证',$re);
             }elseif($re['verify']==1){
                 Json_success('已认证,请等待审核',$re);
             }elseif($re['verify']==2) {
@@ -1320,71 +1321,71 @@ class authControl extends Control {
                 }
             }
 
-                C('UPLOAD_IMG_DIR','');
-                C('THUMB_ENDFIX','');//只生成头像缩略图
-                $upload=new upload(PATH_ROOT.'/uploads/user_info',array('jpg','jpeg','png','gif'));
+            C('UPLOAD_IMG_DIR','');
+            C('THUMB_ENDFIX','');//只生成头像缩略图
+            $upload=new upload(PATH_ROOT.'/uploads/user_info',array('jpg','jpeg','png','gif'));
 
-                $info=$upload->upload();
+            $info=$upload->upload();
 
-                if($info){
-                    $avatar=$info[0]['path'];
-                }
+            if($info){
+                $avatar=$info[0]['path'];
+            }
 
-                if(empty($info)){
+            if(empty($info)){
 
-                    /**
-                     * 新版本 新增身份证正反面识别  2017-02-14
-                     */
-                    if(!empty($_POST['face_base'])&&!empty($_POST['back_base'])){
+                /**
+                 * 新版本 新增身份证正反面识别  2017-02-14
+                 */
+                if(!empty($_POST['face_base'])&&!empty($_POST['back_base'])){
 
-                        $href = '/var/www/html/hpjobweb';
+                    $href = '/var/www/html/hpjobweb';
 
-                        $data = validateIdCardImg(base64_encode(file_get_contents($href.'/'.$_POST['face_base'])),base64_encode(file_get_contents($href.'/'.$_POST['back_base'])));
+                    $data = validateIdCardImg(base64_encode(file_get_contents($href.'/'.$_POST['face_base'])),base64_encode(file_get_contents($href.'/'.$_POST['back_base'])));
 
 //                        $data = validateIdCardImg($_POST['face_base'],$_POST['back_base']);
-                        if(empty($data[0]['num'])){
+                    if(empty($data[0]['num'])){
 
-                            Json_error('未识别身份证,请重新上传');
-                        }else{
-
-                            $id=$db->where(array('id_number'=>$data[0]['num']))->field('uid')->findall();
-
-                            foreach($id as $key=>$val){
-
-                                if($val['uid'] != $_SESSION['uid']){
-
-                                    Json_error('身份证已和其他账号关联');
-                                }
-                            }
-
-                            if($data[0]['sex'] == '男'){
-
-                                $sex = 0;
-                            }else{
-
-                                $sex = 1;
-                            }
-
-                            $db->where(['uid'=>$_SESSION['uid']])->update(['gender'=>$sex,'name'=>$data[0]['name'],'verify'=>1,'id_number'=>$data[0]['num'],'card_address'=>$data[0]['address'],'card_start_time'=>$data[1]['start_date'],'card_end_time'=>$data[1]['end_date'],'apply_time'=>time()]);
-
-                            Json_success('身份证识别已通过,请等待管理员审核');
-                        }
+                        Json_error('未识别身份证,请重新上传');
                     }else{
 
-                        Json_error('请完整上传正反面');
+                        $id=$db->where(array('id_number'=>$data[0]['num']))->field('uid')->findall();
+
+                        foreach($id as $key=>$val){
+
+                            if($val['uid'] != $_SESSION['uid']){
+
+                                Json_error('身份证已和其他账号关联');
+                            }
+                        }
+
+                        if($data[0]['sex'] == '男'){
+
+                            $sex = 0;
+                        }else{
+
+                            $sex = 1;
+                        }
+
+                        $db->where(['uid'=>$_SESSION['uid']])->update(['gender'=>$sex,'name'=>$data[0]['name'],'verify'=>1,'id_number'=>$data[0]['num'],'card_address'=>$data[0]['address'],'card_start_time'=>$data[1]['start_date'],'card_end_time'=>$data[1]['end_date'],'apply_time'=>time()]);
+
+                        Json_success('身份证识别已通过,请等待管理员审核');
                     }
+                }else{
 
-                }else {
-
-                    $data=array(
-                        'name'=>$_POST['name'],
-                        'gender'=>$_POST['gender'],
-                        'id_number'=>$_POST['id_number'],
-                        'photo'=>__ROOT__ .'/'.$avatar,
-                        'verify'=>1,
-                        'apply_time'=>time()
-                    );
+                    Json_error('请完整上传正反面');
                 }
+
+            }else {
+
+                $data=array(
+                    'name'=>$_POST['name'],
+                    'gender'=>$_POST['gender'],
+                    'id_number'=>$_POST['id_number'],
+                    'photo'=>__ROOT__ .'/'.$avatar,
+                    'verify'=>1,
+                    'apply_time'=>time()
+                );
+            }
 
             if($db->where(array('uid'=>$_SESSION['uid']))->update($data)){
                 $log = M('opt_log')->where('uid = '.$_SESSION['uid'])->find();
@@ -1486,8 +1487,8 @@ class authControl extends Control {
      * @author liuzhipeng
      * @return  void  返回类型
      */
-        public function withdraw()
-        {
+    public function withdraw()
+    {
         if ($this->auth->is_logged_in()) {
 
             $code_true = validateSmsCode($_POST['phone'],$_POST['code']);
@@ -1520,65 +1521,65 @@ class authControl extends Control {
                 if(empty($_POST['bank_account']) || empty($_POST['account_name']) ||empty($_POST['bank'])){
                     Json_error('银行相关信息都没有，怎么给你提现');
                 }
-                    if ($_POST['amount'] > $commission['commission']) {
-                        Json_error('佣金不足');
-                    } else {
-
-                        if($db->insert($data)) {
-                            $cut = $commission['commission'] - $_POST['amount'];
-                            M('user')->where(array('uid'=>$_SESSION['uid']))->update(array('commission' => $cut));
-                            $arr = array(
-                                'uid'=>$_SESSION['uid'],
-                                'content'=>'提现',
-                                'commission'=>'-'.$_POST['amount'],
-                                'username'=>$commission['username'],
-                                'create_time'=>time(),
-                                'type'=>'1'
-                            );
-                            M('commission_log')->insert($arr);
-                            Json_success('提现成功，请等待审核');
-                        }else{
-                            Json_error('提现失败');
-                        }
-                    }
-
+                if ($_POST['amount'] > $commission['commission']) {
+                    Json_error('佣金不足');
                 } else {
-                    $data = array(
-                        'uid' => $_SESSION['uid'],
-                        'amount' => $_POST['amount'],
-                        'bank_account' => $re['bank_account'],
-                        'account_name' => $re['account_name'],
-                        'bank' => $re['bank'],
-                        'phone' => $_POST['phone'],
-                        'code' => $_POST['code'],
-                        'create_time' => time(),
-                        'update_time' => time($_POST['create_time'])
-                    );
+
+                    if($db->insert($data)) {
+                        $cut = $commission['commission'] - $_POST['amount'];
+                        M('user')->where(array('uid'=>$_SESSION['uid']))->update(array('commission' => $cut));
+                        $arr = array(
+                            'uid'=>$_SESSION['uid'],
+                            'content'=>'提现',
+                            'commission'=>'-'.$_POST['amount'],
+                            'username'=>$commission['username'],
+                            'create_time'=>time(),
+                            'type'=>'1'
+                        );
+                        M('commission_log')->insert($arr);
+                        Json_success('提现成功，请等待审核');
+                    }else{
+                        Json_error('提现失败');
+                    }
+                }
+
+            } else {
+                $data = array(
+                    'uid' => $_SESSION['uid'],
+                    'amount' => $_POST['amount'],
+                    'bank_account' => $re['bank_account'],
+                    'account_name' => $re['account_name'],
+                    'bank' => $re['bank'],
+                    'phone' => $_POST['phone'],
+                    'code' => $_POST['code'],
+                    'create_time' => time(),
+                    'update_time' => time($_POST['create_time'])
+                );
                 if($_POST['amount']<50){
                     Json_error('满50才能提现哦!亲!');
                 }
 
-                    if ($_POST['amount'] > $commission['commission']) {
-                        Json_error('佣金不足');
-                    } else {
-                        if($db->insert($data)) {
-                            $cut = $commission['commission'] - $_POST['amount'];
-                            M('user')->where(array('uid'=>$_SESSION['uid']))->update(array('commission' => $cut));
-                            $arr = array(
-                                'uid'=>$_SESSION['uid'],
-                                'content'=>'提现',
-                                'commission'=>'-'.$_POST['amount'],
-                                'username'=>$commission['username'],
-                                'create_time'=>time(),
-                                'type'=>'1'
-                            );
-                            M('commission_log')->insert($arr);
-                            Json_success('提现成功');
-                        }else{
-                            Json_error('提现失败');
-                        }
+                if ($_POST['amount'] > $commission['commission']) {
+                    Json_error('佣金不足');
+                } else {
+                    if($db->insert($data)) {
+                        $cut = $commission['commission'] - $_POST['amount'];
+                        M('user')->where(array('uid'=>$_SESSION['uid']))->update(array('commission' => $cut));
+                        $arr = array(
+                            'uid'=>$_SESSION['uid'],
+                            'content'=>'提现',
+                            'commission'=>'-'.$_POST['amount'],
+                            'username'=>$commission['username'],
+                            'create_time'=>time(),
+                            'type'=>'1'
+                        );
+                        M('commission_log')->insert($arr);
+                        Json_success('提现成功');
+                    }else{
+                        Json_error('提现失败');
                     }
                 }
+            }
         }else {
             Json_error('未登录');
         }
@@ -1594,11 +1595,11 @@ class authControl extends Control {
         if ($this->auth->is_logged_in()) {
             $db=M('commission_log');
             //如果没有入职返现记录
-                if($re=$db->where(array('uid'=>$_SESSION['uid'],'verify'=>1))->field('create_time,uid,job_time,company,content,commission')->order('create_time desc')->findall()){
-                    Json_success('获取成功',$re);
-                }else{
-                    Json_error('没有数据');
-                }
+            if($re=$db->where(array('uid'=>$_SESSION['uid'],'verify'=>1))->field('create_time,uid,job_time,company,content,commission')->order('create_time desc')->findall()){
+                Json_success('获取成功',$re);
+            }else{
+                Json_error('没有数据');
+            }
         }else{
             Json_error('未登录');
         }
@@ -1709,10 +1710,10 @@ class authControl extends Control {
                 if (empty($sa)) {
                     Json_error('没有工资记录');
                 }
-                        $ta->where(array('id_number'=>$id_number))->update(array('query_number' => $number,'time'=>time()));
-                        $list = $ta->order('time desc')->where(array('id_number'=>$id_number))->limit('2')->findall();
+                $ta->where(array('id_number'=>$id_number))->update(array('query_number' => $number,'time'=>time()));
+                $list = $ta->order('time desc')->where(array('id_number'=>$id_number))->limit('2')->findall();
 
-                        Json_success('获取成功', $list);
+                Json_success('获取成功', $list);
 
             }else{//不在今天范围内
 //                Json_error('测试');
@@ -1729,10 +1730,10 @@ class authControl extends Control {
                 if (empty($sa)) {
                     Json_error('没有工资记录');
                 }
-                        $ta->where(array('id_number'=>$id_number))->update(array('query_number' => $number,'time'=>time()));
-                        $list = $ta->where(array('id_number'=>$id_number))->findall();
+                $ta->where(array('id_number'=>$id_number))->update(array('query_number' => $number,'time'=>time()));
+                $list = $ta->where(array('id_number'=>$id_number))->findall();
 
-                        Json_success('获取成功', $list);
+                Json_success('获取成功', $list);
             }
         }
     }
@@ -1924,9 +1925,9 @@ class authControl extends Control {
      * @author zhouchao
      * @return  void  返回类型
      */
-    public function share(){   
+    public function share(){
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {  
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
             $phone = $_POST['phone'];
@@ -1975,7 +1976,7 @@ class authControl extends Control {
                 Json_success('注册失败');
 
             }else{
-                 //var_dump($data);die;
+                //var_dump($data);die;
                 if ($this->auth->register($data)) {//注册成功 
 
 

@@ -1234,6 +1234,8 @@ class userControl extends myControl {
      * @return  void  返回类型
      */
     public function commission_into(){
+       echo  md5(serialize('123456'));
+       die();
         $_GET = urldecode_array($_GET);
         if($_GET['action']=='ruzhifanxian'){
             //获取所有62天之内入职的人员，

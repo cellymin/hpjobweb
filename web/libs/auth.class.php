@@ -137,13 +137,44 @@ class auth {
     function register($data) {
         $result = FALSE;
         $new_user = $data;
-        $new_user['password'] = md5_d($data['password']);
-        $new_user['is_bind'] = $data['is_bind'];
-        $new_user['last_ip'] = ip_get_client();
-        $new_user['rid'] = 8;//创建为求职者
+        if($data['salesmanid']){
+            $user = M('user')->where(array('uid'=>$data['salesmanid']))->find();
+            $new_user['branchname'] = $user['branchname'];
+            $new_user['salesmanname'] = $user['salesmanname'];
+            $new_user['salesmanphoneno'] = $user['salesmanphoneno'];
+            $new_user['salesmanid'] = $data['salesmanid'];
 
-        $new_user['unionid'] = $data['unionid'];
-        $new_user['type'] = $data['type'];
+            $new_user['password'] = md5_d($data['password']);
+            $new_user['is_bind'] = $data['is_bind'];
+            $new_user['last_ip'] = ip_get_client();
+            $new_user['rid'] = 8;//创建为求职者
+            $new_user['unionid'] = $data['unionid'];
+            $new_user['is_yewu'] = 1;
+            $new_user['type'] = '业务员';
+        }
+
+        //扫描普通用户场景
+        if($data['normalmanid']){
+            $new_user['normalmanid'] = $data['normalmanid'];
+            $new_user['password'] = md5_d($data['password']);
+            $new_user['is_bind'] = $data['is_bind'];
+            $new_user['last_ip'] = ip_get_client();
+            $new_user['rid'] = 8;//创建为求职者
+            $new_user['unionid'] = $data['unionid'];
+            $new_user['is_yewu'] = 1;
+            $new_user['type'] = '普通用户';
+        }
+
+        if(empty($data['salesmanid'])  && empty($data['normalmanid'])){
+            $new_user['password'] = md5_d($data['password']);
+            $new_user['is_bind'] = $data['is_bind'];
+            $new_user['last_ip'] = ip_get_client();
+            $new_user['rid'] = 8;//创建为求职者
+            $new_user['unionid'] = $data['unionid'];
+            $new_user['is_yewu'] = 1;
+            $new_user['type'] = 'app';
+        }
+
 
         // 发送电子邮件来激活用户
         if (C('AUTH_EMAIL_ACTIVATE')) {

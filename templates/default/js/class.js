@@ -44,9 +44,11 @@ var _system;
             'cid':_id,
             'ctitle':_title
         }
-        callWebView('getJobCategoryId',_data,function(response) {
-            alert(response);
-        });
+        console.log(_data);
+        return false;
+        // callWebView('getJobCategoryId',_data,function(response) {
+        //     alert(response);
+        // });
     })
 
 

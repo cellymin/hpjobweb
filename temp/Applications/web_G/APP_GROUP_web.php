@@ -243,7 +243,7 @@ class DBManage{
             $sqlFile=array_filter(array_map('trim', explode('---------lcphp-------------', file_get_contents($values[$index]))));
             foreach ($sqlFile as $v) {
                 if (empty($v))  continue;
-                    $this->db->exe($v);
+                $this->db->exe($v);
             }
             $url = url_remove_param('index') . '/index/' . ($index + 1);
             echo $url;
@@ -1722,7 +1722,7 @@ class Snoopy
                 if (isset($this->capath))
                     $context_opts['ssl']['capath'] = $this->capath;
             }
-                    
+
             $host = 'ssl://' . $host;
         }
 
@@ -2318,45 +2318,45 @@ class auth {
 
         $result = FALSE; //
 //        if (!empty($login) AND !empty($password)) {
-            $login_mode_func = 'get_login';
-            $login_mode_func_temp = $login_mode_func . '_temp';
-            $query = $this->auth_model->$login_mode_func($login);
-            if ($query) {
-                if ($query['banned'] > 0) {
-                    // 设置用户禁用
-                    $this->_banned = TRUE;
-                    $this->_ban_reason = $query['ban_reason'];
-                } else {//匹配密码
+        $login_mode_func = 'get_login';
+        $login_mode_func_temp = $login_mode_func . '_temp';
+        $query = $this->auth_model->$login_mode_func($login);
+        if ($query) {
+            if ($query['banned'] > 0) {
+                // 设置用户禁用
+                $this->_banned = TRUE;
+                $this->_ban_reason = $query['ban_reason'];
+            } else {//匹配密码
 //                    if (md5_d($password) == $query['password']) {
-                        $this->_auth_set_session($query);
-                        if ($query['newpass']) {
-                            // 清除重置密码
-                            $this->auth_model->clear_newpass($query['uid']);
-                        }
-                        if ($remember) {
-                            // 创建自动登录
-                            $this->_auth_create_autologin($query['uid']);
-                        }
+                $this->_auth_set_session($query);
+                if ($query['newpass']) {
+                    // 清除重置密码
+                    $this->auth_model->clear_newpass($query['uid']);
+                }
+                if ($remember) {
+                    // 创建自动登录
+                    $this->_auth_create_autologin($query['uid']);
+                }
 
-                        // 设置上次登录ip和时间
-                        $this->_set_last_ip_and_last_login($query['uid']);
-                        // 清楚登录尝试
-                        $this->_clear_login_attempts();
-                        $result = TRUE;
+                // 设置上次登录ip和时间
+                $this->_set_last_ip_and_last_login($query['uid']);
+                // 清楚登录尝试
+                $this->_clear_login_attempts();
+                $result = TRUE;
 //                    } else {//密码错误，设置错误次数
 //
 //                        $this->_increase_login_attempt();
 //                        $this->error = L('username_or_password_error');
 //                    }
-                }
-            } else if ($this->auth_model->$login_mode_func_temp($login)) {//查找用户是否已注册，但是未激活
-                $this->error = sprintf(L('user_not_activation'), $login);
-            } else {
-                // 增加登录尝试
-                $this->_increase_login_attempt();
-                // 设置错误信息
-                $this->error = L('login_username_not_exist'); //用户不存在
             }
+        } else if ($this->auth_model->$login_mode_func_temp($login)) {//查找用户是否已注册，但是未激活
+            $this->error = sprintf(L('user_not_activation'), $login);
+        } else {
+            // 增加登录尝试
+            $this->_increase_login_attempt();
+            // 设置错误信息
+            $this->error = L('login_username_not_exist'); //用户不存在
+        }
 //        } else {
 //            $this->error = L('no_username_or_pwd');
 //        }
@@ -2373,13 +2373,92 @@ class auth {
     function register($data) {
         $result = FALSE;
         $new_user = $data;
-        $new_user['password'] = md5_d($data['password']);
-        $new_user['is_bind'] = $data['is_bind'];
-        $new_user['last_ip'] = ip_get_client();
-        $new_user['rid'] = 8;//创建为求职者
+        if($data['is_yewu'] == 1){
+            //扫描业务员二维码的场景
+            if($data['salesmanid']){
+                $user = M('user')->where(array('uid'=>$data['salesmanid']))->find();
+                $new_user['branchname'] = $user['branchname'];
+                $new_user['salesmanname'] = $user['salesmanname'];
+                $new_user['salesmanphoneno'] = $user['salesmanphoneno'];
+                $new_user['salesmanid'] = $data['salesmanid'];
 
-        $new_user['unionid'] = $data['unionid'];
-        $new_user['type'] = $data['type'];
+                $new_user['password'] = md5_d($data['password']);
+                $new_user['is_bind'] = $data['is_bind'];
+                $new_user['last_ip'] = ip_get_client();
+                $new_user['rid'] = 8;//创建为求职者
+                $new_user['unionid'] = $data['unionid'];
+                $new_user['is_yewu'] = 1;
+                $new_user['type'] = '业务员';
+            }
+
+
+            //扫描门店场景
+            if($data['branch_id']){
+                //echo '111';die;
+                $branch = M('branch')->where(array('id'=>$data['branch_id']))->find();
+                //var_dump($branch);die;
+                $new_user['branchname'] = $branch['name'];
+
+                $new_user['password'] = md5_d($data['password']);
+                $new_user['is_bind'] = $data['is_bind'];
+                $new_user['last_ip'] = ip_get_client();
+                $new_user['rid'] = 8;//创建为求职者
+                $new_user['unionid'] = $data['unionid'];
+                $new_user['is_yewu'] = 1;
+                $new_user['type'] = '门店';
+            }
+
+
+
+            //扫描普通用户场景
+            if($data['normalmanid']){
+                $new_user['normalmanid'] = $data['normalmanid'];
+                $new_user['password'] = md5_d($data['password']);
+                $new_user['is_bind'] = $data['is_bind'];
+                $new_user['last_ip'] = ip_get_client();
+                $new_user['rid'] = 8;//创建为求职者
+                $new_user['unionid'] = $data['unionid'];
+                $new_user['is_yewu'] = 1;
+                $new_user['type'] = '普通用户';
+            }
+
+            if(empty($data['salesmanid']) && empty($data['branch_id'])  && empty($data['normalmanid'])){
+                $new_user['password'] = md5_d($data['password']);
+
+                $new_user['is_bind'] = $data['is_bind'];
+                $new_user['last_ip'] = ip_get_client();
+                $new_user['rid'] = 8;//创建为求职者
+                $new_user['unionid'] = $data['unionid'];
+                $new_user['is_yewu'] = 1;
+                $new_user['type'] = 'app';
+            }
+
+        }else{
+            if($data['rid'] == 7){
+                $new_user['password'] = md5_d($data['password']);
+                $new_user['hx_password'] = $data['password'];
+                $new_user['is_bind'] = $data['is_bind'];
+                $new_user['last_ip'] = ip_get_client();
+                $new_user['rid'] = 7;//创建为求职者
+                $new_user['unionid'] = $data['unionid'];
+                $new_user['type'] = $data['type'];
+                $new_user['branchname'] = $data['branchname'];
+                $new_user['salesmanname'] = $data['salesmanname'];
+                $new_user['salesmanphoneno'] = $data['salesmanphoneno'];
+            }else{
+                $new_user['password'] = md5_d($data['password']);
+                $new_user['hx_password'] = $data['password'];
+                $new_user['is_bind'] = $data['is_bind'];
+                $new_user['last_ip'] = ip_get_client();
+                $new_user['rid'] = $data['rid'];
+                $new_user['unionid'] = $data['unionid'];
+                $new_user['type'] = $data['type'];
+
+            }
+
+        }
+
+
 
         // 发送电子邮件来激活用户
         if (C('AUTH_EMAIL_ACTIVATE')) {
@@ -2441,7 +2520,7 @@ class auth {
         $email = new mail();
         $email->send($tomail, $toname, $title, $body);
     }
-    
+
 
     //修改密码
     function change_password($data){
@@ -2507,7 +2586,7 @@ class auth {
 
     /**
      * 创建自动登录
-     * @param type $uid 
+     * @param type $uid
      */
     private function _auth_create_autologin($uid) {
         $result = FALSE;
@@ -2540,11 +2619,11 @@ class auth {
 
     /**
      * 用户登录成功设置SESSION值
-     * @param type $data 
+     * @param type $data
      */
     private function _auth_set_session($data) {
         $role_data = $this->_get_role_data($data['uid']);
-        
+
         $_SESSION = array(
             'uid' => $data['uid'],
             'username' => $data['username'],
@@ -2685,7 +2764,7 @@ class auth {
     }
 
     /**
-     * 用户是否登录 
+     * 用户是否登录
      */
     function is_logged_in() {
 
@@ -2696,7 +2775,7 @@ class auth {
     /**
      * 数组中任意项是否在另外的数组中
      * @param type $needle
-     * @param type $haystack 
+     * @param type $haystack
      */
     function _array_in_array($needle, $haystack) {
         if (!is_array($needle)) {
@@ -2881,8 +2960,8 @@ class authModel extends Model {
             )
         );
         $result =$db->field('user.uid,user.username,user.last_ip,user.last_login')
-                    ->where("user.uid=$user_id AND user_autologin.key_id='" . md5_d($key) . "'")
-                    ->find();
+            ->where("user.uid=$user_id AND user_autologin.key_id='" . md5_d($key) . "'")
+            ->find();
         //$result = $this->user_autologin->query($sql);
         return $result;
     }
@@ -2911,19 +2990,86 @@ class authModel extends Model {
     }
 
     function create_user($data) {
-        $data['created'] = time();
-//        $data['last_login']=time();
-        $data['last_ip']=ip_get_client();
-        $id = $this->user->insert($data);
-        if ($id) {
-            $this->user_role->insert(array('uid' => $id, 'rid' =>8));
-            return $id;
+
+        if($data['is_yewu'] == 1){
+            $data['branchname'] = $data['branchname'];
+            $data['created'] = time();
+            $data['last_ip']=ip_get_client();
+            $id = M('user')->add($data);
+            if ($id) {
+                $this->user_role->insert(array('uid' => $id, 'rid' =>$data['rid']));
+                return $id;
+            }
+        }else{
+            if($data['rid'] == 7){
+                // include_once('/var/www/html/hpjobweb/web/backend/libs/phpqrcode.php');
+                $object = new QRcode();
+                $data['created'] = time();
+                $data['last_ip']=ip_get_client();
+                $id = M('user')->add($data);
+                $huanxin = $this->openRegister($data['username'],$data['hx_password'],$data['username']);
+                //生成二维码
+                $url='http://www.hap-job.com/index.php/app/auth/share/from/35920?from=singlemessage&isappinstalled=1&salesmanid='.$id;
+                $level=3;
+                $size=4;
+                $path = "./uploads/person_qrcode/";//创建路径
+                $fileName = $path.$id.'.png';
+                $errorCorrectionLevel =intval($level);//容错级别
+                $matrixPointSize = intval($size);//生成图片大小
+                $object->png($url, $fileName, $errorCorrectionLevel, $matrixPointSize, 2);
+
+                $list =M('user')->order("uid desc")->limit(1)->find();
+                $save['qrcode'] = $fileName;
+                $result = M('user')->where(array('uid'=>$list['uid']))->update($save);
+                M('user_info')->insert(array('uid' => $id, 'name' =>$data['username']));
+
+                if ($id) {
+                    $this->user_role->insert(array('uid' => $id, 'rid' =>$data['rid']));
+                    return $id;
+                }
+            }else{
+                $data['created'] = time();
+                $data['last_ip']=ip_get_client();
+                $id = M('user')->add($data);
+                $huanxin  = $this->openRegister($data['username'],$data['hx_password'],$data['username']);
+                M('user_info')->insert(array('uid' => $id, 'name' =>$data['username']));
+                if ($id) {
+                    $this->user_role->insert(array('uid' => $id, 'rid' =>$data['rid']));
+                    return $id;
+                }
+            }
+
         }
+
         return FALSE;
     }
 
+
+    function openRegister($username,$password,$nickname) {
+        $url = "https://a1.easemob.com/ttouch/kuaile" . "/token";
+        $data = array(
+            'grant_type' => 'client_credentials',
+            'client_id' => 'YXA6tfPWgFtsEeWzNxtHA-A9OA',
+            'client_secret' => 'YXA6hhR-xo8PGuE3BAqMfTQlfNAkYLs'
+        );
+        $rs = json_decode(curl($url, $data), true);
+        $token = $rs['access_token'];
+        $url="https://a1.easemob.com/ttouch/kuaile".'/users';
+        $username_str = substr($username,0,7);
+        $arr=array(
+            'username'=>$username,
+            'password'=>$password,
+            'nickname'=> empty($nickname) ? '开心工作'.rand(10000,99999) : $nickname,
+        );
+        $header = array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token
+        );
+        return json_decode(curl($url, $arr, $header, "POST"),true);
+    }
+
     /**
-     * 删除到期的激活账户信息 
+     * 删除到期的激活账户信息
      */
     function delExpireActivate() {
         $this->user_temp->where('created <' . time() - C('EMAIL_ACTIVATE_EXPIRE'))->del();
@@ -2948,7 +3094,7 @@ class data {
     private $data; //原始数据
 
     /**
-     * 
+     *
      * @param type $model 模型名
      */
 
@@ -2961,7 +3107,7 @@ class data {
     function convert($data) {
         $this->data = $data;
         foreach ($this->fields as $key => $value) {
-        	
+
             if (!isset($data[$key])) {
                 continue;
             }
@@ -2976,7 +3122,7 @@ class data {
     /**
      * 转换选项数据
      * @param type $field
-     * @param type $value 
+     * @param type $value
      */
     function convertSwitch($field, $value) {
         if (strpos($value, '#') !== FALSE) {
@@ -3026,7 +3172,7 @@ class data {
     /**
      * 转换联动数据
      * @param type $field
-     * @param type $value 
+     * @param type $value
      */
     function convertLinkage($field, $value) {
         $attached = json_decode($this->fields[$field]['attached'], TRUE);
@@ -3038,7 +3184,7 @@ class data {
         //查找附属字段的
         foreach ($attached as $value) {
             if (strpos($this->data[$value], '#') !== FALSE) {
-               $id = array_merge($id,explode('#', $this->data[$value]));
+                $id = array_merge($id,explode('#', $this->data[$value]));
             } else {
                 $id[] = $this->data[$value];
             }
@@ -3071,7 +3217,7 @@ class data {
                 'lcgid' => $value['lcgid']
             );
             $result = $this->data_model->getCateLinkage($condition,'laid,title,pid');
-           $str.='linkage_'.$value['lcgid'].' = '.json_encode_cn(formatParentData($result)).',';
+            $str.='linkage_'.$value['lcgid'].' = '.json_encode_cn(formatParentData($result)).',';
         }
         $str=rtrim($str,',').';';
 
@@ -3342,103 +3488,103 @@ class field extends Control {
 }
 class JSSDK {
 
-  public function getSignPackage($url='')
-  {
-      $jsapiTicket = $this->getJsApiTicket();
+    public function getSignPackage($url='')
+    {
+        $jsapiTicket = $this->getJsApiTicket();
 
-      // 注意 URL 一定要动态获取，不能 hardcode.
-      if (empty($url)) {
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-      }
+        // 注意 URL 一定要动态获取，不能 hardcode.
+        if (empty($url)) {
+            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+            $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        }
 
-    $timestamp = time();
-    $nonceStr = $this->createNonceStr();
+        $timestamp = time();
+        $nonceStr = $this->createNonceStr();
 
-    // 这里参数的顺序要按照 key 值 ASCII 码升序排序
-    $string = "jsapi_ticket=$jsapiTicket&noncestr=$nonceStr&timestamp=$timestamp&url=$url";
+        // 这里参数的顺序要按照 key 值 ASCII 码升序排序
+        $string = "jsapi_ticket=$jsapiTicket&noncestr=$nonceStr&timestamp=$timestamp&url=$url";
 
-    $signature = sha1($string);
+        $signature = sha1($string);
 
-    $signPackage = array(
-      "appId"     => weiXinConfig::APPID,
-      "nonceStr"  => $nonceStr,
-      "timestamp" => $timestamp,
-      "url"       => $url,
-      "signature" => $signature,
-      "rawString" => $string
-    );
-    return $signPackage; 
-  }
-
-  private function createNonceStr($length = 16) {
-    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    $str = "";
-    for ($i = 0; $i < $length; $i++) {
-      $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
-    }
-    return $str;
-  }
-
-  private function getJsApiTicket() {
-    // jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
-    $data = json_decode(file_get_contents("jsapi_ticket.json"));
-    if ($data->expire_time < time()) {
-      $accessToken = $this->getAccessToken();
-      // 如果是企业号用以下 URL 获取 ticket
-      // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
-      $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
-      $res = json_decode($this->httpGet($url));
-      $ticket = $res->ticket;
-      if ($ticket) {
-        $data->expire_time = time() + 7000;
-        $data->jsapi_ticket = $ticket;
-        $fp = fopen("jsapi_ticket.json", "w");
-        fwrite($fp, json_encode($data));
-        fclose($fp);
-      }
-    } else {
-      $ticket = $data->jsapi_ticket;
+        $signPackage = array(
+            "appId"     => weiXinConfig::APPID,
+            "nonceStr"  => $nonceStr,
+            "timestamp" => $timestamp,
+            "url"       => $url,
+            "signature" => $signature,
+            "rawString" => $string
+        );
+        return $signPackage;
     }
 
-    return $ticket;
-  }
-
-  private function getAccessToken() {
-    // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
-    $data = json_decode(file_get_contents("access_token.json"));
-    if ($data->expire_time < time()) {
-      // 如果是企业号用以下URL获取access_token
-      // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
-      $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".weiXinConfig::APPID."&secret=".weiXinConfig::APPSECRET;
-      $res = json_decode($this->httpGet($url));
-      $access_token = $res->access_token;
-      if ($access_token) {
-        $data->expire_time = time() + 7000;
-        $data->access_token = $access_token;
-        $fp = fopen("access_token.json", "w");
-        fwrite($fp, json_encode($data));
-        fclose($fp);
-      }
-    } else {
-      $access_token = $data->access_token;
+    private function createNonceStr($length = 16) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $str = "";
+        for ($i = 0; $i < $length; $i++) {
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
     }
-    return $access_token;
-  }
 
-  private function httpGet($url) {
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_TIMEOUT, 500);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($curl, CURLOPT_URL, $url);
+    private function getJsApiTicket() {
+        // jsapi_ticket 应该全局存储与更新，以下代码以写入到文件中做示例
+        $data = json_decode(file_get_contents("jsapi_ticket.json"));
+        if ($data->expire_time < time()) {
+            $accessToken = $this->getAccessToken();
+            // 如果是企业号用以下 URL 获取 ticket
+            // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
+            $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
+            $res = json_decode($this->httpGet($url));
+            $ticket = $res->ticket;
+            if ($ticket) {
+                $data->expire_time = time() + 7000;
+                $data->jsapi_ticket = $ticket;
+                $fp = fopen("jsapi_ticket.json", "w");
+                fwrite($fp, json_encode($data));
+                fclose($fp);
+            }
+        } else {
+            $ticket = $data->jsapi_ticket;
+        }
 
-    $res = curl_exec($curl);
-    curl_close($curl);
+        return $ticket;
+    }
 
-    return $res;
-  }
+    private function getAccessToken() {
+        // access_token 应该全局存储与更新，以下代码以写入到文件中做示例
+        $data = json_decode(file_get_contents("access_token.json"));
+        if ($data->expire_time < time()) {
+            // 如果是企业号用以下URL获取access_token
+            // $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$this->appId&corpsecret=$this->appSecret";
+            $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=".weiXinConfig::APPID."&secret=".weiXinConfig::APPSECRET;
+            $res = json_decode($this->httpGet($url));
+            $access_token = $res->access_token;
+            if ($access_token) {
+                $data->expire_time = time() + 7000;
+                $data->access_token = $access_token;
+                $fp = fopen("access_token.json", "w");
+                fwrite($fp, json_encode($data));
+                fclose($fp);
+            }
+        } else {
+            $access_token = $data->access_token;
+        }
+        return $access_token;
+    }
+
+    private function httpGet($url) {
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        $res = curl_exec($curl);
+        curl_close($curl);
+
+        return $res;
+    }
 }
 
 /*
@@ -3459,7 +3605,7 @@ class myControl extends Control {
             $this->error($this->auth->error,__APP__);
             die;
         }
-        
+
     }
 
     function is_logged_in() {
@@ -3644,7 +3790,7 @@ function sendSmsMsg($mobile,$con,$new_msg='',$type = 0){
 
 /**
  * 删除编译模板，格式:应用/控制器/方法
- * @param type $path 
+ * @param type $path
  */
 function delCompileTpl($path) {
     $path_array = explode('/', trim($path, '/'));
@@ -3689,7 +3835,7 @@ function formatLevelData($data, $pid = 0) {
  * @param type $data 需要格式化的
  * @param type $format 数据的原索引格式[主键字段名(例如id),层级字段名(例如pid)]
  * @param type $pid
- * @return type 
+ * @return type
  */
 function formatLevelData2($data, $format, $pid = 0) {
     $arr = array();
@@ -3706,7 +3852,7 @@ function formatLevelData2($data, $format, $pid = 0) {
  * 将数组格式化为父子级关系（2级）
  * @param type $data 原数据
  * @param type $format 数据的原索引格式[主键字段名(例如id),层级字段名(例如pid)]
- * @return type 格式化后的数据 
+ * @return type 格式化后的数据
  */
 function formatParentData($data) {
     $data_num = count($data);
@@ -3725,7 +3871,7 @@ function formatParentData($data) {
  * 将数组格式化为父子级关系（2级）
  * @param type $data 原数据
  * @param type $format 数据的原索引格式[主键字段名(例如id),层级字段名(例如pid),主要字段名(例如title、name)]
- * @return type 格式化后的数据 
+ * @return type 格式化后的数据
  */
 function formatParentData2($data,$format) {
     $data_num = count($data);
@@ -3768,7 +3914,7 @@ function json_encode_cn($arr){
 }
 
 /**
- * 组合属性变量 
+ * 组合属性变量
  */
 function buildAttrVar($attr) {
     $str = '';
@@ -3805,7 +3951,7 @@ function getCleanUriArg($unset = array()) {
  * 取得Email模板
  * @param type $data 数据数组
  * @param type $type 模板类型
- * @return type 
+ * @return type
  */
 function getEmailTpl($type, $data = array()) {
     if (!isset($data['web_name'])) {
@@ -3844,14 +3990,14 @@ function node_son_id($nid,$field=array('nid','pid'),$data=NULL){
     }
     $nodes=array($field[0]=>array());
     foreach ($n as $value) {
-            $v=$db->field($field[0])->where($field[1].'='.$value[$field[0]])->findall();
-            if($v){
-                $a=node_son_id(FALSE,$field,$v);
-                foreach ($a[$field[0]] as $v_a) {
-                    $nodes[$field[0]][]=$v_a;
-                }
+        $v=$db->field($field[0])->where($field[1].'='.$value[$field[0]])->findall();
+        if($v){
+            $a=node_son_id(FALSE,$field,$v);
+            foreach ($a[$field[0]] as $v_a) {
+                $nodes[$field[0]][]=$v_a;
             }
-            $nodes[$field[0]][]=$value[$field[0]];
+        }
+        $nodes[$field[0]][]=$value[$field[0]];
     }
     return $nodes;
 }
@@ -3880,15 +4026,15 @@ function filePutArray($array, $path) {
  * @return mixed
  */
 function dopost($url,$data=null){
-	
-	header("Content-type:text/html;charset=utf-8");
-	include './Snoopy.class.php';
-	$snoopy = new Snoopy();
-	$snoopy->submit($url, $data);
-	$results = $snoopy->results;
-	$results = iconv('gbk', 'utf-8', $results);
-	$arr = json_decode($results,true);
-	return $arr[0];
+
+    header("Content-type:text/html;charset=utf-8");
+    include './Snoopy.class.php';
+    $snoopy = new Snoopy();
+    $snoopy->submit($url, $data);
+    $results = $snoopy->results;
+    $results = iconv('gbk', 'utf-8', $results);
+    $arr = json_decode($results,true);
+    return $arr[0];
 }
 /**
  * 通过地址得到经纬度
@@ -3897,16 +4043,16 @@ function dopost($url,$data=null){
  */
 function getLocation($adress){
 
-	$url='http://api.map.baidu.com/geocoder/v2/?address='.$adress.'&output=json&ak=VvLKaDZCCalQjBFzWhKaaNyi';
-	$html = file_get_contents($url);
-	$location = json_decode($html,true);
-	$lng = $location['result']['location']['lng'];
-	$lat = $location['result']['location']['lat'];
-	$info = array(
-			'lng'=>$lng,
-			'lat'=>$lat
-	);
-	return $info;
+    $url='http://api.map.baidu.com/geocoder/v2/?address='.$adress.'&output=json&ak=VvLKaDZCCalQjBFzWhKaaNyi';
+    $html = file_get_contents($url);
+    $location = json_decode($html,true);
+    $lng = $location['result']['location']['lng'];
+    $lat = $location['result']['location']['lat'];
+    $info = array(
+        'lng'=>$lng,
+        'lat'=>$lat
+    );
+    return $info;
 }
 /**
  * 得到城市名称
@@ -3922,11 +4068,11 @@ function getCity($lat,$lng,$type=1){
         $lat = $point[0]['y'];
     }
 
-	$url='http://api.map.baidu.com/geocoder/v2/?ak=VvLKaDZCCalQjBFzWhKaaNyi&location='.$lat.','.$lng."&output=json";
-	$html = file_get_contents($url);
-	$location = json_decode($html,true);
-	$city = $location['result'];
-	return $city;
+    $url='http://api.map.baidu.com/geocoder/v2/?ak=VvLKaDZCCalQjBFzWhKaaNyi&location='.$lat.','.$lng."&output=json";
+    $html = file_get_contents($url);
+    $location = json_decode($html,true);
+    $city = $location['result'];
+    return $city;
 }
 
 function gaodeConvertedBaidu($lat,$lng){
@@ -3945,21 +4091,21 @@ function gaodeConvertedBaidu($lat,$lng){
  * @return multitype:number
  */
 function returnSquarePoint($myLng, $myLat,$distance = 5){
-	
-	$range = 180 / pi() * $distance / 6372.797;
-	$lngR = $range / cos($myLat * pi() / 180);
-	$maxLat = $myLat + $range;//最大纬度
-	$minLat = $myLat - $range;//最小纬度
-	$maxLng = $myLng + $lngR;//最大经度
-	$minLng = $myLng - $lngR;//最小经度
 
-	$info = array(
-			'maxLat'=>$maxLat,
-			'minLat'=>$minLat,
-			'maxLng'=>$maxLng,
-			'minLng'=>$minLng
-	);
-	return $info;
+    $range = 180 / pi() * $distance / 6372.797;
+    $lngR = $range / cos($myLat * pi() / 180);
+    $maxLat = $myLat + $range;//最大纬度
+    $minLat = $myLat - $range;//最小纬度
+    $maxLng = $myLng + $lngR;//最大经度
+    $minLng = $myLng - $lngR;//最小经度
+
+    $info = array(
+        'maxLat'=>$maxLat,
+        'minLat'=>$minLat,
+        'maxLng'=>$maxLng,
+        'minLng'=>$minLng
+    );
+    return $info;
 }
 
 /**
@@ -3970,20 +4116,20 @@ function returnSquarePoint($myLng, $myLat,$distance = 5){
 function Json_success($msg,$data=array(),$session_id=''){
 
 
-	$info = array(
-		'status'=>1,
-		'msg'=>$msg,
+    $info = array(
+        'status'=>1,
+        'msg'=>$msg,
         'sessionid' =>empty($session_id)?(empty($_POST['sessionid'])?$_SESSION['sessionid']:$_POST['sessionid']):$session_id,
-		'data'=>$data
-	);
-	echo json_encode($info);
+        'data'=>$data
+    );
+    echo json_encode($info);
 
     $data = '成功返回----'.__URL__.' time='.date("Y-m-d H:i:s").' json='.json_encode($info)." \r\n ";
 
     file_put_contents(PATH_TEMP.'/log/json.log','参数:'.json_encode($_POST,JSON_UNESCAPED_UNICODE),FILE_APPEND);
     file_put_contents(PATH_TEMP.'/log/json.log',$data,FILE_APPEND);
 
-	exit;
+    exit;
 }
 
 /**
@@ -3993,18 +4139,18 @@ function Json_success($msg,$data=array(),$session_id=''){
  */
 function Json_error($msg,$data=array(),$status=0){
 
-	$info = array(
-		'status'=>$status,
-		'msg'=>$msg,
+    $info = array(
+        'status'=>$status,
+        'msg'=>$msg,
         'sessionid' =>empty($session_id)?(empty($_SESSION)?session_id():$_POST['sessionid']):$session_id,
-		'data'=>$data
-	);
-	echo json_encode($info);
+        'data'=>$data
+    );
+    echo json_encode($info);
 
     $data = '错误返回----'.__URL__.' time='.date("Y-m-d H:i:s").' json='.json_encode($info)." \r\n ";
     file_put_contents(PATH_TEMP.'/log/json.log','参数:'.json_encode($_POST,JSON_UNESCAPED_UNICODE),FILE_APPEND);
     file_put_contents(PATH_TEMP.'/log/json.log',$data,FILE_APPEND);
-	exit;
+    exit;
 }
 
 /**
@@ -4042,7 +4188,7 @@ function Json_error($msg,$data=array(),$status=0){
  */
 function sortByCol($array, $keyname, $dir = SORT_ASC)
 {
-	return sortByMultiCols($array, array($keyname => $dir));
+    return sortByMultiCols($array, array($keyname => $dir));
 }
 /**
  * 将一个二维数组按照多个列进行排序，类似 SQL 语句中的 ORDER BY
@@ -4062,19 +4208,19 @@ function sortByCol($array, $keyname, $dir = SORT_ASC)
  */
 function sortByMultiCols($rowset, $args)
 {
-	$sortArray = array();
-	$sortRule = '';
-	foreach ($args as $sortField => $sortDir)
-	{
-		foreach ($rowset as $offset => $row)
-		{
-			$sortArray[$sortField][$offset] = $row[$sortField];
-		}
-		$sortRule .= '$sortArray[\'' . $sortField . '\'], ' . $sortDir . ', ';
-	}
-	if (empty($sortArray) || empty($sortRule)) { return $rowset; }
-	eval('array_multisort(' . $sortRule . '$rowset);');
-	return $rowset;
+    $sortArray = array();
+    $sortRule = '';
+    foreach ($args as $sortField => $sortDir)
+    {
+        foreach ($rowset as $offset => $row)
+        {
+            $sortArray[$sortField][$offset] = $row[$sortField];
+        }
+        $sortRule .= '$sortArray[\'' . $sortField . '\'], ' . $sortDir . ', ';
+    }
+    if (empty($sortArray) || empty($sortRule)) { return $rowset; }
+    eval('array_multisort(' . $sortRule . '$rowset);');
+    return $rowset;
 }
 
 function frameCallBack($msg,$data=array()){
@@ -4371,7 +4517,7 @@ function validateSmsCode($mobile,$code){
     return true;
 }
 
- function validateIdCardImg($face_base,$back_base){
+function validateIdCardImg($face_base,$back_base){
 
     $host = "https://dm-51.data.aliyun.com";
     $path = "/rest/160601/ocr/ocr_idcard.json";
@@ -4480,54 +4626,54 @@ function random($length)
     return $hash;
 }
 
-    /**
-     * @Title: openRegister
-     * @Description: todo(环信注册)
-     * @author nipeiquan
-     * @param $username
-     * @param $password
-     * @param $nickname
-     * @return  mixed  返回类型
-     */
-    function openRegister($username,$password,$nickname) {
-        $url = "https://a1.easemob.com/ttouch/kuaile" . "/token";
-        $data = array(
-            'grant_type' => 'client_credentials',
-            'client_id' => 'YXA6tfPWgFtsEeWzNxtHA-A9OA',
-            'client_secret' => 'YXA6hhR-xo8PGuE3BAqMfTQlfNAkYLs'
-        );
-        $rs = json_decode(curl($url, $data), true);
-        $token = $rs['access_token'];
-        $url="https://a1.easemob.com/ttouch/kuaile".'/users';
-        $username_str = substr($username,0,7);
-        $arr=array(
-            'username'=>$username,
-            'password'=>$password,
-            'nickname'=> empty($nickname) ? '开心工作'.rand(10000,99999) : $nickname,
-        );
-        $header = array(
-            'Content-Type: application/json',
-            'Authorization: Bearer ' . $token
-        );
-        return json_decode(curl($url, $arr, $header, "POST"),true);
-    }
+/**
+ * @Title: openRegister
+ * @Description: todo(环信注册)
+ * @author nipeiquan
+ * @param $username
+ * @param $password
+ * @param $nickname
+ * @return  mixed  返回类型
+ */
+function openRegister($username,$password,$nickname) {
+    $url = "https://a1.easemob.com/ttouch/kuaile" . "/token";
+    $data = array(
+        'grant_type' => 'client_credentials',
+        'client_id' => 'YXA6tfPWgFtsEeWzNxtHA-A9OA',
+        'client_secret' => 'YXA6hhR-xo8PGuE3BAqMfTQlfNAkYLs'
+    );
+    $rs = json_decode(curl($url, $data), true);
+    $token = $rs['access_token'];
+    $url="https://a1.easemob.com/ttouch/kuaile".'/users';
+    $username_str = substr($username,0,7);
+    $arr=array(
+        'username'=>$username,
+        'password'=>$password,
+        'nickname'=> empty($nickname) ? '开心工作'.rand(10000,99999) : $nickname,
+    );
+    $header = array(
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . $token
+    );
+    return json_decode(curl($url, $arr, $header, "POST"),true);
+}
 
-    function curl($url, $data, $header = false, $method = "POST"){
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        if ($header) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        }
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-        if ($data) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        }
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        $ret = curl_exec($ch);
-        return $ret;
+function curl($url, $data, $header = false, $method = "POST"){
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    if ($header) {
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
     }
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+    if ($data) {
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    }
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    $ret = curl_exec($ch);
+    return $ret;
+}
 
 /**
  * @Title: getMissionType
@@ -4535,28 +4681,28 @@ function random($length)
  * @author nipeiquan
  * @return  array  返回类型
  */
-    function getMissionType(){
+function getMissionType(){
 
-        return $mission_types = [
-            1=>'每日-自拍签到',
-            2=>'每日-普通签到',
-            3=>'每日-限时抢兑',
-            4=>'每日-回复帖子',
-            5=>'每日-发布帖子',
-            6=>'每日-分享',
-            7=>'每日-点赞帖子',
-            8=>'每日-关注好友',
-            9=>'每日-抽奖',
-            10=>'新手-抽奖',
-            11=>'新手-完善简历',
-            12=>'新手-参与抢兑',
-            13=>'新手-申请工作',
-            14=>'新手-注册成功',
-            15=>'新手-完善个人信息',
-            16=>'新手-首次发帖',
-            17=>'新手-首次回复',
-        ];
-    }
+    return $mission_types = [
+        1=>'每日-自拍签到',
+        2=>'每日-普通签到',
+        3=>'每日-限时抢兑',
+        4=>'每日-回复帖子',
+        5=>'每日-发布帖子',
+        6=>'每日-分享',
+        7=>'每日-点赞帖子',
+        8=>'每日-关注好友',
+        9=>'每日-抽奖',
+        10=>'新手-抽奖',
+        11=>'新手-完善简历',
+        12=>'新手-参与抢兑',
+        13=>'新手-申请工作',
+        14=>'新手-注册成功',
+        15=>'新手-完善个人信息',
+        16=>'新手-首次发帖',
+        17=>'新手-首次回复',
+    ];
+}
 
 /**
  * @Title: addOptLog
@@ -4571,26 +4717,26 @@ function random($length)
  * @param string $lat
  * @return  bool|mixed  返回类型
  */
-    function addOptLog($uid,$content,$point,$username,$type,$lng='',$lat=''){
+function addOptLog($uid,$content,$point,$username,$type,$lng='',$lat=''){
 
-        $data=array(
-            'uid'=>$uid,
-            'content'=>$content,
-            'point'=> '+'.$point,
-            'created'=>time(),
-            'ip'=>ip_get_client(),//操作ip
-            'username'=>$username,
-            'time'=>time(),
-            'type'=>$type,
-            'lng'=>$lng,
-            'lat'=>$lat
-        );
+    $data=array(
+        'uid'=>$uid,
+        'content'=>$content,
+        'point'=> '+'.$point,
+        'created'=>time(),
+        'ip'=>ip_get_client(),//操作ip
+        'username'=>$username,
+        'time'=>time(),
+        'type'=>$type,
+        'lng'=>$lng,
+        'lat'=>$lat
+    );
 
-        $db=M('opt_log');
+    $db=M('opt_log');
 
-        return $db->insert($data);
+    return $db->insert($data);
 
-    }
+}
 
 /**
  * @Title: addSignLog
@@ -4605,23 +4751,23 @@ function random($length)
  * @param $href
  * @return  bool|mixed  返回类型
  */
-    function addSignLog($uid,$username,$type,$num,$title,$icon,$href){
+function addSignLog($uid,$username,$type,$num,$title,$icon,$href){
 
-        $data=array(
-            'uid'=>$uid,
-            'username'=>$username,
-            'type'=>$type,
-            'num'=> $num,
-            'title'=>$title,
-            'icon'=>$icon,
-            'href'=>$href,
-            'created'=>time(),
-        );
+    $data=array(
+        'uid'=>$uid,
+        'username'=>$username,
+        'type'=>$type,
+        'num'=> $num,
+        'title'=>$title,
+        'icon'=>$icon,
+        'href'=>$href,
+        'created'=>time(),
+    );
 
-        $db=M('sign_log');
+    $db=M('sign_log');
 
-        return $db->insert($data);
-    }
+    return $db->insert($data);
+}
 
 function getDeviceType()
 {

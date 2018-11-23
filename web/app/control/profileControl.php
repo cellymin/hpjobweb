@@ -388,6 +388,8 @@ class profileControl extends Control {
             );
             if($db->insert($data)){
                 Json_success('添加工作经验成功',$data);
+            }else{
+                Json_error('添加失败',$data);
             }
         }
     }
@@ -462,7 +464,6 @@ class profileControl extends Control {
                 $basic['resume_id'] = $value['resume_id'];
                 $data[]= $basic;
             }
-
         }
         if(!empty($data)){
             Json_success('获取成功',$data);
